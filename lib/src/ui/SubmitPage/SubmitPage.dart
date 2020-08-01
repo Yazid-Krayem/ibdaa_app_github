@@ -26,9 +26,11 @@ class _SubmitPageState extends State<SubmitPage> {
 
   @override
   Widget build(BuildContext context) {
+    // _getItemsFromLocalStorage();
     //  ITEMS holds the answer's of the user
     var items = storage.getItem(deviceId);
-    String jsonString = json.encode(items); // encode map to json
+    String jsonString = jsonEncode(items); // encode map to json
+
     List<int> data = utf8.encode(jsonString);
     return Scaffold(
         appBar: AppBar(

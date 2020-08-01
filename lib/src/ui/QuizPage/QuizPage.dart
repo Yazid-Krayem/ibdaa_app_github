@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ibdaa_app/src/Models/Api.dart';
@@ -143,36 +144,34 @@ class _QuizPageState extends State<QuizPage>
           // Change here any Animation object value.
         });
       });
-    this._getItemsFromLocalStorage();
   }
 
   double _progress = 0;
+
   _getItemsFromLocalStorage() async {
-    Future.delayed(Duration(seconds: 2));
+    var items = storage.getItem(deviceId);
 
-    var existing = await storage.getItem(deviceId);
+    print(items);
 
-    if (existing == null) {
-      print('nill');
+    if (items == null) {
+      setState(() {
+        _currentIndex = 0;
+      });
+    } else {
+      String jsonString = jsonEncode(items); // encode map to json
+      var tagObjsJson = jsonDecode(jsonString) as List;
+      List<User> tagObjs =
+          tagObjsJson.map((tagJson) => User.fromJson(tagJson)).toList();
+
+      setState(() {
+        _currentIndex = tagObjs.length;
+      });
     }
-    if (existing != null) {
-      print(existing['id']);
-    }
-    // setState(() {
-    //   _currentIndex = jsonString.length;
-    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    // for (var title in list) print(title['id'].toString());
-
-    // map the the storage and get the index of it
-
-    // setState(() {
-    //   _currentIndex = jsonString.length;
-    // });
-
+    _getItemsFromLocalStorage();
     return new Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -279,5 +278,23 @@ class _QuizPageState extends State<QuizPage>
         // LinearProgressIndicator()
       ],
     );
+  }
+}
+
+class User {
+  int id;
+  String answers_text;
+  double answer_value;
+
+  User(this.id, this.answers_text, this.answer_value);
+
+  factory User.fromJson(dynamic json) {
+    return User(json['id'] as int, json['answers_text'] as String,
+        json['answer_value'] as double);
+  }
+
+  @override
+  String toString() {
+    return '{ ${this.id}, ${this.answers_text}, ${this.answer_value} }';
   }
 }
