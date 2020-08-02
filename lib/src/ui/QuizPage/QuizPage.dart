@@ -57,13 +57,6 @@ class _QuizPageState extends State<QuizPage>
 // Save and Delete data from Local Storage
   final LocalStorage storage = new LocalStorage(v1);
   bool initialized = false;
-//
-  // _toggleItem(AnswersItem item) {
-  //   setState(() {
-  //     item.done = !item.done;
-  //     _saveToStorage();
-  //   });
-  // }
 
   _addItem(int id, String answers_text, double answer_value) {
     setState(() {
@@ -89,20 +82,6 @@ class _QuizPageState extends State<QuizPage>
   //// Get the existing data
   ///
   ///
-  _checkStorage() async {
-    var existing = await storage.getItem(deviceId);
-  }
-
-// // If no existing data, create an array
-// // Otherwise, convert the localStorage string to an array
-// existing = existing ? json.parse(existing) : {};
-
-// // Add new data to localStorage Array
-// existing['drink'] = 'soda';
-
-// // Save back to localStorage
-// storage.setItem('myLunch', JSON.stringify(existing));
-
   int _currentIndex = 0;
 
   var listQuestions = new List<GetQuestions>();
@@ -150,9 +129,6 @@ class _QuizPageState extends State<QuizPage>
 
   _getItemsFromLocalStorage() async {
     var items = storage.getItem(deviceId);
-
-    print(items);
-
     if (items == null) {
       setState(() {
         _currentIndex = 0;
@@ -167,39 +143,86 @@ class _QuizPageState extends State<QuizPage>
         _currentIndex = tagObjs.length;
       });
     }
+    return _currentIndex;
+  }
+
+  List listForTesting = [];
+
+  get _returnButtonFunction async {
+    if (_currentIndex == 0) {
+      return false;
+    } else {
+      setState(() {
+        _currentIndex = _currentIndex - 1;
+      });
+
+      // storage.deleteItem(deviceId[_currentIndex]);
+
+      // setState(() {
+      //   listForTesting = storage.getItem("$deviceId");
+      // });
+      // // list1.items.removeWhere((item) => item.id == '1');
+
+      // print(listForTesting[_currentIndex]);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     _getItemsFromLocalStorage();
+
     return new Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text("Quiz"),
       ),
       body: SingleChildScrollView(
-        child: Column(children: <Widget>[
-          returnButton(),
-          linearProgressIndicator(),
-          animateSwitcher(),
-          for (var item in listAnswers) answersList(item)
-        ]),
+        child: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.deepPurpleAccent, Colors.tealAccent],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.0, 1.0],
+                  tileMode: TileMode.clamp)),
+          child: Column(children: <Widget>[
+            Container(
+              child: Column(
+                children: [
+                  returnButton(),
+                  linearProgressIndicator(),
+                  animateSwitcher(),
+                ],
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var item in listAnswers) answersList(item),
+                ],
+              ),
+            )
+          ]),
+        ),
       ),
     );
   }
 
   Widget linearProgressIndicator() {
-    return Align(
+    return Positioned(
+        child: Align(
       alignment: Alignment.topCenter,
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.5,
+        width: MediaQuery.of(context).size.width * 0.79,
         child: LinearProgressIndicator(
           backgroundColor: Colors.cyanAccent,
           valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
           value: _progress,
         ),
       ),
-    );
+    ));
   }
 
   Widget returnButton() {
@@ -207,16 +230,14 @@ class _QuizPageState extends State<QuizPage>
       padding: const EdgeInsets.all(8.0),
       child: Align(
           alignment: Alignment.topRight,
-          child: RaisedButton(
-              onPressed: () => {
-                    if (_currentIndex != 0)
-                      {
-                        setState(() {
-                          _currentIndex = (_currentIndex - 1);
-                        }),
-                      }
-                  },
-              child: Text('return'))),
+          child: RaisedButton.icon(
+            hoverColor: Colors.black,
+            onPressed: () => {_returnButtonFunction},
+            icon: Icon(Icons.undo),
+            textColor: Colors.white,
+            color: Colors.lightBlue,
+            label: Text('return to The Prevouis question'),
+          )),
     );
   }
 
@@ -239,9 +260,10 @@ class _QuizPageState extends State<QuizPage>
   Widget questionsList(item) {
     return Center(
         child: Card(
+            elevation: 8,
             child: Container(
                 height: MediaQuery.of(context).size.height * 0.5,
-                width: MediaQuery.of(context).size.width * 0.6,
+                width: MediaQuery.of(context).size.width * 0.8,
                 child: Center(
                     child: ListTile(
                   title: Text('Question ${_currentIndex + 1} of 3'),
@@ -250,33 +272,31 @@ class _QuizPageState extends State<QuizPage>
   }
 
   Widget answersList(item) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        RaisedButton(
-            onPressed: () => {
-                  _addItem(item.id, item.answers_text, item.answer_value),
-                  startProgress(),
-                  setState(() {
-                    _currentIndex = (_currentIndex + 1);
-                  }),
-                  if (_currentIndex == 3)
-                    {
-                      Navigator.push<bool>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                SubmitPage(deviceId),
-                          ))
-                    },
-                  setState(() {
-                    _progress = (_progress + 0.3);
-                  })
-                },
-            child: Text("${item.answers_text}")),
-        // _getLocalItems()
-        // LinearProgressIndicator()
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(right: 20.0),
+      child: RaisedButton(
+          color: Colors.white,
+          shape: StadiumBorder(),
+          onPressed: () => {
+                _addItem(item.id, item.answers_text, item.answer_value),
+                startProgress(),
+                setState(() {
+                  _currentIndex = (_currentIndex + 1);
+                }),
+                if (_currentIndex == 3)
+                  {
+                    Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              SubmitPage(deviceId),
+                        ))
+                  },
+                setState(() {
+                  _progress = (_progress + 0.3);
+                })
+              },
+          child: Text("${item.answers_text}")),
     );
   }
 }
