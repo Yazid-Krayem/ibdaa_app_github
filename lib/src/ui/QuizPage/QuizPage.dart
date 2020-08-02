@@ -117,15 +117,29 @@ class _QuizPageState extends State<QuizPage>
     this._getAnswers();
     controller =
         AnimationController(duration: const Duration(seconds: 5), vsync: this);
-    animation = Tween(begin: beginAnim, end: endAnim).animate(controller)
+    animation = Tween<Offset>(
+      begin: Offset(2.0, 0.0),
+      end: Offset.zero,
+    ).animate(controller)
       ..addListener(() {
         setState(() {
           // Change here any Animation object value.
         });
       });
+    // controller = AnimationController(
+    //   duration: const Duration(seconds: 2),
+    //   vsync: this,
+    // );
+    // _offsetAnimation = Tween<Offset>(
+    //   end: Offset.zero,
+    //   begin: const Offset(1.5, 0.0),
+    // ).animate(CurvedAnimation(
+    //   parent: controller,
+    //   curve: Curves.elasticIn,
+    // ));
   }
 
-  double _progress = 0;
+  double _progress = 0.33;
 
   _getItemsFromLocalStorage() async {
     var items = storage.getItem(deviceId);
@@ -145,8 +159,6 @@ class _QuizPageState extends State<QuizPage>
     }
     return _currentIndex;
   }
-
-  List listForTesting = [];
 
   get _returnButtonFunction async {
     if (_currentIndex == 0) {
@@ -190,7 +202,6 @@ class _QuizPageState extends State<QuizPage>
               child: Column(
                 children: [
                   returnButton(),
-                  linearProgressIndicator(),
                   animateSwitcher(),
                 ],
               ),
@@ -243,7 +254,7 @@ class _QuizPageState extends State<QuizPage>
 
   Widget animateSwitcher() {
     return AnimatedSwitcher(
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 3),
       transitionBuilder: (Widget child, Animation<double> animation) {
         return ScaleTransition(child: child, scale: animation);
       },
@@ -265,10 +276,39 @@ class _QuizPageState extends State<QuizPage>
                 height: MediaQuery.of(context).size.height * 0.5,
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Center(
-                    child: ListTile(
-                  title: Text('Question ${_currentIndex + 1} of 3'),
-                  subtitle: Text("${item.question_data}"),
-                )))));
+                    child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: linearProgressIndicator(),
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Question ${_currentIndex + 1} of 3',
+                            style: TextStyle(color: Colors.purple),
+                          ),
+                        )),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              '${item.question_data}',
+                              style:
+                                  TextStyle(fontSize: 30, color: Colors.black),
+                            )))
+                  ],
+                ))
+
+                //     ListTile(
+                //   title: Text('Question ${_currentIndex + 1} of 3'),
+                //   subtitle: Text("${item.question_data}"),
+                // ))
+
+                )));
   }
 
   Widget answersList(item) {
@@ -293,7 +333,7 @@ class _QuizPageState extends State<QuizPage>
                         ))
                   },
                 setState(() {
-                  _progress = (_progress + 0.3);
+                  _progress = (_progress + 0.333);
                 })
               },
           child: Text("${item.answers_text}")),
