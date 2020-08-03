@@ -52,18 +52,31 @@ class _QuizPageState extends State<QuizPage>
     controller.reset();
   }
 
+  AnimationController _controller;
+  Animation<Offset> _animation;
   @override
   void initState() {
     this._getQuestions();
     this._getAnswers();
     controller =
         AnimationController(duration: const Duration(seconds: 5), vsync: this);
-    animation = Tween<double>(begin: 0, end: 300).animate(controller)
-      ..addListener(() {
-        setState(() {
-          // The state that has changed here is the animation object’s value.
-        });
-      });
+    // animation = Tween<double>(begin: -1, end: 0).animate(controller)
+    //   ..addListener(() {
+    //     setState(() {
+    //       // The state that has changed here is the animation object’s value.
+    //     });
+    //   });
+    // // _controller = AnimationController(
+    // //   duration: const Duration(seconds: 3),
+    // //   vsync: this,
+    // // )..forward();
+    // // _animation = Tween<Offset>(
+    // //   begin: const Offset(-0.5, 0.0),
+    // //   end: const Offset(0.5, 0.0),
+    // // ).animate(CurvedAnimation(
+    // //   parent: _controller,
+    // //   curve: Curves.easeInCubic,
+    // // ));
 
     super.initState();
   }
@@ -238,14 +251,14 @@ class _QuizPageState extends State<QuizPage>
   }
 
 //TODO: replace IndexedStack with stack_Cards package
-// change the ScaleTransition to something that make forward
   Widget animateSwitcher() {
     return new AnimatedSwitcher(
-      duration: const Duration(seconds: 3),
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(
+      duration: const Duration(seconds: 2),
+      transitionBuilder: (Widget child, Animation animation) {
+        return SlideTransition(
           child: child,
-          opacity: animation,
+          position: Tween<Offset>(begin: const Offset(1.0, 0), end: Offset.zero)
+              .animate(animation),
         );
       },
       child: IndexedStack(
@@ -283,49 +296,45 @@ class _QuizPageState extends State<QuizPage>
                       ),
                     ),
                     Container(
-                        padding: const EdgeInsets.only(top: 8.0),
+                        padding: const EdgeInsets.all(8.0),
                         alignment: Alignment.centerRight,
                         child: Text(
                           '${item.question_data}',
                           style: TextStyle(fontSize: 30, color: Colors.black),
                         ))
                   ],
-                ))
-
-                //     ListTile(
-                //   title: Text('Question ${_currentIndex + 1} of 3'),
-                //   subtitle: Text("${item.question_data}"),
-                // ))
-
-                )));
+                )))));
   }
 
   Widget answersList(item) {
-    return Container(
-      padding: const EdgeInsets.only(right: 20.0),
-      child: RaisedButton(
-          color: Colors.white,
-          shape: StadiumBorder(),
-          onPressed: () => {
-                _addItem(item.id, item.answers_text, item.answer_value),
-                startProgress(),
-                setState(() {
-                  _currentIndex = (_currentIndex + 1);
-                }),
-                if (_currentIndex == 3)
-                  {
-                    Navigator.push<bool>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              SubmitPage(deviceId),
-                        ))
-                  },
-                setState(() {
-                  _progress = (_progress + 0.333);
-                })
-              },
-          child: Text("${item.answers_text}")),
+    return Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: Container(
+        padding: const EdgeInsets.only(right: 20.0),
+        child: RaisedButton(
+            color: Colors.white,
+            shape: StadiumBorder(),
+            onPressed: () => {
+                  _addItem(item.id, item.answers_text, item.answer_value),
+                  startProgress(),
+                  setState(() {
+                    _currentIndex = (_currentIndex + 1);
+                  }),
+                  if (_currentIndex == 3)
+                    {
+                      Navigator.push<bool>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                SubmitPage(deviceId),
+                          ))
+                    },
+                  setState(() {
+                    _progress = (_progress + 0.333);
+                  })
+                },
+            child: Text("${item.answers_text}")),
+      ),
     );
   }
 }
