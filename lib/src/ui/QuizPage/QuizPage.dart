@@ -52,32 +52,12 @@ class _QuizPageState extends State<QuizPage>
     controller.reset();
   }
 
-  AnimationController _controller;
-  Animation<Offset> _animation;
   @override
   void initState() {
     this._getQuestions();
     this._getAnswers();
     controller =
         AnimationController(duration: const Duration(seconds: 5), vsync: this);
-    // animation = Tween<double>(begin: -1, end: 0).animate(controller)
-    //   ..addListener(() {
-    //     setState(() {
-    //       // The state that has changed here is the animation object’s value.
-    //     });
-    //   });
-    // // _controller = AnimationController(
-    // //   duration: const Duration(seconds: 3),
-    // //   vsync: this,
-    // // )..forward();
-    // // _animation = Tween<Offset>(
-    // //   begin: const Offset(-0.5, 0.0),
-    // //   end: const Offset(0.5, 0.0),
-    // // ).animate(CurvedAnimation(
-    // //   parent: _controller,
-    // //   curve: Curves.easeInCubic,
-    // // ));
-
     super.initState();
   }
 
