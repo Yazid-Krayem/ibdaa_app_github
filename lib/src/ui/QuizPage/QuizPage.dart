@@ -7,6 +7,7 @@ import 'package:ibdaa_app/src/Models/getAnswers.dart';
 import 'package:ibdaa_app/src/Models/getQuestions.dart';
 import 'package:ibdaa_app/src/ui/SubmitPage/SubmitPage.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:swipe_stack/swipe_stack.dart';
 
 class QuizPage extends StatefulWidget {
   final deviceId;
@@ -23,18 +24,20 @@ class _QuizPageState extends State<QuizPage>
   final cookieName;
 
 //LinearProgressIndicator methods
-  AnimationController controller;
 
-  Animation animation;
+  double _progress = 0.33;
 
   _QuizPageState(this.deviceId, this.cookieName);
 
   @override
   void dispose() {
-    controller.stop();
+    controller.dispose();
     super.dispose();
   }
 
+//animation
+  Animation<double> animation;
+  AnimationController controller;
   double beginAnim = 0.0;
   double endAnim = 1.0;
   startProgress() {
@@ -47,6 +50,22 @@ class _QuizPageState extends State<QuizPage>
 
   resetProgress() {
     controller.reset();
+  }
+
+  @override
+  void initState() {
+    this._getQuestions();
+    this._getAnswers();
+    controller =
+        AnimationController(duration: const Duration(seconds: 5), vsync: this);
+    animation = Tween<double>(begin: 0, end: 300).animate(controller)
+      ..addListener(() {
+        setState(() {
+          // The state that has changed here is the animation object’s value.
+        });
+      });
+
+    super.initState();
   }
 
   static final v1 = 'ibdaa';
@@ -109,37 +128,6 @@ class _QuizPageState extends State<QuizPage>
       });
     });
   }
-
-  @override
-  void initState() {
-    super.initState();
-    this._getQuestions();
-    this._getAnswers();
-    controller =
-        AnimationController(duration: const Duration(seconds: 5), vsync: this);
-    animation = Tween<Offset>(
-      begin: Offset(2.0, 0.0),
-      end: Offset.zero,
-    ).animate(controller)
-      ..addListener(() {
-        setState(() {
-          // Change here any Animation object value.
-        });
-      });
-    // controller = AnimationController(
-    //   duration: const Duration(seconds: 2),
-    //   vsync: this,
-    // );
-    // _offsetAnimation = Tween<Offset>(
-    //   end: Offset.zero,
-    //   begin: const Offset(1.5, 0.0),
-    // ).animate(CurvedAnimation(
-    //   parent: controller,
-    //   curve: Curves.elasticIn,
-    // ));
-  }
-
-  double _progress = 0.33;
 
   _getItemsFromLocalStorage() async {
     var items = storage.getItem(deviceId);
@@ -223,40 +211,42 @@ class _QuizPageState extends State<QuizPage>
 
   Widget linearProgressIndicator() {
     return Positioned(
-        child: Align(
+        child: Container(
       alignment: Alignment.topCenter,
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.79,
-        child: LinearProgressIndicator(
-          backgroundColor: Colors.cyanAccent,
-          valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
-          value: _progress,
-        ),
+      width: MediaQuery.of(context).size.width * 0.79,
+      child: LinearProgressIndicator(
+        backgroundColor: Colors.cyanAccent,
+        valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+        value: _progress,
       ),
     ));
   }
 
   Widget returnButton() {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.all(8.0),
-      child: Align(
-          alignment: Alignment.topRight,
-          child: RaisedButton.icon(
-            hoverColor: Colors.black,
-            onPressed: () => {_returnButtonFunction},
-            icon: Icon(Icons.undo),
-            textColor: Colors.white,
-            color: Colors.lightBlue,
-            label: Text('return to The Prevouis question'),
-          )),
+      alignment: Alignment.topRight,
+      child: RaisedButton.icon(
+        hoverColor: Colors.black,
+        onPressed: () => {_returnButtonFunction},
+        icon: Icon(Icons.undo),
+        textColor: Colors.white,
+        color: Colors.lightBlue,
+        label: Text('return to The Prevouis question'),
+      ),
     );
   }
 
+//TODO: replace IndexedStack with stack_Cards package
+// change the ScaleTransition to something that make forward
   Widget animateSwitcher() {
-    return AnimatedSwitcher(
+    return new AnimatedSwitcher(
       duration: const Duration(seconds: 3),
       transitionBuilder: (Widget child, Animation<double> animation) {
-        return ScaleTransition(child: child, scale: animation);
+        return FadeTransition(
+          child: child,
+          opacity: animation,
+        );
       },
       child: IndexedStack(
         key: ValueKey<int>(_currentIndex),
@@ -278,28 +268,27 @@ class _QuizPageState extends State<QuizPage>
                 child: Center(
                     child: Column(
                   children: [
-                    Padding(
+                    Container(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: linearProgressIndicator(),
                     ),
-                    Padding(
+                    Container(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Question ${_currentIndex + 1} of 3',
+                          style: TextStyle(color: Colors.purple),
+                        ),
+                      ),
+                    ),
+                    Container(
                         padding: const EdgeInsets.only(top: 8.0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Question ${_currentIndex + 1} of 3',
-                            style: TextStyle(color: Colors.purple),
-                          ),
-                        )),
-                    Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '${item.question_data}',
-                              style:
-                                  TextStyle(fontSize: 30, color: Colors.black),
-                            )))
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${item.question_data}',
+                          style: TextStyle(fontSize: 30, color: Colors.black),
+                        ))
                   ],
                 ))
 
@@ -312,7 +301,7 @@ class _QuizPageState extends State<QuizPage>
   }
 
   Widget answersList(item) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.only(right: 20.0),
       child: RaisedButton(
           color: Colors.white,
