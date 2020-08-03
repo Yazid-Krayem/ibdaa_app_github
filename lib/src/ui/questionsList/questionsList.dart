@@ -10,35 +10,44 @@ class QuestionsList extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Center(
-            child: Card(
-                elevation: 8,
-                child: Column(
-                  children: [
-                    Container(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Linearprogress(
-                          progress: progress,
-                        )),
-                    Container(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Question ${currentIndex + 1} of 3',
-                          style: TextStyle(color: Colors.purple),
-                        ),
-                      ),
-                    ),
-                    Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '${item.question_data}',
-                          style: TextStyle(fontSize: 30, color: Colors.black),
-                        ))
-                  ],
-                ))));
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+          width: MediaQuery.of(context).size.width * 0.6,
+          height: MediaQuery.of(context).size.height * 0.3,
+          decoration: BoxDecoration(
+            color: Colors.lightBlueAccent,
+            // border: Border.all(
+            //   color: Colors.black,
+            //   width: 5,
+            // ),
+            gradient: LinearGradient(
+              colors: [Colors.white, Colors.blue],
+            ),
+          ),
+          child: Center(
+              child: Column(
+            children: [
+              Container(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Linearprogress(
+                    progress: progress,
+                  )),
+              Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.all(20.0),
+                child: Text("السؤال ${currentIndex + 1} من 3",
+                    style: TextStyle(color: Colors.purple),
+                    textDirection: TextDirection.rtl),
+              ),
+              Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    '${item.question_data}',
+                    style: TextStyle(fontSize: 25, color: Colors.black),
+                  ))
+            ],
+          ))),
+    );
   }
 }

@@ -171,6 +171,8 @@ class _QuizPageState extends State<QuizPage>
       ),
       body: SingleChildScrollView(
         child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [Colors.deepPurpleAccent, Colors.tealAccent],
@@ -209,10 +211,10 @@ class _QuizPageState extends State<QuizPage>
       child: RaisedButton.icon(
         hoverColor: Colors.black,
         onPressed: () => {_returnButtonFunction},
-        icon: Icon(Icons.undo),
+        icon: Icon(Icons.arrow_back),
         textColor: Colors.white,
         color: Colors.lightBlue,
-        label: Text('return to The Prevouis question'),
+        label: Text('عودة'),
       ),
     );
   }

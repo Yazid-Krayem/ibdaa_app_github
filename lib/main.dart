@@ -19,12 +19,14 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Ibdaa',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Ibdaa',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: Directionality(
+          textDirection: TextDirection.rtl,
+          child: HomePage(),
+        ));
   }
 }

@@ -10,7 +10,7 @@ class Linearprogress extends StatelessWidget {
         alignment: Alignment.topCenter,
 
         //hard coded width
-        width: 100,
+        width: MediaQuery.of(context).size.width * 0.5,
         child: Positioned(
             child: LinearProgressIndicator(
           backgroundColor: Colors.cyanAccent,
