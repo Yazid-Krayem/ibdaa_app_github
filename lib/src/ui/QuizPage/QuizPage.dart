@@ -6,8 +6,8 @@ import 'package:ibdaa_app/src/Models/answersList.dart';
 import 'package:ibdaa_app/src/Models/getAnswers.dart';
 import 'package:ibdaa_app/src/Models/getQuestions.dart';
 import 'package:ibdaa_app/src/ui/SubmitPage/SubmitPage.dart';
+import 'package:ibdaa_app/src/ui/questionsList/questionsList.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:swipe_stack/swipe_stack.dart';
 
 class QuizPage extends StatefulWidget {
   final deviceId;
@@ -202,19 +202,6 @@ class _QuizPageState extends State<QuizPage>
     );
   }
 
-  Widget linearProgressIndicator() {
-    return Positioned(
-        child: Container(
-      alignment: Alignment.topCenter,
-      width: MediaQuery.of(context).size.width * 0.79,
-      child: LinearProgressIndicator(
-        backgroundColor: Colors.cyanAccent,
-        valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
-        value: _progress,
-      ),
-    ));
-  }
-
   Widget returnButton() {
     return Container(
       padding: const EdgeInsets.all(8.0),
@@ -245,45 +232,15 @@ class _QuizPageState extends State<QuizPage>
         key: ValueKey<int>(_currentIndex),
         index: _currentIndex,
         children: <Widget>[
-          for (var item in listQuestions) Center(child: questionsList(item))
+          for (var item in listQuestions)
+            QuestionsList(
+              progress: _progress,
+              currentIndex: _currentIndex,
+              item: item,
+            )
         ],
       ),
     );
-  }
-
-  Widget questionsList(item) {
-    return Center(
-        child: Card(
-            elevation: 8,
-            child: Container(
-                height: MediaQuery.of(context).size.height * 0.5,
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: Center(
-                    child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: linearProgressIndicator(),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Question ${_currentIndex + 1} of 3',
-                          style: TextStyle(color: Colors.purple),
-                        ),
-                      ),
-                    ),
-                    Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '${item.question_data}',
-                          style: TextStyle(fontSize: 30, color: Colors.black),
-                        ))
-                  ],
-                )))));
   }
 
   Widget answersList(item) {
