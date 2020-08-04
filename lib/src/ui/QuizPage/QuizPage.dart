@@ -6,7 +6,9 @@ import 'package:ibdaa_app/src/Models/answersList.dart';
 import 'package:ibdaa_app/src/Models/getAnswers.dart';
 import 'package:ibdaa_app/src/Models/getQuestions.dart';
 import 'package:ibdaa_app/src/ui/SubmitPage/SubmitPage.dart';
+import 'package:ibdaa_app/src/ui/answersList/answersList.dart';
 import 'package:ibdaa_app/src/ui/questionsList/questionsList.dart';
+import 'package:ibdaa_app/src/ui/returnButton/returnButton.dart';
 import 'package:localstorage/localstorage.dart';
 
 class QuizPage extends StatefulWidget {
@@ -52,12 +54,25 @@ class _QuizPageState extends State<QuizPage>
     controller.reset();
   }
 
+  reserveProgress() {
+    print(_currentIndex);
+
+    controller.reverse();
+  }
+
   @override
   void initState() {
     this._getQuestions();
     this._getAnswers();
     controller =
         AnimationController(duration: const Duration(seconds: 5), vsync: this);
+    animation = Tween(begin: beginAnim, end: endAnim).animate(controller)
+      ..addListener(() {
+        setState(() {
+          _currentIndex = animation.value.floor();
+          // Change here any Animation object value.
+        });
+      });
     super.initState();
   }
 
@@ -141,23 +156,24 @@ class _QuizPageState extends State<QuizPage>
     return _currentIndex;
   }
 
-  get _returnButtonFunction async {
-    if (_currentIndex == 0) {
-      return false;
-    } else {
+  returnButtonFunction() async {
+    print(_currentIndex);
+    if (_currentIndex != 0) {
       setState(() {
         _currentIndex = _currentIndex - 1;
       });
 
-      // storage.deleteItem(deviceId[_currentIndex]);
-
-      // setState(() {
-      //   listForTesting = storage.getItem("$deviceId");
-      // });
-      // // list1.items.removeWhere((item) => item.id == '1');
-
-      // print(listForTesting[_currentIndex]);
+      reserveProgress();
     }
+
+    // storage.deleteItem(deviceId[_currentIndex]);
+
+    // setState(() {
+    //   listForTesting = storage.getItem("$deviceId");
+    // });
+    // // list1.items.removeWhere((item) => item.id == '1');
+
+    // print(listForTesting[_currentIndex]);
   }
 
   @override
@@ -184,19 +200,17 @@ class _QuizPageState extends State<QuizPage>
             Container(
               child: Column(
                 children: [
-                  returnButton(),
+                  ReturnButton(returnButtonFunction),
                   animateSwitcher(),
                 ],
               ),
             ),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.3,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var item in listAnswers) answersList(item),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (var item in listAnswers)
+                  AnswerList(item: item, answersCallBack: answersCallBack),
+              ],
             )
           ]),
         ),
@@ -205,21 +219,23 @@ class _QuizPageState extends State<QuizPage>
   }
 
   Widget returnButton() {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.all(8.0),
-      alignment: Alignment.topRight,
-      child: RaisedButton.icon(
-        hoverColor: Colors.black,
-        onPressed: () => {_returnButtonFunction},
-        icon: Icon(Icons.arrow_back),
-        textColor: Colors.white,
-        color: Colors.lightBlue,
-        label: Text('عودة'),
-      ),
+      child: Align(
+          alignment: Alignment.topRight,
+          child: RaisedButton(
+              onPressed: () => {
+                    if (_currentIndex != 0)
+                      {
+                        setState(() {
+                          _currentIndex = (_currentIndex - 1);
+                        }),
+                      }
+                  },
+              child: Text('return'))),
     );
   }
 
-//TODO: replace IndexedStack with stack_Cards package
   Widget animateSwitcher() {
     return new AnimatedSwitcher(
       duration: const Duration(seconds: 2),
@@ -245,39 +261,28 @@ class _QuizPageState extends State<QuizPage>
     );
   }
 
-  Widget answersList(item) {
-    return Padding(
-      padding: const EdgeInsets.all(0.0),
-      child: Container(
-        padding: const EdgeInsets.only(right: 20.0),
-        child: RaisedButton(
-            color: Colors.white,
-            shape: StadiumBorder(),
-            onPressed: () => {
-                  _addItem(item.id, item.answers_text, item.answer_value),
-                  startProgress(),
-                  setState(() {
-                    _currentIndex = (_currentIndex + 1);
-                  }),
-                  if (_currentIndex == 3)
-                    {
-                      Navigator.push<bool>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                SubmitPage(deviceId),
-                          ))
-                    },
-                  setState(() {
-                    _progress = (_progress + 0.333);
-                  })
-                },
-            child: Text("${item.answers_text}")),
-      ),
-    );
+  //Answers function
+
+  answersCallBack(item) {
+    _addItem(item.id, item.answers_text, item.answer_value);
+    startProgress();
+    setState(() {
+      _currentIndex = (_currentIndex + 1);
+    });
+    if (_currentIndex == 3) {
+      Navigator.push<bool>(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => SubmitPage(deviceId),
+          ));
+    }
+    setState(() {
+      _progress = (_progress + 0.333);
+    });
   }
 }
 
+// This class for checking the items inside the localStorage
 class User {
   int id;
   String answers_text;

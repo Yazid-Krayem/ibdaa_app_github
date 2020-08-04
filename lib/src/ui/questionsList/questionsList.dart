@@ -13,7 +13,7 @@ class QuestionsList extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: Container(
-          width: MediaQuery.of(context).size.width * 0.6,
+          width: MediaQuery.of(context).size.width * 0.5,
           height: MediaQuery.of(context).size.height * 0.3,
           decoration: BoxDecoration(
             color: Colors.lightBlueAccent,
