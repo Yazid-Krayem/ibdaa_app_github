@@ -17,10 +17,6 @@ class QuestionsList extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.3,
           decoration: BoxDecoration(
             color: Colors.lightBlueAccent,
-            // border: Border.all(
-            //   color: Colors.black,
-            //   width: 5,
-            // ),
             gradient: LinearGradient(
               colors: [Colors.white, Colors.blue],
             ),
@@ -43,7 +39,8 @@ class QuestionsList extends StatelessWidget {
               Container(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    '${item.question_data}',
+                    '${item.questionData}',
+                    key: ValueKey<int>(currentIndex),
                     style: TextStyle(fontSize: 25, color: Colors.black),
                   ))
             ],

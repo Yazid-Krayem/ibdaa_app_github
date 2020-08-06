@@ -31,6 +31,7 @@ class _SubmitPageState extends State<SubmitPage> {
     var items = storage.getItem(deviceId);
     String jsonString = jsonEncode(items); // encode map to json
 
+    print(jsonString);
     List<int> data = utf8.encode(jsonString);
     return Scaffold(
         appBar: AppBar(
@@ -50,7 +51,9 @@ class _SubmitPageState extends State<SubmitPage> {
 
             Container(
               child: RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  storage.clear();
+                },
                 child: Text('Submit'),
               ),
             ),

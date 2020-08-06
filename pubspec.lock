@@ -123,6 +123,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.1"
+  js_shims:
+    dependency: "direct main"
+    description:
+      name: js_shims
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   localstorage:
     dependency: "direct main"
     description:
@@ -138,7 +145,7 @@ packages:
     source: hosted
     version: "0.12.8"
   meta:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: meta
       url: "https://pub.dartlang.org"

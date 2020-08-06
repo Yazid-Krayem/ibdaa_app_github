@@ -1,22 +1,31 @@
 class GetQuestions {
   final int id;
-  final String question_data;
+  final String questionData;
 
   GetQuestions({
     this.id,
-    this.question_data,
+    this.questionData,
   });
 
   factory GetQuestions.fromJson(Map<String, dynamic> json) {
     return GetQuestions(
       id: json['id'],
-      question_data: json['question_data'],
+      questionData: json['question_data'],
     );
   }
   Map toJson() {
     return {
       'id': id,
-      'question_data': question_data,
+      'question_data': questionData,
     };
+  }
+
+  toJSONEncodable() {
+    Map<String, dynamic> m = new Map();
+
+    m['id'] = id;
+    m['question_data'] = questionData;
+
+    return m;
   }
 }

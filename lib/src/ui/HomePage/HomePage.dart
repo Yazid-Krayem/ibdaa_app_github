@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ibdaa_app/src/ui/QuizPage/QuizPage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cooky/cooky.dart' as cookie;
+import 'dart:html';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,13 +14,36 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String deviceid;
   String cookieName;
+  final Storage _localStorage = window.localStorage;
+
+  List oldData = ['empty'];
+
+  _copyTheOldDataFromLocalStorage() async {
+    var items = _localStorage['ibdaa'];
+
+    if (items != null) {
+      final decoding = json.decode(items);
+
+      final getData = decoding['$deviceid'];
+      if (getData == null) {
+        setState(() {
+          oldData = [{}];
+        });
+      } else {
+        setState(() {
+          oldData = getData;
+        });
+      }
+    } else {
+      return oldData;
+    }
+    return oldData;
+  }
 
   _getDeviceId() {
     var uuid = Uuid();
-
     // Generate a v1 (time-based) id
     var v1 = uuid.v1();
-
     setState(() {
       deviceid = v1;
     });
@@ -50,6 +76,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     this._checkCookie();
+    this._copyTheOldDataFromLocalStorage();
   }
 
   @override
@@ -66,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        QuizPage(deviceid, cookieName),
+                        QuizPage(deviceid, cookieName, oldData),
                   ));
             }),
       ),

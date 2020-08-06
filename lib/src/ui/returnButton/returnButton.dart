@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ReturnButton extends StatelessWidget {
-  final returnButtonFunction;
+  final Function returnButtonFunction;
 
   ReturnButton(this.returnButtonFunction);
 
@@ -12,7 +12,7 @@ class ReturnButton extends StatelessWidget {
       alignment: Alignment.topRight,
       child: RaisedButton.icon(
         hoverColor: Colors.black,
-        onPressed: () => {returnButtonFunction()},
+        onPressed: () => {returnButtonFunction},
         icon: Icon(Icons.arrow_back),
         textColor: Colors.white,
         color: Colors.lightBlue,

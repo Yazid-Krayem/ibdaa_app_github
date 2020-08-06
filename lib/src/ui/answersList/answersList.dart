@@ -20,7 +20,7 @@ class AnswerList extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(50.0))),
           color: Colors.white,
           onPressed: () => {answersCallBack(item)},
-          child: Text("${item.answers_text}")),
+          child: Text("${item.answersText}")),
     );
   }
 }

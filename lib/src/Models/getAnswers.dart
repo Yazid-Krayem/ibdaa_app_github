@@ -1,22 +1,22 @@
 class GetAnswers {
   final int id;
-  final String answers_text;
-  final double answer_value;
+  final String answersText;
+  final double answerValue;
 
-  GetAnswers({this.id, this.answers_text, this.answer_value});
+  GetAnswers({this.id, this.answersText, this.answerValue});
 
   factory GetAnswers.fromJson(Map<String, dynamic> json) {
     return GetAnswers(
       id: json['id'],
-      answers_text: json['answers_text'],
-      answer_value: json['answer_value'],
+      answersText: json['answers_text'],
+      answerValue: json['answer_value'],
     );
   }
   Map toJson() {
     return {
       'id': id,
-      'answers_text': answers_text,
-      'answer_value': answer_value,
+      'answers_text': answersText,
+      'answer_value': answerValue,
     };
   }
 
@@ -24,8 +24,8 @@ class GetAnswers {
     Map<String, dynamic> m = new Map();
 
     m['id'] = id;
-    m['answers_text'] = answers_text;
-    m['answer_value'] = answer_value;
+    m['answers_text'] = answersText;
+    m['answer_value'] = answerValue;
 
     return m;
   }

@@ -1,11 +1,11 @@
 import 'package:ibdaa_app/src/Models/getAnswers.dart';
 import 'package:ibdaa_app/src/Models/getQuestions.dart';
 
-class AnswersList {
+class AnswersListFromCookieName {
   List<GetAnswers> items;
   List<GetQuestions> questionItems;
 
-  AnswersList() {
+  AnswersListFromCookieName() {
     items = new List();
     questionItems = new List();
   }
