@@ -420,6 +420,8 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   }
 
   Widget _mobileScreen() {
+    var orientation = MediaQuery.of(context).orientation;
+
     return SingleChildScrollView(
       child: Container(
           height: MediaQuery.of(context).size.height,
@@ -436,7 +438,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
             children: <Widget>[
               // return button
               Container(
-                alignment: Alignment.topRight,
+                alignment: orientation == Orientation.landscape
+                    ? Alignment.topLeft
+                    : Alignment.topRight,
                 padding: const EdgeInsets.all(20.0),
                 child: RaisedButton(
                   shape: buttonStyle,
