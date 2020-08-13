@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ibdaa_app/src/ui/HomePage/HomePage.dart';
+import 'package:ibdaa_app/ui/introPage/introPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         ),
         home: Directionality(
           textDirection: TextDirection.rtl,
-          child: HomePage(),
+          child: IntroPage(),
         ));
   }
 }

@@ -19,13 +19,4 @@ class GetQuestions {
       'question_data': questionData,
     };
   }
-
-  toJSONEncodable() {
-    Map<String, dynamic> m = new Map();
-
-    m['id'] = id;
-    m['question_data'] = questionData;
-
-    return m;
-  }
 }

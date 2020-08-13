@@ -1,17 +1,18 @@
 import 'dart:convert';
-
+import 'dart:html';
 import 'package:flutter/material.dart';
-import 'package:ibdaa_app/src/ui/QuizPage/QuizPage.dart';
+import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cooky/cooky.dart' as cookie;
-import 'dart:html';
 
-class HomePage extends StatefulWidget {
+import '../style.dart';
+
+class StartQuizPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _StartQuizPageState createState() => _StartQuizPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _StartQuizPageState extends State<StartQuizPage> {
   String deviceid;
   String cookieName;
   final Storage _localStorage = window.localStorage;
@@ -23,11 +24,19 @@ class _HomePageState extends State<HomePage> {
 
     if (items != null) {
       final decoding = json.decode(items);
-
       final getData = decoding['$deviceid'];
+
       if (getData == null) {
         setState(() {
-          oldData = [{}];
+          oldData = [];
+        });
+      } else if (getData == []) {
+        setState(() {
+          oldData = [];
+        });
+      } else if (getData == true) {
+        setState(() {
+          oldData = [];
         });
       } else {
         setState(() {
@@ -35,9 +44,10 @@ class _HomePageState extends State<HomePage> {
         });
       }
     } else {
-      return oldData;
+      setState(() {
+        oldData = [];
+      });
     }
-    return oldData;
   }
 
   _getDeviceId() {
@@ -51,7 +61,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _addCookie() {
-    cookie.set('id', deviceid, maxAge: Duration(days: 7));
+    cookie.set('id', deviceid, maxAge: Duration(days: 3));
   }
 
   _checkCookie() async {
@@ -82,11 +92,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Ibdaa'),
-      ),
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Center(
         child: RaisedButton(
+            shape: buttonStyle,
+            textColor: Colors.white,
+            color: Colors.blue,
             child: Text('Start Quiz'),
             onPressed: () {
               Navigator.push<bool>(
