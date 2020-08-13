@@ -246,7 +246,10 @@ class _SubmitPageState extends State<SubmitPage> {
           child: Icon(Icons.share, color: Colors.white),
           backgroundColor: Colors.green,
           onTap: () {
-            share(context, result);
+            Share.share('check out my website https://example.com',
+                subject: 'Look what I made!');
+
+            // share(context, result);
           },
           label: 'Share',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),

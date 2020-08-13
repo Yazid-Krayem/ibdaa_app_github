@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:html';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:ibdaa_app/models/answersList.dart';
@@ -333,15 +334,24 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   ///
   ///
   ///
+  ///
+  ///
+
   Widget indexStacked() {
+    var orientation = MediaQuery.of(context).orientation;
+
     return Stack(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Container(
             alignment: Alignment.center,
-            width: MediaQuery.of(context).size.width * 0.5,
-            height: MediaQuery.of(context).size.height * 0.3,
+            width: orientation == Orientation.landscape
+                ? MediaQuery.of(context).size.width * 0.7
+                : MediaQuery.of(context).size.width * 0.5,
+            height: orientation == Orientation.landscape
+                ? MediaQuery.of(context).size.height * 0.4
+                : MediaQuery.of(context).size.height * 0.3,
             decoration: BoxDecoration(
               color: Colors.lightBlueAccent,
               gradient: LinearGradient(
@@ -447,11 +457,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                 // crossAxisAlignment: CrossAxisAlignment.,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    child: indexStacked(),
-                  ),
+                  indexStacked(),
                   _answersButtonRow(),
                 ],
               )
