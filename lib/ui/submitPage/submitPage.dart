@@ -229,8 +229,8 @@ class _SubmitPageState extends State<SubmitPage> {
       animatedIcon: AnimatedIcons.menu_arrow,
       animatedIconTheme: IconThemeData(size: 22.0),
       // child: Icon(Icons.add),
-      onOpen: () => print('OPENING DIAL'),
-      onClose: () => print('DIAL CLOSED'),
+      // onOpen: () => print('OPENING DIAL'),
+      // onClose: () => print('DIAL CLOSED'),
       visible: dialVisible,
       curve: Curves.bounceIn,
       children: [
