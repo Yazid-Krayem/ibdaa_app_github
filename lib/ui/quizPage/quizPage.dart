@@ -408,7 +408,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           else
             return LayoutBuilder(
               builder: (context, constraints) {
-                if (constraints.maxHeight < 768 && constraints.maxWidth < 600 ||
+                if (constraints.maxHeight < 650 && constraints.maxWidth < 600 ||
                     orientation == Orientation.portrait) {
                   return _mobileScreen();
                 } else {
@@ -422,6 +422,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   Widget _mobileScreen() {
     var orientation = MediaQuery.of(context).orientation;
 
+    print(orientation);
     return SingleChildScrollView(
       child: Container(
           height: MediaQuery.of(context).size.height,
