@@ -10,11 +10,13 @@ import 'package:ibdaa_app/models/getQuestions.dart';
 import 'package:ibdaa_app/ui/answersButtons/answersButtons.dart';
 import 'package:ibdaa_app/ui/questionsList/questionsList.dart';
 import 'package:ibdaa_app/ui/responsiveWIdget.dart';
+import 'package:ibdaa_app/ui/sizeInformation.dart';
 import 'package:ibdaa_app/ui/submitPage/submitPage.dart';
 
 import 'package:js_shims/js_shims.dart';
 import 'package:localstorage/localstorage.dart';
 
+import '../../main.dart';
 import '../style.dart';
 
 class QuizPage extends StatefulWidget {
@@ -367,22 +369,43 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print(_progress);
+    var orientation = MediaQuery.of(context).orientation;
+
     return ResponsiveWIdget(
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text("Quiz"),
         ),
         builder: (context, constraints) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              if (constraints.maxHeight < 768 && constraints.maxWidth < 600) {
-                return _mobileScreen();
-              } else {
-                return _webScreen();
-              }
-            },
-          );
+          if (oldData.length == 3)
+            return Container(
+              alignment: Alignment.center,
+              child: RaisedButton(
+                  child: Text('Start over'),
+                  shape: buttonStyle,
+                  onPressed: () {
+                    storage.clear();
+                    progressStorage.clear();
+                    setState(() {
+                      dataListWithCookieName = [];
+                    });
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                        (Route<dynamic> route) => false);
+                  }),
+            );
+          else
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                if (constraints.maxHeight < 768 && constraints.maxWidth < 600 ||
+                    orientation == Orientation.portrait) {
+                  return _mobileScreen();
+                } else {
+                  return _webScreen();
+                }
+              },
+            );
         });
   }
 
