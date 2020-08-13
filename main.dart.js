@@ -43778,7 +43778,7 @@ p.cy.hz("progress",p.r)},
 AY:function(){var s,r,q=this,p=null,o=F.aW(q.c,!1),n=new P.b_(15,15)
 o=o.go_(o)===C.m3
 s=q.c
-s=o?F.aW(s,!1).a.a*0.7:F.aW(s,!1).a.a*0.5
+s=o?F.aW(s,!1).a.a*0.6:F.aW(s,!1).a.a*0.5
 r=q.c
 o=o?F.aW(r,!1).a.b*0.4:F.aW(r,!1).a.b*0.3
 r=S.eP(p,p,p,C.xM,T.pz(C.r1,H.b([C.j,C.bU],t.r8),C.nn,p,C.dd),p,C.M)
