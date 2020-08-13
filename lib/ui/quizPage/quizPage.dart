@@ -447,7 +447,11 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                 // crossAxisAlignment: CrossAxisAlignment.,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  indexStacked(),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: indexStacked(),
+                  ),
                   _answersButtonRow(),
                 ],
               )
