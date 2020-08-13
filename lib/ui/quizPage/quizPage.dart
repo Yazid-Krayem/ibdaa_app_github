@@ -347,7 +347,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           child: Container(
             alignment: Alignment.center,
             width: orientation == Orientation.landscape
-                ? MediaQuery.of(context).size.width * 0.7
+                ? MediaQuery.of(context).size.width * 0.6
                 : MediaQuery.of(context).size.width * 0.5,
             height: orientation == Orientation.landscape
                 ? MediaQuery.of(context).size.height * 0.4
