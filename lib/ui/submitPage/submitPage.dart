@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:share/share.dart';
 
 import '../../main.dart';
 
@@ -119,6 +120,8 @@ class _SubmitPageState extends State<SubmitPage> {
 //Alert
   void _showDialog() {
     // flutter defined function
+    final String text = "Hey, my result is $result";
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -131,7 +134,7 @@ class _SubmitPageState extends State<SubmitPage> {
             new FlatButton(
               child: new Text("Sahre it "),
               onPressed: () {
-                Navigator.of(context).pop();
+                Share.share(text, subject: "$result");
               },
             ),
             FlatButton(
@@ -152,6 +155,11 @@ class _SubmitPageState extends State<SubmitPage> {
         );
       },
     );
+  }
+
+  void share(BuildContext context, result) {
+    final String text = "Hey, my result is $result";
+    Share.share(text, subject: "$result");
   }
 
   //speedDial Buttons
@@ -237,7 +245,9 @@ class _SubmitPageState extends State<SubmitPage> {
         SpeedDialChild(
           child: Icon(Icons.share, color: Colors.white),
           backgroundColor: Colors.green,
-          onTap: () => print('Share'),
+          onTap: () {
+            share(context, result);
+          },
           label: 'Share',
           labelStyle: TextStyle(fontWeight: FontWeight.w500),
           labelBackgroundColor: Colors.green,
