@@ -11,7 +11,6 @@ import 'package:ibdaa_app/models/getQuestions.dart';
 import 'package:ibdaa_app/ui/answersButtons/answersButtons.dart';
 import 'package:ibdaa_app/ui/questionsList/questionsList.dart';
 import 'package:ibdaa_app/ui/responsiveWIdget.dart';
-import 'package:ibdaa_app/ui/sizeInformation.dart';
 import 'package:ibdaa_app/ui/submitPage/submitPage.dart';
 
 import 'package:js_shims/js_shims.dart';
@@ -384,22 +383,46 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         builder: (context, constraints) {
           if (oldData.length == 3)
             return Container(
-              alignment: Alignment.center,
-              child: RaisedButton(
-                  child: Text('Start over'),
-                  shape: buttonStyle,
-                  onPressed: () {
-                    storage.clear();
-                    progressStorage.clear();
-                    setState(() {
-                      dataListWithCookieName = [];
-                    });
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyApp()),
-                        (Route<dynamic> route) => false);
-                  }),
-            );
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                  Center(child: Text('You already answered the questions')),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      new RaisedButton(
+                        child: new Text("See the result "),
+                        onPressed: () {
+                          Navigator.push<bool>(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => SubmitPage(
+                                    deviceId: deviceId,
+                                    questionsListTest: questionsListTest,
+                                    dataListWithCookieName:
+                                        dataListWithCookieName),
+                              ));
+                        },
+                      ),
+                      RaisedButton(
+                        child: new Text("Start over "),
+                        onPressed: () {
+                          storage.clear();
+                          progressStorage.clear();
+                          setState(() {
+                            dataListWithCookieName = [];
+                          });
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyApp()),
+                              (Route<dynamic> route) => false);
+                        },
+                      ),
+                    ],
+                  )
+                ]));
           else
             return Container(
                 height: MediaQuery.of(context).size.height,
