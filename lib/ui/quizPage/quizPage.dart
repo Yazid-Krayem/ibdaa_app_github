@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -218,11 +218,11 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   // This function for checking  and count the items inside the local storage and it  return the NEW currentIndex
 
   _getItemsFromLocalStorage() async {
-    final Storage _localStorage = window.localStorage;
-    var items = _localStorage['progress'];
-    final decoding = json.decode(items);
+    await storage.ready;
+    await progressStorage.ready;
+    // final decoding = storage.getItem(deviceId);
 
-    final progressLocalStorage = decoding['progress'];
+    final progressLocalStorage = progressStorage.getItem('progress');
 
     setState(() {
       dataListWithCookieName = oldData;
@@ -244,13 +244,10 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   }
 
   returnButtonFunction() async {
-    final Storage _localStorage = window.localStorage;
+    await storage.ready;
 
     List removeItemFromLocalStorageList = [];
-    var items = _localStorage['ibdaa'];
-
-    final decoding = json.decode(items);
-    var getData = decoding['$deviceId'];
+    var getData = storage.getItem(deviceId);
 
     setState(() {
       removeItemFromLocalStorageList = getData;
@@ -295,12 +292,12 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   /////////
   //Answers function
 
-  answersCallBack(item) {
+  answersCallBack(item) async {
+    await storage.ready;
     if (currentIndex != 0) {
-      final Storage _localStorage = window.localStorage;
-      var items = _localStorage['ibdaa'];
-      final decoding = json.decode(items);
-      var getData = decoding['$deviceId'];
+      var getData = storage.getItem(deviceId);
+      // final decoding = json.decode(items);
+      // var getData = decoding['$deviceId'];
       setState(() {
         currentIndex = getData.length;
       });

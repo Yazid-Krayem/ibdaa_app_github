@@ -1,7 +1,6 @@
-import 'dart:convert';
-import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cooky/cooky.dart' as cookie;
 
@@ -15,32 +14,36 @@ class StartQuizPage extends StatefulWidget {
 class _StartQuizPageState extends State<StartQuizPage> {
   String deviceid;
   String cookieName;
-  final Storage _localStorage = window.localStorage;
+  // Save and Delete data from Local Storage
 
   List oldData = ['empty'];
+  List progress = [];
+
+  final LocalStorage storage = new LocalStorage('ibdaa');
+  final progressStorage = LocalStorage('progress');
 
   _copyTheOldDataFromLocalStorage() async {
-    var items = _localStorage['ibdaa'];
+    await storage.ready;
+    final getIbdaaData = storage.getItem(deviceid);
 
-    if (items != null) {
-      final decoding = json.decode(items);
-      final getData = decoding['$deviceid'];
+    print(getIbdaaData);
 
-      if (getData == null) {
+    if (getIbdaaData != null) {
+      if (getIbdaaData == null) {
         setState(() {
           oldData = [];
         });
-      } else if (getData == []) {
+      } else if (getIbdaaData == []) {
         setState(() {
           oldData = [];
         });
-      } else if (getData == true) {
+      } else if (getIbdaaData == true) {
         setState(() {
           oldData = [];
         });
       } else {
         setState(() {
-          oldData = getData;
+          oldData = getIbdaaData;
         });
       }
     } else {
