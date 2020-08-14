@@ -60,7 +60,8 @@ class _SubmitPageState extends State<SubmitPage> {
   double result;
   void getPostsData() {
     List<Widget> listItems = [];
-    answersData.forEach((post) {
+
+    answersData.asMap().forEach((index, post) {
       // if (answersData[i] == post['id'])
       listItems.add(Container(
           height: 150,
@@ -80,9 +81,15 @@ class _SubmitPageState extends State<SubmitPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      post["answers_text"],
+                      questionsListTest[index]['question_data'],
                       style: const TextStyle(
                           fontSize: 28, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      post["answers_text"],
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
                     ),
                   ],
                 ),
