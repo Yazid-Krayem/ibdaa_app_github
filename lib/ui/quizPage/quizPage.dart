@@ -229,7 +229,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       dataListWithCookieName = oldData;
     });
     var findEmpty = dataListWithCookieName.contains('empty');
-    var findEmptyProgress = progressLocalStorage.contains('');
 
     if (findEmpty || progressLocalStorage == null) {
       setState(() {
@@ -541,17 +540,15 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   }
 
   _answersButtonMobileScreen() {
-    return Expanded(
-      child: Wrap(
-        children: [
-          for (var item in listAnswers)
-            AnswersButtons(
-                answersList: answersList,
-                answersCallBack: answersCallBack,
-                item: item,
-                currentIndex: currentIndex)
-        ],
-      ),
+    return Wrap(
+      children: [
+        for (var item in listAnswers)
+          AnswersButtons(
+              answersList: answersList,
+              answersCallBack: answersCallBack,
+              item: item,
+              currentIndex: currentIndex)
+      ],
     );
   }
 }
