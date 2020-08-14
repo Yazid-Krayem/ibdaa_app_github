@@ -224,19 +224,17 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     final decoding = json.decode(items);
 
     final progressLocalStorage = decoding['progress'];
-    if (progressLocalStorage == {}) {
-      setState(() {
-        _progress = 0.33;
-      });
-    }
 
     setState(() {
       dataListWithCookieName = oldData;
     });
     var findEmpty = dataListWithCookieName.contains('empty');
-    if (findEmpty) {
+    var findEmptyProgress = progressLocalStorage.contains('');
+
+    if (findEmpty || progressLocalStorage == null) {
       setState(() {
         currentIndex = 0;
+        _progress = 0.33;
       });
     } else {
       setState(() {
