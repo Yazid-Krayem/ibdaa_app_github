@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:ibdaa_app/ui/style.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:share/share.dart';
 
@@ -80,17 +81,9 @@ class _SubmitPageState extends State<SubmitPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      questionsListTest[index]['question_data'],
-                      style: const TextStyle(
-                          fontSize: 28, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      post["answers_text"],
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
+                    Text(questionsListTest[index]['question_data'],
+                        style: questionStyle),
+                    Text(post["answers_text"], style: answerStyle),
                   ],
                 ),
               ],

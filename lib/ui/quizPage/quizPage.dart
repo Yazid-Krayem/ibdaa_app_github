@@ -374,47 +374,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         ),
         builder: (context, constraints) {
           if (oldData.length == 3)
-            return Container(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                  Center(child: Text('You already answered the questions')),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      new RaisedButton(
-                        child: new Text("See the result "),
-                        onPressed: () {
-                          Navigator.push<bool>(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => SubmitPage(
-                                    deviceId: deviceId,
-                                    questionsListTest: questionsListTest,
-                                    dataListWithCookieName:
-                                        dataListWithCookieName),
-                              ));
-                        },
-                      ),
-                      RaisedButton(
-                        child: new Text("Start over "),
-                        onPressed: () {
-                          storage.clear();
-                          progressStorage.clear();
-                          setState(() {
-                            dataListWithCookieName = [];
-                          });
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => MyApp()),
-                              (Route<dynamic> route) => false);
-                        },
-                      ),
-                    ],
-                  )
-                ]));
+            return _outOfQuestions();
           else
             return Container(
                 height: MediaQuery.of(context).size.height,
@@ -438,7 +398,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         });
   }
 
-//constraints.maxHeight < 650 ||
+  //constraints.maxHeight < 650 ||
   // constraints.maxWidth < 600 ||
   Widget _mobileScreen() {
     return SingleChildScrollView(
@@ -563,5 +523,66 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
               currentIndex: currentIndex)
       ],
     );
+  }
+
+  Widget _outOfQuestions() {
+    return Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: [Colors.deepPurpleAccent, Colors.tealAccent],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp)),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                  child: Text(
+                'You already answered the questions',
+                style: outOfQuestionsTextStyle,
+              )),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  new RaisedButton(
+                    child: new Text("See the result "),
+                    shape: buttonStyle,
+                    onPressed: () {
+                      Navigator.push<bool>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => SubmitPage(
+                                deviceId: deviceId,
+                                questionsListTest: questionsListTest,
+                                dataListWithCookieName: dataListWithCookieName),
+                          ));
+                    },
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  RaisedButton(
+                    child: new Text("Start over "),
+                    shape: buttonStyle,
+                    onPressed: () {
+                      storage.clear();
+                      progressStorage.clear();
+                      setState(() {
+                        dataListWithCookieName = [];
+                      });
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyApp()),
+                          (Route<dynamic> route) => false);
+                    },
+                  ),
+                ],
+              )
+            ]));
   }
 }
