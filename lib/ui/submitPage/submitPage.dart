@@ -74,16 +74,26 @@ class _SubmitPageState extends State<SubmitPage> {
                 BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
               ]),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    Text(questionsListTest[index]['question_data'],
-                        style: questionStyle),
-                    Text(post["answers_text"], style: answerStyle),
+                    Text(
+                      questionsListTest[index]['question_data'],
+                      style: questionStyle,
+                      textAlign: TextAlign.justify,
+                      textDirection: TextDirection.rtl,
+                    ),
+                    Text(
+                      post["answers_text"],
+                      style: answerStyle,
+                      textAlign: TextAlign.justify,
+                      textDirection: TextDirection.rtl,
+                    ),
                   ],
                 ),
               ],

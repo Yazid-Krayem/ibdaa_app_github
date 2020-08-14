@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        locale: Locale('ar', ''),
         debugShowCheckedModeBanner: false,
         title: 'Ibdaa',
         theme: ThemeData(

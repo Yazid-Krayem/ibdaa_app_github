@@ -5,7 +5,7 @@ final buttonStyle = new RoundedRectangleBorder(
 );
 
 final questionStyle =
-    const TextStyle(fontSize: 28, fontWeight: FontWeight.bold);
+    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
 
 final answerStyle = const TextStyle(
   fontSize: 18,
