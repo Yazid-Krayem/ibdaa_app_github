@@ -133,7 +133,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
 
       storage.setItem("$cookieName", dataListWithCookieName);
     });
-    // print('_additem $dataListWithCookieName');
   }
 
   //// Get the existing data
@@ -260,14 +259,11 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     await storage.deleteItem('ibdaa');
     storage.setItem("$cookieName", removeItemFromLocalStorageList);
 
-    // print("deleted array $removeItemFromLocalStorageList +++ currentIndex $deleteCurrentIndex  ");
-
     _decrementCurrentIndex();
 
     if (getData == []) {
       return false;
     }
-    // print('from the return button function $currentIndex');
   }
 
   // seState functions
@@ -355,7 +351,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
             index: currentIndex,
             children: questionsListTest.map((question) {
               if (questionsListTest.indexOf(question) <= 3) {
-                // print(question.question_data);
                 return QuestionsList(
                     currentIndex: currentIndex,
                     progress: _progress,
@@ -463,7 +458,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                   color: Colors.blue,
                   onPressed: () => {
                     if (currentIndex == 0)
-                      // {print('object')}
                       null
                     else
                       {
@@ -511,7 +505,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                   color: Colors.blue,
                   onPressed: () => {
                     if (currentIndex == 0)
-                      // {print('object')}
                       null
                     else
                       {

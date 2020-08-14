@@ -26,8 +26,6 @@ class _StartQuizPageState extends State<StartQuizPage> {
     await storage.ready;
     final getIbdaaData = storage.getItem(deviceid);
 
-    print(getIbdaaData);
-
     if (getIbdaaData != null) {
       if (getIbdaaData == null) {
         setState(() {
