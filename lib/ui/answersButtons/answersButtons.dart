@@ -19,7 +19,7 @@ class AnswersButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: MaterialButton(
+      child: RaisedButton(
           elevation: 8,
           shape: buttonStyle,
           textColor: Colors.black,

@@ -340,40 +340,34 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   Widget indexStacked() {
     var orientation = MediaQuery.of(context).orientation;
 
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Container(
-            alignment: Alignment.center,
-            width: orientation == Orientation.landscape
-                ? MediaQuery.of(context).size.width * 0.6
-                : MediaQuery.of(context).size.width * 0.5,
-            height: orientation == Orientation.landscape
-                ? MediaQuery.of(context).size.height * 0.4
-                : MediaQuery.of(context).size.height * 0.3,
-            decoration: BoxDecoration(
-              color: Colors.lightBlueAccent,
-              gradient: LinearGradient(
-                colors: [Colors.white, Colors.blue],
-              ),
-            ),
-            child: IndexedStack(
-                index: currentIndex,
-                children: questionsListTest.map((question) {
-                  if (questionsListTest.indexOf(question) <= 3) {
-                    // print(question.question_data);
-                    return QuestionsList(
-                        currentIndex: currentIndex,
-                        progress: _progress,
-                        question: question);
-                  } else {
-                    return Container();
-                  }
-                }).toList()),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        alignment: Alignment.center,
+        width: orientation == Orientation.portrait
+            ? MediaQuery.of(context).size.width * 0.8
+            : MediaQuery.of(context).size.width * 0.5,
+        height: MediaQuery.of(context).size.height * 0.4,
+        decoration: BoxDecoration(
+          color: Colors.lightBlueAccent,
+          gradient: LinearGradient(
+            colors: [Colors.white, Colors.blue],
           ),
         ),
-      ],
+        child: IndexedStack(
+            index: currentIndex,
+            children: questionsListTest.map((question) {
+              if (questionsListTest.indexOf(question) <= 3) {
+                // print(question.question_data);
+                return QuestionsList(
+                    currentIndex: currentIndex,
+                    progress: _progress,
+                    question: question);
+              } else {
+                return Container();
+              }
+            }).toList()),
+      ),
     );
   }
 
@@ -406,42 +400,41 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                   }),
             );
           else
-            return LayoutBuilder(
-              builder: (context, constraints) {
-                if (constraints.maxHeight < 650 ||
-                    constraints.maxWidth < 600 ||
-                    orientation == Orientation.portrait) {
-                  return _mobileScreen();
-                } else {
-                  return _webScreen();
-                }
-              },
-            );
+            return Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [Colors.deepPurpleAccent, Colors.tealAccent],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp)),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    if (orientation == Orientation.portrait) {
+                      return _mobileScreen();
+                    } else {
+                      return _webScreen();
+                    }
+                  },
+                ));
         });
   }
 
+//constraints.maxHeight < 650 ||
+  // constraints.maxWidth < 600 ||
   Widget _mobileScreen() {
-    var orientation = MediaQuery.of(context).orientation;
-
     return SingleChildScrollView(
-      child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [Colors.deepPurpleAccent, Colors.tealAccent],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp)),
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              // return button
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          // return button
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
               Container(
-                alignment: orientation == Orientation.landscape
-                    ? Alignment.topLeft
-                    : Alignment.topRight,
+                // alignment: Alignment.topLeft,
                 padding: const EdgeInsets.all(20.0),
                 child: RaisedButton(
                   shape: buttonStyle,
@@ -459,111 +452,102 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                   child: Text("return", style: TextStyle(fontSize: 20)),
                 ),
               ),
-              Column(
-                // crossAxisAlignment: CrossAxisAlignment.,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  indexStacked(),
-                  _answersButtonRow(),
-                ],
-              )
-              //answers widget
             ],
-          )),
+          ),
+
+          Column(
+            children: [
+              indexStacked(),
+
+              Container(
+                height: 300,
+                child: _answersButtonMobileScreen(),
+              )
+              // _answersButtonMobileScreen()
+            ],
+          )
+
+          //answers widget
+        ],
+      ),
     );
   }
 
   Widget _webScreen() {
     return SingleChildScrollView(
-        child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [Colors.deepPurpleAccent, Colors.tealAccent],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0.0, 1.0],
-                    tileMode: TileMode.clamp)),
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      indexStacked(),
-                      _answersButtonColumn(),
-                    ]),
-                // return button
-                Container(
-                  alignment: Alignment.topRight,
-                  padding: const EdgeInsets.all(20.0),
-                  child: RaisedButton(
-                    shape: buttonStyle,
-                    textColor: Colors.black,
-                    color: Colors.blue,
-                    onPressed: () => {
-                      if (currentIndex == 0)
-                        // {print('object')}
-                        null
-                      else
-                        {
-                          returnButtonFunction(),
-                        }
-                    },
-                    child: Text("return", style: TextStyle(fontSize: 20)),
-                  ),
-                )
-              ],
-            )
-            //answers widget
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                // alignment: Alignment.topLeft,
+                padding: const EdgeInsets.all(20.0),
+                child: RaisedButton(
+                  shape: buttonStyle,
+                  textColor: Colors.black,
+                  color: Colors.blue,
+                  onPressed: () => {
+                    if (currentIndex == 0)
+                      // {print('object')}
+                      null
+                    else
+                      {
+                        returnButtonFunction(),
+                      }
+                  },
+                  child: Text("return", style: TextStyle(fontSize: 20)),
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 100,
+          ),
+          Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // overflow: Overflow.clip,
+              children: [
+                indexStacked(),
+                _answersButtonWebScreen(),
+              ]),
+          // return button
+        ],
 
-            ));
+        //answers widget
+      ),
+    );
   }
 
-  _answersButtonRow() {
+  _answersButtonWebScreen() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Wrap(
-          // crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            for (var item in listAnswers)
-              Container(
-                // padding: const EdgeInsets.only(bottom: 150.0),
-                alignment: Alignment.bottomCenter,
-                child: AnswersButtons(
-                    answersList: answersList,
-                    answersCallBack: answersCallBack,
-                    item: item,
-                    currentIndex: currentIndex),
-              )
-          ],
-        )
+        for (var item in listAnswers)
+          Container(
+            // padding: const EdgeInsets.only(bottom: 150.0),
+            alignment: Alignment.bottomCenter,
+            child: AnswersButtons(
+                answersList: answersList,
+                answersCallBack: answersCallBack,
+                item: item,
+                currentIndex: currentIndex),
+          )
       ],
     );
   }
 
-  _answersButtonColumn() {
-    return Container(
-      height: 300,
-      // padding: const EdgeInsets.only(top: 60.0),
-      alignment: Alignment.center,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.end,
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
+  _answersButtonMobileScreen() {
+    return Expanded(
+      child: Wrap(
         children: [
           for (var item in listAnswers)
-            Wrap(children: [
-              AnswersButtons(
-                  answersList: answersList,
-                  answersCallBack: answersCallBack,
-                  item: item,
-                  currentIndex: currentIndex),
-            ])
+            AnswersButtons(
+                answersList: answersList,
+                answersCallBack: answersCallBack,
+                item: item,
+                currentIndex: currentIndex)
         ],
       ),
     );

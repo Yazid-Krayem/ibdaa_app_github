@@ -31,12 +31,17 @@ class QuestionsList extends StatelessWidget {
               style: TextStyle(color: Colors.purple),
               textDirection: TextDirection.rtl),
         ),
-        Center(
-            // padding: const EdgeInsets.all(8.0),
-            child: Text(
-          "${question['question_data']}",
-          style: TextStyle(fontSize: 25, color: Colors.black),
-        )),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                "${question['question_data']}",
+                textAlign: TextAlign.justify,
+                textDirection: TextDirection.rtl,
+                style: TextStyle(fontSize: 25, color: Colors.black),
+              )),
+        ),
       ],
     );
   }
