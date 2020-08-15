@@ -553,14 +553,15 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                     child: new Text("See the result "),
                     shape: buttonStyle,
                     onPressed: () {
-                      Navigator.push<bool>(
+                      Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (BuildContext context) => SubmitPage(
+                            builder: (context) => SubmitPage(
                                 deviceId: deviceId,
                                 questionsListTest: questionsListTest,
                                 dataListWithCookieName: dataListWithCookieName),
-                          ));
+                          ),
+                          (Route<dynamic> route) => false);
                     },
                   ),
                   SizedBox(
