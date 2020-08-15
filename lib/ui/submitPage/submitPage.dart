@@ -55,8 +55,9 @@ class _SubmitPageState extends State<SubmitPage> {
     });
   }
 
-  _addResult(deviceId, result, user_answers) {
-    return API.usersAnswers(deviceId, result, user_answers);
+  _addResult(deviceId, stringResult, user_answers) {
+    final stringResult = result.toString();
+    return API.usersAnswers(deviceId, stringResult, user_answers);
   }
 
   List<Widget> itemsData = [];
@@ -134,7 +135,6 @@ class _SubmitPageState extends State<SubmitPage> {
 //Alert
   void _showDialog() {
     // flutter defined function
-    final stringResult = "result";
     final device_id = "$deviceId";
     final user_answers = "$answersData";
 
@@ -150,9 +150,11 @@ class _SubmitPageState extends State<SubmitPage> {
             new FlatButton(
               child: new Text("Sahre it "),
               onPressed: () async {
-                await _addResult(device_id, stringResult, user_answers);
-                print(
-                    "device_id $device_id ,++ user_result  ++ user_answers $user_answers");
+                await _addResult(device_id, result, user_answers);
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyApp()),
+                    (Route<dynamic> route) => false);
               },
             ),
             FlatButton(
