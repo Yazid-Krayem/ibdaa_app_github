@@ -63,7 +63,6 @@ class _SubmitPageState extends State<SubmitPage> {
     List<Widget> listItems = [];
 
     answersData.asMap().forEach((index, post) {
-      // if (answersData[i] == post['id'])
       listItems.add(Container(
           height: 150,
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -74,27 +73,27 @@ class _SubmitPageState extends State<SubmitPage> {
                 BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
               ]),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Column(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      questionsListTest[index]['question_data'],
-                      style: questionStyle,
-                      textAlign: TextAlign.justify,
-                      textDirection: TextDirection.rtl,
-                    ),
-                    Text(
-                      post["answers_text"],
-                      style: answerStyle,
-                      textAlign: TextAlign.justify,
-                      textDirection: TextDirection.rtl,
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        questionsListTest[index]['question_data'],
+                        style: questionStyle,
+                        textDirection: TextDirection.rtl,
+                      ),
+                      Text(
+                        post["answers_text"],
+                        style: answerStyle,
+                        textAlign: TextAlign.justify,
+                        textDirection: TextDirection.rtl,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
