@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/ui/style.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:share/share.dart';
@@ -52,6 +53,10 @@ class _SubmitPageState extends State<SubmitPage> {
     setState(() {
       result = double.parse(resultVar.toStringAsFixed(2));
     });
+  }
+
+  _addResult(deviceId, result, user_answers) {
+    return API.usersAnswers(deviceId, result, user_answers);
   }
 
   List<Widget> itemsData = [];
@@ -129,7 +134,9 @@ class _SubmitPageState extends State<SubmitPage> {
 //Alert
   void _showDialog() {
     // flutter defined function
-    final String text = "Hey, my result is $result";
+    final stringResult = "result";
+    final device_id = "$deviceId";
+    final user_answers = "$answersData";
 
     showDialog(
       context: context,
@@ -142,8 +149,10 @@ class _SubmitPageState extends State<SubmitPage> {
             // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text("Sahre it "),
-              onPressed: () {
-                Share.share(text, subject: "$result");
+              onPressed: () async {
+                await _addResult(device_id, stringResult, user_answers);
+                print(
+                    "device_id $device_id ,++ user_result  ++ user_answers $user_answers");
               },
             ),
             FlatButton(

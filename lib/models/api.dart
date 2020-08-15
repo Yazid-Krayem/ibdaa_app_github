@@ -35,15 +35,17 @@ class API {
     );
   }
 
-  // static Future insertUserAnswers(
-  //     user_question_question, user_question_answer, user_question_user) {
-  //   var url = baseUrl + "/answers/list";
-  //   return http.post(url, body: {
-  //     'user_question_question': user_question_question,
-  //     'user_question_answer': user_question_answer,
-  //     'user_question_user': user_question_user
-  //   });
-  // }
+  static Future usersAnswers(device_id, result, user_answers) {
+    var url = baseUrl + "/result/add";
+
+    print(
+        "device_id $device_id ,++ questions $result ++ user_answers $user_answers");
+    return http.post(url, body: {
+      'device_id': device_id,
+      'user_result': result,
+      'user_answers': user_answers
+    });
+  }
 
   static Future userAnswersFromLocalStorage(data) {
     var url = baseUrl + "/users/add";
