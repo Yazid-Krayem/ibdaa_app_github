@@ -313,7 +313,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
             builder: (BuildContext context) => SubmitPage(
                 deviceId: deviceId,
                 questionsListTest: questionsListTest,
-                dataListWithCookieName: dataListWithCookieName),
+                dataListWithCookieName: dataListWithCookieName,
+                cookieName: cookieName,
+                oldData: oldData),
           ));
     }
     setState(() {
@@ -553,16 +555,18 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                   new RaisedButton(
                     child: new Text("See the result "),
                     shape: buttonStyle,
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                          context,
+                    onPressed: () async {
+                      await Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                             builder: (context) => SubmitPage(
-                                deviceId: deviceId,
-                                questionsListTest: questionsListTest,
-                                dataListWithCookieName: dataListWithCookieName),
+                              deviceId: deviceId,
+                              questionsListTest: questionsListTest,
+                              dataListWithCookieName: dataListWithCookieName,
+                              cookieName: cookieName,
+                              oldData: oldData,
+                            ),
                           ),
-                          (Route<dynamic> route) => false);
+                          (Route<dynamic> route) => true);
                     },
                   ),
                   SizedBox(

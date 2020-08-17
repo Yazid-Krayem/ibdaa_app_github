@@ -2,35 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:ibdaa_app/models/api.dart';
+import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
+import 'package:js_shims/js_shims.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:share/share.dart';
 
 import '../../main.dart';
 
 class SubmitPage extends StatefulWidget {
+  final List oldData;
   final deviceId;
   final List questionsListTest;
   final List dataListWithCookieName;
+  final String cookieName;
 
   SubmitPage(
       {Key key,
       @required this.deviceId,
       @required this.questionsListTest,
-      @required this.dataListWithCookieName})
+      @required this.dataListWithCookieName,
+      @required this.cookieName,
+      @required this.oldData})
       : super(key: key);
 
   @override
-  _SubmitPageState createState() => _SubmitPageState(
-      deviceId, questionsListTest, this.dataListWithCookieName);
+  _SubmitPageState createState() => _SubmitPageState(deviceId,
+      questionsListTest, this.dataListWithCookieName, cookieName, oldData);
 }
 
 class _SubmitPageState extends State<SubmitPage> {
+  final List oldData;
+
+  final cookieName;
   final deviceId;
   final List questionsListTest;
   List dataListWithCookieName;
-  _SubmitPageState(
-      this.deviceId, this.questionsListTest, this.dataListWithCookieName);
+  _SubmitPageState(this.deviceId, this.questionsListTest,
+      this.dataListWithCookieName, this.cookieName, this.oldData);
   ScrollController controller = ScrollController();
   bool closeTopContainer = false;
   double topContainer = 0;
@@ -200,7 +209,7 @@ class _SubmitPageState extends State<SubmitPage> {
           automaticallyImplyLeading: false,
           title: Text("Submit"),
         ),
-        floatingActionButton: buildSpeedDial(),
+        // floatingActionButton: buildSpeedDial(),
         body: SafeArea(
             child: Container(
           height: MediaQuery.of(context).size.height,
@@ -240,6 +249,55 @@ class _SubmitPageState extends State<SubmitPage> {
                         ),
                       );
                     })),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                RaisedButton.icon(
+                  shape: buttonStyle,
+                  color: Colors.blue,
+                  onPressed: () async {
+                    await storage.ready;
+
+                    List removeItemFromLocalStorageList = [];
+                    var getData = storage.getItem(deviceId);
+
+                    setState(() {
+                      removeItemFromLocalStorageList = getData;
+                      removeItemFromLocalStorageList = dataListWithCookieName;
+                    });
+
+                    // int deleteCurrentIndex = currentIndex - 1;
+                    await pop(removeItemFromLocalStorageList);
+
+                    await storage.deleteItem('ibdaa');
+                    storage.setItem(
+                        "$cookieName", removeItemFromLocalStorageList);
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            QuizPage(deviceId, cookieName, oldData)));
+
+                    // _decrementCurrentIndex();
+                  },
+                  label: Text('تعديل'),
+                  icon: Icon(Icons.arrow_back),
+                ),
+                RaisedButton.icon(
+                  shape: buttonStyle,
+                  color: Colors.green,
+                  onPressed: () async {
+                    await _addResult(deviceId, result, answersData);
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                        (Route<dynamic> route) => false);
+                  },
+                  label: Text('إرسال'),
+                  icon: Icon(Icons.send),
+                ),
+              ],
+            )
           ]),
         )));
   }
