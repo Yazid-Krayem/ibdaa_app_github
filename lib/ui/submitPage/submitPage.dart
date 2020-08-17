@@ -16,6 +16,7 @@ class SubmitPage extends StatefulWidget {
   final List questionsListTest;
   final List dataListWithCookieName;
   final String cookieName;
+  final double progress;
 
   SubmitPage(
       {Key key,
@@ -23,23 +24,34 @@ class SubmitPage extends StatefulWidget {
       @required this.questionsListTest,
       @required this.dataListWithCookieName,
       @required this.cookieName,
-      @required this.oldData})
+      @required this.oldData,
+      @required this.progress})
       : super(key: key);
 
   @override
-  _SubmitPageState createState() => _SubmitPageState(deviceId,
-      questionsListTest, this.dataListWithCookieName, cookieName, oldData);
+  _SubmitPageState createState() => _SubmitPageState(
+      deviceId,
+      questionsListTest,
+      this.dataListWithCookieName,
+      cookieName,
+      oldData,
+      progress);
 }
 
 class _SubmitPageState extends State<SubmitPage> {
   final List oldData;
-
+  final double progress;
   final cookieName;
   final deviceId;
   final List questionsListTest;
   List dataListWithCookieName;
-  _SubmitPageState(this.deviceId, this.questionsListTest,
-      this.dataListWithCookieName, this.cookieName, this.oldData);
+  _SubmitPageState(
+      this.deviceId,
+      this.questionsListTest,
+      this.dataListWithCookieName,
+      this.cookieName,
+      this.oldData,
+      this.progress);
   ScrollController controller = ScrollController();
   bool closeTopContainer = false;
   double topContainer = 0;
@@ -47,6 +59,8 @@ class _SubmitPageState extends State<SubmitPage> {
   final LocalStorage storage = new LocalStorage('ibdaa');
 
   final LocalStorage progressStorage = new LocalStorage('progress');
+
+  double newProgress;
 
   List answersData = [];
   _getLocalStorageData() async {
@@ -258,6 +272,13 @@ class _SubmitPageState extends State<SubmitPage> {
                   color: Colors.blue,
                   onPressed: () async {
                     await storage.ready;
+                    await progressStorage.ready;
+
+                    setState(() {
+                      newProgress = progress - 0.33;
+                    });
+
+                    progressStorage.setItem('progress', newProgress);
 
                     List removeItemFromLocalStorageList = [];
                     var getData = storage.getItem(deviceId);
