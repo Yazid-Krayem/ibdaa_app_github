@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ibdaa_app/ui/introPage/introPage.dart';
+import 'package:ibdaa_app/ui/style.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,6 +17,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Ibdaa',
         theme: ThemeData(
+          brightness: Brightness.dark,
+          primaryColor: AppColors.darkSlateGray,
+          accentColor: AppColors.dodgerBlue,
+          scaffoldBackgroundColor: AppColors.darkSlateGray,
+          fontFamily: GoogleFonts.oxygen().fontFamily,
           primarySwatch: Colors.blue,
         ),
         home: Directionality(

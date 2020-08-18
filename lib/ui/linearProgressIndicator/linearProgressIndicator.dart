@@ -1,15 +1,67 @@
 import 'package:flutter/material.dart';
 
-class Linearprogress extends StatelessWidget {
-  final double progress;
+import '../style.dart';
 
-  const Linearprogress({Key key, this.progress}) : super(key: key);
+class Linearprogress extends StatelessWidget {
+  static const _totalHeight = 50.0;
+  static const _circularBorderRadius = 40.0;
+  static const _borderWidth = 5.0;
+  static const _fillContainerMargin = 5.0;
+
+  final int currentIndex;
+  final int totalNumberOfQuestions;
+
+  const Linearprogress({
+    @required this.currentIndex,
+    @required this.totalNumberOfQuestions,
+  });
+
   @override
   Widget build(BuildContext context) {
-    return LinearProgressIndicator(
-      backgroundColor: Colors.cyanAccent,
-      valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
-      value: progress,
+    final outlineContainerHeight = _totalHeight;
+    final outlineContainerWidth = MediaQuery.of(context).size.width * 0.4;
+    final fillContainerHeight =
+        outlineContainerHeight - 2 * _fillContainerMargin;
+    final totalFillContainerWidth =
+        outlineContainerWidth - 2 * _fillContainerMargin;
+    final fillContainerWidth =
+        totalFillContainerWidth * (currentIndex / totalNumberOfQuestions);
+
+    return Stack(
+      children: <Widget>[
+        Container(
+          height: fillContainerHeight,
+          width: fillContainerWidth,
+          margin: EdgeInsets.all(_fillContainerMargin),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(_circularBorderRadius),
+            gradient: LinearGradient(
+              colors: [
+                AppColors.tomato,
+                AppColors.purple,
+              ],
+            ),
+          ),
+        ),
+        Container(
+          height: outlineContainerHeight,
+          width: outlineContainerWidth,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(_circularBorderRadius),
+            border: Border.all(
+              width: _borderWidth,
+              color: AppColors.darkSlateBlue,
+            ),
+          ),
+        ),
+        Container(
+          height: outlineContainerHeight,
+          width: outlineContainerWidth,
+          child: Center(
+            child: Text('$currentIndex/$totalNumberOfQuestions'),
+          ),
+        ),
+      ],
     );
   }
 }

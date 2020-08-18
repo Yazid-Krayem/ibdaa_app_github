@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ibdaa_app/common/button.dart';
 import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cooky/cooky.dart' as cookie;
-
-import '../style.dart';
 
 class StartQuizPage extends StatefulWidget {
   @override
@@ -94,20 +93,23 @@ class _StartQuizPageState extends State<StartQuizPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      body: Center(
-        child: RaisedButton(
-            shape: buttonStyle,
-            textColor: Colors.white,
-            color: Colors.blue,
-            child: Text('Start Quiz'),
-            onPressed: () {
-              Navigator.push<bool>(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        QuizPage(deviceid, cookieName, oldData),
-                  ));
-            }),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: NetworkImage('assets/quiz.jpg'), fit: BoxFit.fill),
+        ),
+        child: Center(
+          child: Button(
+              buttonLabel: 'ابدأ الاختبار',
+              onPressed: () {
+                Navigator.push<bool>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          QuizPage(deviceid, cookieName, oldData),
+                    ));
+              }),
+        ),
       ),
     );
   }

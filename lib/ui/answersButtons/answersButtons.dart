@@ -17,10 +17,12 @@ class AnswersButtons extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      width: MediaQuery.of(context).size.width / 4,
       padding: const EdgeInsets.all(8.0),
-      child: RaisedButton(
-          elevation: 8,
+      child: FlatButton(
+
+          // elevation: 8,
           shape: buttonStyle,
           textColor: Colors.black,
           color: Colors.blue,

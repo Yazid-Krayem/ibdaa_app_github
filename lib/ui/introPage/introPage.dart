@@ -22,8 +22,8 @@ class _IntroScreenState extends State<IntroPage> {
   void initState() {
     super.initState();
 
-    _timer = Timer.periodic(Duration(seconds: 2), (timer) {
-      if (index < 2) {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (index < 3) {
         setState(() {
           index++;
         });
@@ -43,7 +43,7 @@ class _IntroScreenState extends State<IntroPage> {
         children: [
           Center(
             child: AnimatedSwitcher(
-              duration: Duration(seconds: 2),
+              duration: Duration(seconds: 3),
               child: Text(
                 _titles[index],
                 key: ValueKey(_titles[index]),
@@ -61,7 +61,7 @@ class _IntroScreenState extends State<IntroPage> {
                 pushReplacementOverview();
               },
               child: Text(
-                "Skip",
+                "تخطى",
                 style: Theme.of(context).textTheme.headline6,
               ),
             ),

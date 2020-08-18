@@ -9,6 +9,7 @@ import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/models/getAnswers.dart';
 import 'package:ibdaa_app/models/getQuestions.dart';
 import 'package:ibdaa_app/ui/answersButtons/answersButtons.dart';
+import 'package:ibdaa_app/ui/linearProgressIndicator/linearProgressIndicator.dart';
 import 'package:ibdaa_app/ui/questionsList/questionsList.dart';
 import 'package:ibdaa_app/ui/responsiveWIdget.dart';
 import 'package:ibdaa_app/ui/submitPage/submitPage.dart';
@@ -342,9 +343,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       child: Container(
         alignment: Alignment.center,
         width: orientation == Orientation.portrait
-            ? MediaQuery.of(context).size.width * 0.8
-            : MediaQuery.of(context).size.width * 0.5,
-        height: MediaQuery.of(context).size.height * 0.4,
+            ? MediaQuery.of(context).size.width * 0.6
+            : MediaQuery.of(context).size.width * 0.45,
+        height: MediaQuery.of(context).size.height * 0.3,
         decoration: BoxDecoration(
           color: Colors.lightBlueAccent,
           gradient: LinearGradient(
@@ -370,154 +371,94 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var orientation = MediaQuery.of(context).orientation;
+    var width = MediaQuery.of(context).size.width;
 
-    return ResponsiveWIdget(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text("Quiz"),
-        ),
-        builder: (context, constraints) {
-          if (oldData.length == 3)
-            return _outOfQuestions();
-          else
-            return Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [Colors.deepPurpleAccent, Colors.tealAccent],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: [0.0, 1.0],
-                        tileMode: TileMode.clamp)),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    if (orientation == Orientation.portrait) {
-                      return _mobileScreen();
-                    } else {
-                      return _webScreen();
-                    }
-                  },
-                ));
-        });
+    return SafeArea(
+        child: ResponsiveWIdget(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text("اختبار"),
+            ),
+            builder: (context, constraints) {
+              if (oldData.length == 3)
+                return _outOfQuestions();
+              else
+                return SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Row(
+                    children: [
+                      orientation == Orientation.landscape
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(450.0),
+                                bottomRight: Radius.circular(450.0),
+                              ),
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage('assets/quiz.jpg'),
+                                        fit: BoxFit.fill),
+                                  ),
+                                  width: MediaQuery.of(context).size.width / 2,
+                                  height: MediaQuery.of(context).size.height,
+                                  child: null),
+                            )
+                          : Container(),
+                      Container(
+                          width: orientation == Orientation.landscape
+                              ? width / 2
+                              : width,
+                          child: _mobileScreen())
+                    ],
+                  ),
+                );
+            }));
   }
 
-  //constraints.maxHeight < 650 ||
-  // constraints.maxWidth < 600 ||
   Widget _mobileScreen() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          // return button
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                // alignment: Alignment.topLeft,
-                padding: const EdgeInsets.all(20.0),
-                child: RaisedButton(
-                  shape: buttonStyle,
-                  textColor: Colors.black,
-                  color: Colors.blue,
-                  onPressed: () => {
-                    if (currentIndex == 0)
-                      null
-                    else
-                      {
-                        returnButtonFunction(),
-                      }
-                  },
-                  child: Text("return", style: TextStyle(fontSize: 20)),
-                ),
-              ),
-            ],
-          ),
-
-          Column(
-            children: [
-              indexStacked(),
-
-              Container(
-                height: 300,
-                child: _answersButtonMobileScreen(),
-              )
-              // _answersButtonMobileScreen()
-            ],
-          )
-
-          //answers widget
-        ],
-      ),
-    );
-  }
-
-  Widget _webScreen() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                // alignment: Alignment.topLeft,
-                padding: const EdgeInsets.all(20.0),
-                child: RaisedButton(
-                  shape: buttonStyle,
-                  textColor: Colors.black,
-                  color: Colors.blue,
-                  onPressed: () => {
-                    if (currentIndex == 0)
-                      null
-                    else
-                      {
-                        returnButtonFunction(),
-                      }
-                  },
-                  child: Text("return", style: TextStyle(fontSize: 20)),
-                ),
-              )
-            ],
-          ),
-          SizedBox(
-            height: 100,
-          ),
-          Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              // overflow: Overflow.clip,
-              children: [
-                indexStacked(),
-                _answersButtonWebScreen(),
-              ]),
-          // return button
-        ],
-
-        //answers widget
-      ),
-    );
-  }
-
-  _answersButtonWebScreen() {
     return Column(
-      children: [
-        for (var item in listAnswers)
-          Container(
-            // padding: const EdgeInsets.only(bottom: 150.0),
-            alignment: Alignment.bottomCenter,
-            child: AnswersButtons(
-                answersList: answersList,
-                answersCallBack: answersCallBack,
-                item: item,
-                currentIndex: currentIndex),
-          )
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        // return button
+        Container(
+          alignment: Alignment.topLeft,
+          padding: const EdgeInsets.all(20.0),
+          child: RaisedButton(
+            shape: buttonStyle,
+            textColor: Colors.black,
+            color: Colors.blue,
+            onPressed: () => {
+              if (currentIndex == 0)
+                null
+              else
+                {
+                  returnButtonFunction(),
+                }
+            },
+            child: Text("السؤال السابق", style: TextStyle(fontSize: 20)),
+          ),
+        ),
+
+        Linearprogress(
+          currentIndex: currentIndex + 1,
+          totalNumberOfQuestions: 3,
+        ),
+
+        Column(
+          children: [
+            indexStacked(),
+            Container(
+              height: 300,
+              child: _answersButtonMobileScreen(),
+            )
+          ],
+        )
       ],
     );
   }
 
   _answersButtonMobileScreen() {
-    return Wrap(
+    return Column(
       children: [
         for (var item in listAnswers)
           AnswersButtons(

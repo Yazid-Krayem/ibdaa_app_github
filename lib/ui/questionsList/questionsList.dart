@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ibdaa_app/ui/linearProgressIndicator/linearProgressIndicator.dart';
 
 class QuestionsList extends StatelessWidget {
   final double progress;
@@ -14,35 +13,16 @@ class QuestionsList extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Container(
-            width: MediaQuery.of(context).size.width * 0.5,
-            child: Linearprogress(
-              progress: progress,
-            ),
-          ),
-        ]),
-        Container(
-          alignment: Alignment.topRight,
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Text("السؤال ${currentIndex + 1} من 3",
-              style: TextStyle(color: Colors.purple),
-              textDirection: TextDirection.rtl),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                "${question['question_data']}",
-                textAlign: TextAlign.justify,
-                textDirection: TextDirection.rtl,
-                style: TextStyle(fontSize: 25, color: Colors.black),
-              )),
-        ),
-      ],
+          child: Text(
+            "${question['question_data']}",
+            textAlign: TextAlign.justify,
+            textDirection: TextDirection.rtl,
+            style: TextStyle(fontSize: 25, color: Colors.black),
+          )),
     );
   }
 }
