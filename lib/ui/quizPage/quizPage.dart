@@ -312,12 +312,13 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           context,
           MaterialPageRoute(
             builder: (BuildContext context) => SubmitPage(
-                deviceId: deviceId,
-                questionsListTest: questionsListTest,
-                dataListWithCookieName: dataListWithCookieName,
-                cookieName: cookieName,
-                oldData: oldData,
-                progress: _progress),
+              deviceId: deviceId,
+              questionsListTest: questionsListTest,
+              dataListWithCookieName: dataListWithCookieName,
+              cookieName: cookieName,
+              oldData: oldData,
+              progress: _progress,
+            ),
           ));
     }
     setState(() {
@@ -500,12 +501,13 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                       await Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                             builder: (context) => SubmitPage(
-                                deviceId: deviceId,
-                                questionsListTest: questionsListTest,
-                                dataListWithCookieName: dataListWithCookieName,
-                                cookieName: cookieName,
-                                oldData: oldData,
-                                progress: _progress),
+                              deviceId: deviceId,
+                              questionsListTest: questionsListTest,
+                              dataListWithCookieName: dataListWithCookieName,
+                              cookieName: cookieName,
+                              oldData: oldData,
+                              progress: _progress,
+                            ),
                           ),
                           (Route<dynamic> route) => true);
                     },

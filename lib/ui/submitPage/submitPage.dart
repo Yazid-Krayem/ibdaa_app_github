@@ -87,6 +87,7 @@ class _SubmitPageState extends State<SubmitPage> {
 
   List questionsAnswers = [];
 
+  List<Widget> listItems = [];
   double result;
   void getPostsData() {
     List<Widget> listItems = [];
@@ -218,6 +219,7 @@ class _SubmitPageState extends State<SubmitPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(itemsData);
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -225,49 +227,41 @@ class _SubmitPageState extends State<SubmitPage> {
         ),
         // floatingActionButton: buildSpeedDial(),
         body: SafeArea(
-            child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [Colors.deepPurpleAccent, Colors.tealAccent],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp)),
-          child: Column(children: [
-            Expanded(
-                child: ListView.builder(
-                    controller: controller,
-                    itemCount: itemsData.length,
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      double scale = 1.0;
-                      if (topContainer > 0.5) {
-                        scale = index + 0.5 - topContainer;
-                        if (scale < 0) {
-                          scale = 0;
-                        } else if (scale > 1) {
-                          scale = 1;
-                        }
+            child: Column(children: [
+          Expanded(
+              child: ListView.builder(
+                  controller: controller,
+                  itemCount: itemsData.length,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    double scale = 1.0;
+                    if (topContainer > 0.5) {
+                      scale = index + 0.5 - topContainer;
+                      if (scale < 0) {
+                        scale = 0;
+                      } else if (scale > 1) {
+                        scale = 1;
                       }
-                      return Opacity(
-                        opacity: scale,
-                        child: Transform(
-                          transform: Matrix4.identity()..scale(scale, scale),
-                          alignment: Alignment.bottomCenter,
-                          child: Align(
-                              heightFactor: 0.7,
-                              alignment: Alignment.topCenter,
-                              child: itemsData[index]),
-                        ),
-                      );
-                    })),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                RaisedButton.icon(
+                    }
+                    return Opacity(
+                      opacity: scale,
+                      child: Transform(
+                        transform: Matrix4.identity()..scale(scale, scale),
+                        alignment: Alignment.bottomCenter,
+                        child: Align(
+                            heightFactor: 0.7,
+                            alignment: Alignment.topCenter,
+                            child: itemsData[index]),
+                      ),
+                    );
+                  })),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: RaisedButton.icon(
                   shape: buttonStyle,
                   color: Colors.blue,
                   onPressed: () async {
@@ -304,7 +298,10 @@ class _SubmitPageState extends State<SubmitPage> {
                   label: Text('تعديل'),
                   icon: Icon(Icons.arrow_back),
                 ),
-                RaisedButton.icon(
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: RaisedButton.icon(
                   shape: buttonStyle,
                   color: Colors.green,
                   onPressed: () async {
@@ -317,10 +314,10 @@ class _SubmitPageState extends State<SubmitPage> {
                   label: Text('إرسال'),
                   icon: Icon(Icons.send),
                 ),
-              ],
-            )
-          ]),
-        )));
+              ),
+            ],
+          )
+        ])));
   }
 
   SpeedDial buildSpeedDial() {

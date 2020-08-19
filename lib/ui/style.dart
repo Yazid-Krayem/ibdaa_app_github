@@ -5,12 +5,10 @@ final buttonStyle = new RoundedRectangleBorder(
   borderRadius: new BorderRadius.circular(30.0),
 );
 
-final questionStyle =
-    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
+final questionStyle = const TextStyle(
+    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black);
 
-final answerStyle = const TextStyle(
-  fontSize: 18,
-);
+final answerStyle = const TextStyle(fontSize: 18, color: Colors.black);
 
 final outOfQuestionsTextStyle = const TextStyle(
     fontSize: 28, fontWeight: FontWeight.bold, color: Colors.red);
