@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../style.dart';
+
 class QuestionsList extends StatelessWidget {
   final double progress;
   final int currentIndex;
@@ -13,16 +15,18 @@ class QuestionsList extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var orientation = MediaQuery.of(context).orientation;
+
     return Container(
       padding: EdgeInsets.all(8),
       child: Center(
-          child: Text("${question['question_data']}",
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.rtl,
-              style: TextStyle(
-                  fontSize: 35,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold))),
+          child: FittedBox(
+        fit: BoxFit.fitWidth,
+        child: Text("${question['question_data']}",
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.rtl,
+            style: webQuestionsFont),
+      )),
     );
   }
 }

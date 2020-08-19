@@ -29,9 +29,12 @@ class AnswersButtons extends StatelessWidget {
           onPressed: () async {
             answersCallBack(item);
           },
-          child: Text(
-            "${item.answersText}",
-            style: TextStyle(fontSize: 30, color: Colors.black),
+          child: FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Text(
+              "${item.answersText}",
+              style: webAnswersFont,
+            ),
           )),
     );
   }

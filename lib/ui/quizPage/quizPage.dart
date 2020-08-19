@@ -439,7 +439,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                   returnButtonFunction(),
                 }
             },
-            child: Text("السؤال السابق", style: TextStyle(fontSize: 20)),
+            child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text("السؤال السابق", style: TextStyle(fontSize: 20))),
           ),
         ),
 

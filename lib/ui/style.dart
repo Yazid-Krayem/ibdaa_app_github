@@ -22,3 +22,7 @@ class AppColors {
   static const purple = const Color(0xffb66ef6);
   static const green = const Color(0xff18da72);
 }
+
+final webQuestionsFont = const TextStyle(
+    fontSize: 35, color: Colors.black, fontWeight: FontWeight.bold);
+final webAnswersFont = const TextStyle(fontSize: 30, color: Colors.black);
