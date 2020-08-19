@@ -96,7 +96,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: NetworkImage('assets/quiz.jpg'), fit: BoxFit.fill),
+              image: NetworkImage('/assets/quiz.jpg'), fit: BoxFit.fill),
         ),
         child: Center(
           child: Button(

@@ -338,33 +338,24 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   Widget indexStacked() {
     var orientation = MediaQuery.of(context).orientation;
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(15),
-      child: Container(
-        alignment: Alignment.center,
-        width: orientation == Orientation.portrait
-            ? MediaQuery.of(context).size.width * 0.6
-            : MediaQuery.of(context).size.width * 0.45,
-        height: MediaQuery.of(context).size.height * 0.3,
-        decoration: BoxDecoration(
-          color: Colors.lightBlueAccent,
-          gradient: LinearGradient(
-            colors: [Colors.white, Colors.blue],
-          ),
-        ),
-        child: IndexedStack(
-            index: currentIndex,
-            children: questionsListTest.map((question) {
-              if (questionsListTest.indexOf(question) <= 3) {
-                return QuestionsList(
-                    currentIndex: currentIndex,
-                    progress: _progress,
-                    question: question);
-              } else {
-                return Container();
-              }
-            }).toList()),
-      ),
+    return Container(
+      alignment: Alignment.center,
+      width: orientation == Orientation.portrait
+          ? MediaQuery.of(context).size.width * 0.6
+          : MediaQuery.of(context).size.width * 0.45,
+      height: MediaQuery.of(context).size.height * 0.3,
+      child: IndexedStack(
+          index: currentIndex,
+          children: questionsListTest.map((question) {
+            if (questionsListTest.indexOf(question) <= 3) {
+              return QuestionsList(
+                  currentIndex: currentIndex,
+                  progress: _progress,
+                  question: question);
+            } else {
+              return Container();
+            }
+          }).toList()),
     );
   }
 
@@ -396,7 +387,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                               child: Container(
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image: NetworkImage('assets/quiz.jpg'),
+                                        image: NetworkImage('/assets/quiz.jpg'),
                                         fit: BoxFit.fill),
                                   ),
                                   width: MediaQuery.of(context).size.width / 2,

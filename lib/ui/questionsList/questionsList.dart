@@ -13,16 +13,12 @@ class QuestionsList extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text(
-            "${question['question_data']}",
-            textAlign: TextAlign.justify,
-            textDirection: TextDirection.rtl,
-            style: TextStyle(fontSize: 25, color: Colors.black),
-          )),
-    );
+    return Center(
+        child: Text(
+      "${question['question_data']}",
+      textAlign: TextAlign.justify,
+      textDirection: TextDirection.rtl,
+      style: TextStyle(fontSize: 25, color: Colors.black),
+    ));
   }
 }
