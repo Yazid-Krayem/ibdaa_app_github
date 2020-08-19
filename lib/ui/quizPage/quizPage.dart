@@ -271,7 +271,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   // seState functions
   _incrementCurrentIndex() {
     setState(() {
-      if (currentIndex < 3) {
+      if (currentIndex < questionsListTest.length) {
         currentIndex++;
       }
     });
@@ -307,7 +307,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     );
     startProgress();
     _incrementCurrentIndex();
-    if (currentIndex == 3) {
+    if (currentIndex == questionsListTest.length) {
       Navigator.push<bool>(
           context,
           MaterialPageRoute(
@@ -380,7 +380,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
               title: Text("اختبار"),
             ),
             builder: (context, constraints) {
-              if (oldData.length == 3)
+              if (oldData.length == questionsListTest.length)
                 return _outOfQuestions();
               else
                 return SingleChildScrollView(
@@ -396,7 +396,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                               child: Container(
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image: NetworkImage('/assets/quiz.jpg'),
+                                        image: NetworkImage('assets/quiz.jpg'),
                                         fit: BoxFit.fill),
                                   ),
                                   width: MediaQuery.of(context).size.width / 2,
@@ -441,7 +441,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
 
         Linearprogress(
           currentIndex: currentIndex + 1,
-          totalNumberOfQuestions: 3,
+          totalNumberOfQuestions: questionsListTest.length,
         ),
 
         Column(
