@@ -223,7 +223,8 @@ class _SubmitPageState extends State<SubmitPage> {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text("Submit"),
+          title: Text("نتيجة"),
+          backgroundColor: Colors.brown[200],
         ),
         // floatingActionButton: buildSpeedDial(),
         body: SafeArea(
@@ -305,11 +306,13 @@ class _SubmitPageState extends State<SubmitPage> {
                   shape: buttonStyle,
                   color: Colors.green,
                   onPressed: () async {
-                    await _addResult(deviceId, result, answersData);
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyApp()),
-                        (Route<dynamic> route) => false);
+                    _showDialog();
+
+                    // await _addResult(deviceId, result, answersData);
+                    // Navigator.pushAndRemoveUntil(
+                    //     context,
+                    //     MaterialPageRoute(builder: (context) => MyApp()),
+                    //     (Route<dynamic> route) => false);
                   },
                   label: Text('إرسال'),
                   icon: Icon(Icons.send),

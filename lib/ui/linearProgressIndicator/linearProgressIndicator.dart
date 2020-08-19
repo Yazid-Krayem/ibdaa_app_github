@@ -37,8 +37,8 @@ class Linearprogress extends StatelessWidget {
             borderRadius: BorderRadius.circular(_circularBorderRadius),
             gradient: LinearGradient(
               colors: [
-                AppColors.tomato,
-                AppColors.purple,
+                Colors.orange,
+                Colors.white,
               ],
             ),
           ),

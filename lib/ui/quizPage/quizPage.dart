@@ -345,18 +345,19 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           alignment: Alignment.center,
           width: orientation == Orientation.portrait
               ? MediaQuery.of(context).size.width * 0.6
-              : MediaQuery.of(context).size.width * 0.45,
-          height: MediaQuery.of(context).size.height * 0.3,
+              : MediaQuery.of(context).size.width * 0.4,
+          height: MediaQuery.of(context).size.height * 0.2,
           decoration: BoxDecoration(
             color: Colors.lightBlueAccent,
             gradient: LinearGradient(
-              colors: [Colors.white, Colors.blue],
+              colors: [Colors.white, Colors.grey[400]],
             ),
           ),
           child: IndexedStack(
               index: currentIndex,
               children: questionsListTest.map((question) {
-                if (questionsListTest.indexOf(question) <= 3) {
+                if (questionsListTest.indexOf(question) <=
+                    questionsListTest.length) {
                   return QuestionsList(
                       currentIndex: currentIndex,
                       progress: _progress,
@@ -378,6 +379,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
             appBar: AppBar(
               automaticallyImplyLeading: false,
               title: Text("اختبار"),
+              backgroundColor: Colors.grey[400],
             ),
             builder: (context, constraints) {
               if (oldData.length == questionsListTest.length)
@@ -386,18 +388,20 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                 return SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       orientation == Orientation.landscape
                           ? ClipRRect(
                               borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(450.0),
-                                bottomRight: Radius.circular(450.0),
+                                topRight: Radius.circular(200.0),
+                                bottomRight: Radius.circular(200.0),
                               ),
                               child: Container(
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image: NetworkImage('assets/quiz.jpg'),
-                                        fit: BoxFit.fill),
+                                        image: NetworkImage(
+                                            './assets/images/brain1.jpg'),
+                                        fit: BoxFit.cover),
                                   ),
                                   width: MediaQuery.of(context).size.width / 2,
                                   height: MediaQuery.of(context).size.height,
@@ -426,7 +430,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           child: RaisedButton(
             shape: buttonStyle,
             textColor: Colors.black,
-            color: Colors.blue,
+            color: Colors.grey[400],
             onPressed: () => {
               if (currentIndex == 0)
                 null
@@ -442,6 +446,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         Linearprogress(
           currentIndex: currentIndex + 1,
           totalNumberOfQuestions: questionsListTest.length,
+        ),
+        SizedBox(
+          height: 8.0,
         ),
 
         Column(
@@ -476,7 +483,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [Colors.deepPurpleAccent, Colors.tealAccent],
+                colors: [Colors.white, Colors.blueAccent[400]],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 stops: [0.0, 1.0],
@@ -495,6 +502,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   new RaisedButton(
+                    color: Colors.grey[400],
                     child: new Text("See the result "),
                     shape: buttonStyle,
                     onPressed: () async {

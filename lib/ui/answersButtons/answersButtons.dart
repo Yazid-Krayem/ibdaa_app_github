@@ -18,18 +18,21 @@ class AnswersButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width / 4,
+      width: MediaQuery.of(context).size.width / 3,
       padding: const EdgeInsets.all(8.0),
       child: FlatButton(
 
           // elevation: 8,
           shape: buttonStyle,
           textColor: Colors.black,
-          color: Colors.blue,
+          color: Colors.grey[400],
           onPressed: () async {
             answersCallBack(item);
           },
-          child: Text("${item.answersText}")),
+          child: Text(
+            "${item.answersText}",
+            style: TextStyle(fontSize: 30, color: Colors.black),
+          )),
     );
   }
 }

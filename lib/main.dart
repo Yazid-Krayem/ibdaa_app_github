@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
           primaryColor: AppColors.darkSlateGray,
           accentColor: AppColors.dodgerBlue,
-          scaffoldBackgroundColor: AppColors.darkSlateGray,
+          scaffoldBackgroundColor: Colors.grey[800],
           fontFamily: GoogleFonts.oxygen().fontFamily,
           primarySwatch: Colors.blue,
         ),
