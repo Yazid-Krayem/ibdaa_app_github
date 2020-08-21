@@ -13,20 +13,32 @@ class QuestionsList extends StatelessWidget {
       @required this.currentIndex,
       this.question})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    var orientation = MediaQuery.of(context).orientation;
+    String mainQuestions = ' :هل تحب أو ترغب في ';
 
     return Container(
       padding: EdgeInsets.all(8),
       child: Center(
           child: FittedBox(
-        fit: BoxFit.fitWidth,
-        child: Text("${question['question_data']}",
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.rtl,
-            style: webQuestionsFont),
-      )),
+              fit: BoxFit.fitWidth,
+              child: RichText(
+                  textAlign: TextAlign.right,
+                  text: TextSpan(children: <TextSpan>[
+                    TextSpan(
+                        text: "${mainQuestions} \n\n", style: mainQuestion),
+                    TextSpan(
+                      text: "${question['question_data']}",
+                      style: webQuestionsFont,
+                    )
+                  ]))
+
+              // Text(,
+              //     textAlign: TextAlign.center,
+              //     textDirection: TextDirection.rtl,
+              //     style: webQuestionsFont),
+              )),
     );
   }
 }

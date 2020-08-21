@@ -36,10 +36,7 @@ class Linearprogress extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(_circularBorderRadius),
             gradient: LinearGradient(
-              colors: [
-                Colors.orange,
-                Colors.white,
-              ],
+              colors: [Colors.orange, Colors.white, Colors.black],
             ),
           ),
         ),

@@ -177,6 +177,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
 
     setState(() {
       questionsListTest = json.decode(result.body)['result'];
+      _load = !_load;
     });
     return json.decode(result.body)['result'];
   }
@@ -244,15 +245,27 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     return currentIndex;
   }
 
+  int lengthOflocalStorageItems;
+  int pressedButton;
+
+  _pressedButton(getData) async {
+    setState(() {
+      pressedButton = getData[lengthOflocalStorageItems]['id'];
+    });
+  }
+
   returnButtonFunction() async {
     await storage.ready;
 
     List removeItemFromLocalStorageList = [];
     var getData = storage.getItem(deviceId);
 
+    _pressedButton(getData);
+
     setState(() {
       removeItemFromLocalStorageList = getData;
       removeItemFromLocalStorageList = dataListWithCookieName;
+      lengthOflocalStorageItems = getData.length - 1;
     });
 
     // int deleteCurrentIndex = currentIndex - 1;
@@ -274,6 +287,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       if (currentIndex < questionsListTest.length) {
         currentIndex++;
       }
+      if (currentIndex == 6 || currentIndex == 12 || currentIndex == 18) {
+        _imagesIndex++;
+      }
     });
   }
 
@@ -283,9 +299,21 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         currentIndex--;
         _progress = _progress - 0.33;
       });
+      if (currentIndex == 6 || currentIndex == 12 || currentIndex == 18) {
+        _imagesIndex++;
+      }
       progressStorage.setItem("progress", _progress);
     }
   }
+
+  List _quizPageImages = [
+    '/assets/images/3.jpg',
+    '/assets/images/intro.png',
+    '/assets/images/3.jpg',
+    '/assets/images/intro.jpg',
+  ];
+
+  int _imagesIndex = 0;
 
   /////////
   //Answers function
@@ -296,7 +324,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       var getData = storage.getItem(deviceId);
       // final decoding = json.decode(items);
       // var getData = decoding['$deviceId'];
+
       setState(() {
+        pressedButton = null;
         currentIndex = getData.length;
       });
     }
@@ -369,54 +399,58 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         ));
   }
 
+  bool _load = true;
+
   @override
   Widget build(BuildContext context) {
     var orientation = MediaQuery.of(context).orientation;
     var width = MediaQuery.of(context).size.width;
 
-    return SafeArea(
-        child: ResponsiveWIdget(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text("اختبار"),
-              backgroundColor: Colors.grey[400],
-            ),
-            builder: (context, constraints) {
-              if (oldData.length == questionsListTest.length)
-                return _outOfQuestions();
-              else
-                return SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      orientation == Orientation.landscape
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(200.0),
-                                bottomRight: Radius.circular(200.0),
-                              ),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            './assets/images/brain1.jpg'),
-                                        fit: BoxFit.cover),
-                                  ),
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  height: MediaQuery.of(context).size.height,
-                                  child: null),
-                            )
-                          : Container(),
-                      Container(
-                          width: orientation == Orientation.landscape
-                              ? width / 2
-                              : width,
-                          child: _mobileScreen())
-                    ],
-                  ),
-                );
-            }));
+    return SafeArea(child: ResponsiveWIdget(builder: (context, constraints) {
+      if (oldData.length == questionsListTest.length)
+        return _load
+            ? Center(child: CircularProgressIndicator())
+            : SubmitPage(
+                deviceId: deviceId,
+                questionsListTest: questionsListTest,
+                dataListWithCookieName: dataListWithCookieName,
+                cookieName: cookieName,
+                oldData: oldData,
+                progress: _progress,
+              );
+      else {
+        return SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              orientation == Orientation.landscape
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0),
+                      ),
+                      child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    '${_quizPageImages[_imagesIndex]}'),
+                                fit: BoxFit.cover),
+                          ),
+                          width: MediaQuery.of(context).size.width / 2,
+                          height: MediaQuery.of(context).size.height,
+                          child: null),
+                    )
+                  : Container(),
+              Container(
+                  width:
+                      orientation == Orientation.landscape ? width / 2 : width,
+                  child: _mobileScreen())
+            ],
+          ),
+        );
+      }
+    }));
   }
 
   Widget _mobileScreen() {
@@ -474,12 +508,14 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
               answersList: answersList,
               answersCallBack: answersCallBack,
               item: item,
-              currentIndex: currentIndex)
+              currentIndex: currentIndex,
+              lengthOflocalStorageItems: lengthOflocalStorageItems,
+              pressedButton: pressedButton)
       ],
     );
   }
 
-  Widget _outOfQuestions() {
+  Widget outOfQuestions() {
     return Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -496,7 +532,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
             children: [
               Center(
                   child: Text(
-                'You already answered the questions',
+                'لقد أجبت على الأسئلة',
                 style: outOfQuestionsTextStyle,
               )),
               Row(
@@ -505,7 +541,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                 children: [
                   new RaisedButton(
                     color: Colors.grey[400],
-                    child: new Text("See the result "),
+                    child: new Text("الحصول على النتيجة"),
                     shape: buttonStyle,
                     onPressed: () async {
                       await Navigator.of(context).pushAndRemoveUntil(
@@ -526,7 +562,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                     width: 8,
                   ),
                   RaisedButton(
-                    child: new Text("Start over "),
+                    child: new Text("ابدأ من جديد"),
                     shape: buttonStyle,
                     onPressed: () {
                       storage.clear();

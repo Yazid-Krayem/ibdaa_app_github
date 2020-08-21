@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
 import 'package:js_shims/js_shims.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:share/share.dart';
+import 'package:cooky/cooky.dart' as cookie;
 
 import '../../main.dart';
 
@@ -78,9 +78,16 @@ class _SubmitPageState extends State<SubmitPage> {
     });
   }
 
-  _addResult(deviceId, stringResult, user_answers) {
+  List dataResult = [];
+
+  _addResult(deviceId, stringResult, user_answers) async {
     final stringResult = result.toString();
-    return API.usersAnswers(deviceId, stringResult, user_answers);
+    await API
+        .usersAnswers(deviceId, stringResult, user_answers)
+        .then((response) {
+      // print('here ${json.decode(response.body.result)}');
+      // print("${json.encode(response.body['result'])}");
+    });
   }
 
   List<Widget> itemsData = [];
@@ -167,34 +174,44 @@ class _SubmitPageState extends State<SubmitPage> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
           title: new Text("Mabrouk "),
           content: new Text("Your result is $result"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Sahre it "),
-              onPressed: () async {
-                await _addResult(device_id, result, user_answers);
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyApp()),
-                    (Route<dynamic> route) => false);
-              },
-            ),
-            FlatButton(
-              child: new Text("Start over "),
-              onPressed: () {
-                storage.clear();
-                progressStorage.clear();
-                setState(() {
-                  dataListWithCookieName = [];
-                });
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyApp()),
-                    (Route<dynamic> route) => false);
-              },
-            ),
+
+            Row(
+              children: [
+                new FlatButton(
+                  child: new Text("Sahre it "),
+                  onPressed: () async {
+                    await _addResult(device_id, result, user_answers);
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                        (Route<dynamic> route) => false);
+                  },
+                ),
+                FlatButton(
+                  child: new Text("Start over "),
+                  onPressed: () async {
+                    await storage.clear();
+                    await progressStorage.clear();
+
+                    cookie.remove('id');
+
+                    setState(() {
+                      dataListWithCookieName = [];
+                    });
+
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                        (Route<dynamic> route) => false);
+                  },
+                ),
+              ],
+            )
           ],
         );
       },
@@ -219,7 +236,6 @@ class _SubmitPageState extends State<SubmitPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(itemsData);
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -252,7 +268,9 @@ class _SubmitPageState extends State<SubmitPage> {
                         child: Align(
                             heightFactor: 0.7,
                             alignment: Alignment.topCenter,
-                            child: itemsData[index]),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width / 1.5,
+                                child: itemsData[index])),
                       ),
                     );
                   })),
@@ -323,38 +341,38 @@ class _SubmitPageState extends State<SubmitPage> {
         ])));
   }
 
-  SpeedDial buildSpeedDial() {
-    return SpeedDial(
-      animatedIcon: AnimatedIcons.menu_arrow,
-      animatedIconTheme: IconThemeData(size: 22.0),
-      // child: Icon(Icons.add),
-      // onOpen: () => print('OPENING DIAL'),
-      // onClose: () => print('DIAL CLOSED'),
-      visible: dialVisible,
-      curve: Curves.bounceIn,
-      children: [
-        SpeedDialChild(
-          child: Icon(Icons.save, color: Colors.white),
-          backgroundColor: Colors.deepOrange,
-          onTap: () => _showDialog(),
-          label: 'Submit',
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.deepOrangeAccent,
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.share, color: Colors.white),
-          backgroundColor: Colors.green,
-          onTap: () {
-            Share.share('check out my website https://example.com',
-                subject: 'Look what I made!');
+  // SpeedDial buildSpeedDial() {
+  //   return SpeedDial(
+  //     animatedIcon: AnimatedIcons.menu_arrow,
+  //     animatedIconTheme: IconThemeData(size: 22.0),
+  //     // child: Icon(Icons.add),
+  //     // onOpen: () => print('OPENING DIAL'),
+  //     // onClose: () => print('DIAL CLOSED'),
+  //     visible: dialVisible,
+  //     curve: Curves.bounceIn,
+  //     children: [
+  //       SpeedDialChild(
+  //         child: Icon(Icons.save, color: Colors.white),
+  //         backgroundColor: Colors.deepOrange,
+  //         onTap: () => _showDialog(),
+  //         label: 'Submit',
+  //         labelStyle: TextStyle(fontWeight: FontWeight.w500),
+  //         labelBackgroundColor: Colors.deepOrangeAccent,
+  //       ),
+  //       SpeedDialChild(
+  //         child: Icon(Icons.share, color: Colors.white),
+  //         backgroundColor: Colors.green,
+  //         onTap: () {
+  //           Share.share('check out my website https://example.com',
+  //               subject: 'Look what I made!');
 
-            // share(context, result);
-          },
-          label: 'Share',
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-          labelBackgroundColor: Colors.green,
-        ),
-      ],
-    );
-  }
+  //           // share(context, result);
+  //         },
+  //         label: 'Share',
+  //         labelStyle: TextStyle(fontWeight: FontWeight.w500),
+  //         labelBackgroundColor: Colors.green,
+  //       ),
+  //     ],
+  //   );
+  // }
 }

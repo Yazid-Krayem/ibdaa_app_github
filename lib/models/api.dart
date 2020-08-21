@@ -56,9 +56,4 @@ class API {
         },
         body: query);
   }
-
-  static Future userAnswersFromLocalStorage(data) {
-    var url = baseUrl + "/users/add";
-    return http.post(url, body: {'name': data});
-  }
 }

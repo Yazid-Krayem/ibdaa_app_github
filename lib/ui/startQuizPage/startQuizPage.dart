@@ -96,20 +96,31 @@ class _StartQuizPageState extends State<StartQuizPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: NetworkImage('assets/images/intro.jpg'), fit: BoxFit.fill),
+              image: NetworkImage('assets/images/intro.png'), fit: BoxFit.fill),
         ),
         child: Center(
-          child: Button(
-              buttonLabel: 'ابدأ الاختبار',
-              onPressed: () {
-                Navigator.push<bool>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          QuizPage(deviceid, cookieName, oldData),
-                    ));
-              }),
-        ),
+            child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 2,
+            ),
+            Container(
+              // alignment: Alignment.centerRight,
+              // padding: EdgeInsets.only(left: 200),
+              child: Button(
+                  buttonLabel: 'ابدأ الاختبار',
+                  onPressed: () {
+                    Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              QuizPage(deviceid, cookieName, oldData),
+                        ));
+                  }),
+            ),
+          ],
+        )),
       ),
     );
   }
