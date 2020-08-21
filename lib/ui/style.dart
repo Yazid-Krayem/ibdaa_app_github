@@ -24,13 +24,13 @@ class AppColors {
 }
 
 final webQuestionsFont = const TextStyle(
-    fontSize: 32, color: Colors.black, fontWeight: FontWeight.bold);
+    fontSize: 26, color: Colors.black, fontWeight: FontWeight.bold);
 
 final mainQuestion = const TextStyle(
   fontSize: 20,
 );
 
 final webAnswersFont = const TextStyle(
-  fontSize: 30,
+  fontSize: 25,
   color: Colors.black,
 );

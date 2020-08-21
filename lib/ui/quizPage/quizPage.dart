@@ -13,11 +13,8 @@ import 'package:ibdaa_app/ui/linearProgressIndicator/linearProgressIndicator.dar
 import 'package:ibdaa_app/ui/questionsList/questionsList.dart';
 import 'package:ibdaa_app/ui/responsiveWIdget.dart';
 import 'package:ibdaa_app/ui/submitPage/submitPage.dart';
-
 import 'package:js_shims/js_shims.dart';
 import 'package:localstorage/localstorage.dart';
-
-import '../../main.dart';
 import '../style.dart';
 
 class QuizPage extends StatefulWidget {
@@ -307,10 +304,12 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   }
 
   List _quizPageImages = [
+    '/assets/images/1.png',
+    '/assets/images/2.jpg',
     '/assets/images/3.jpg',
-    '/assets/images/intro.png',
-    '/assets/images/3.jpg',
-    '/assets/images/intro.jpg',
+    '/assets/images/4.jpg',
+    '/assets/images/5.jpg',
+    '/assets/images/6.jpg',
   ];
 
   int _imagesIndex = 0;
@@ -513,71 +512,5 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
               pressedButton: pressedButton)
       ],
     );
-  }
-
-  Widget outOfQuestions() {
-    return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Colors.white, Colors.blueAccent[400]],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp)),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Center(
-                  child: Text(
-                'لقد أجبت على الأسئلة',
-                style: outOfQuestionsTextStyle,
-              )),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  new RaisedButton(
-                    color: Colors.grey[400],
-                    child: new Text("الحصول على النتيجة"),
-                    shape: buttonStyle,
-                    onPressed: () async {
-                      await Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (context) => SubmitPage(
-                              deviceId: deviceId,
-                              questionsListTest: questionsListTest,
-                              dataListWithCookieName: dataListWithCookieName,
-                              cookieName: cookieName,
-                              oldData: oldData,
-                              progress: _progress,
-                            ),
-                          ),
-                          (Route<dynamic> route) => true);
-                    },
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  RaisedButton(
-                    child: new Text("ابدأ من جديد"),
-                    shape: buttonStyle,
-                    onPressed: () {
-                      storage.clear();
-                      progressStorage.clear();
-                      setState(() {
-                        dataListWithCookieName = [];
-                      });
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyApp()),
-                          (Route<dynamic> route) => false);
-                    },
-                  ),
-                ],
-              )
-            ]));
   }
 }

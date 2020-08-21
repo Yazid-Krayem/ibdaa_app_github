@@ -26,8 +26,7 @@ class QuestionsList extends StatelessWidget {
               child: RichText(
                   textAlign: TextAlign.right,
                   text: TextSpan(children: <TextSpan>[
-                    TextSpan(
-                        text: "${mainQuestions} \n\n", style: mainQuestion),
+                    TextSpan(text: " $mainQuestions \n\n", style: mainQuestion),
                     TextSpan(
                       text: "${question['question_data']}",
                       style: webQuestionsFont,
