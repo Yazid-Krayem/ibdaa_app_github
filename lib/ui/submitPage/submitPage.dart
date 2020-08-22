@@ -1,5 +1,7 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
@@ -163,59 +165,95 @@ class _SubmitPageState extends State<SubmitPage> {
     super.initState();
   }
 
+  static const List<Key> keys = [Key('flare')];
+
 //Alert
   void _showDialog() {
     // flutter defined function
     final device_id = "$deviceId";
     final user_answers = "$answersData";
-
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          title: new Text("Mabrouk "),
-          content: new Text("Your result is $result"),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
+        context: context,
+        builder: (_) => FlareGiffyDialog(
+              flarePath: 'assets/images/space_demo.flr',
+              flareAnimation: 'loading',
+              title: Text(
+                'مبروك',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
+              ),
+              entryAnimation: EntryAnimation.DEFAULT,
+              description: Text(
+                'نتيجتك هي $result',
+                textAlign: TextAlign.center,
+                style: TextStyle(),
+              ),
+              buttonOkText: Text('إرسال'),
+              onOkButtonPressed: () async {
+                await _addResult(device_id, result, user_answers);
+                await storage.clear();
+                await progressStorage.clear();
 
-            Row(
-              children: [
-                new FlatButton(
-                  child: new Text("Sahre it "),
-                  onPressed: () async {
-                    await _addResult(device_id, result, user_answers);
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyApp()),
-                        (Route<dynamic> route) => false);
-                  },
-                ),
-                FlatButton(
-                  child: new Text("Start over "),
-                  onPressed: () async {
-                    await storage.clear();
-                    await progressStorage.clear();
+                cookie.remove('id');
 
-                    cookie.remove('id');
+                setState(() {
+                  dataListWithCookieName = [];
+                });
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyApp()),
+                    (Route<dynamic> route) => false);
+              },
+              buttonCancelText: Text('عودة'),
+            ));
 
-                    setState(() {
-                      dataListWithCookieName = [];
-                    });
+    // showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     // return object of type Dialog
+    //     return AlertDialog(
+    //       clipBehavior: Clip.antiAliasWithSaveLayer,
+    //       title: new Text("مبروك "),
+    //       content: new Text("Your result is $result"),
+    //       actions: <Widget>[
+    //         // usually buttons at the bottom of the dialog
 
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyApp()),
-                        (Route<dynamic> route) => false);
-                  },
-                ),
-              ],
-            )
-          ],
-        );
-      },
-    );
+    //         Row(
+    //           children: [
+    //             new FlatButton(
+    //               child: new Text("Sahre it "),
+    //               onPressed: () async {
+    //                 await _addResult(device_id, result, user_answers);
+    //                 Navigator.pushAndRemoveUntil(
+    //                     context,
+    //                     MaterialPageRoute(builder: (context) => MyApp()),
+    //                     (Route<dynamic> route) => false);
+    //               },
+    //             ),
+    //             FlatButton(
+    //               child: new Text("Start over "),
+    //               onPressed: () async {
+    //                 await storage.clear();
+    //                 await progressStorage.clear();
+
+    //                 cookie.remove('id');
+
+    //                 setState(() {
+    //                   dataListWithCookieName = [];
+    //                 });
+
+    //                 Navigator.pushAndRemoveUntil(
+    //                     context,
+    //                     MaterialPageRoute(builder: (context) => MyApp()),
+    //                     (Route<dynamic> route) => false);
+    //               },
+    //             ),
+    //           ],
+    //         )
+    //       ],
+    //     );
+    //   },
+    // );
   }
 
   void share(BuildContext context, result) {
@@ -321,6 +359,7 @@ class _SubmitPageState extends State<SubmitPage> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: RaisedButton.icon(
+                  key: keys[0],
                   shape: buttonStyle,
                   color: Colors.green,
                   onPressed: () async {
