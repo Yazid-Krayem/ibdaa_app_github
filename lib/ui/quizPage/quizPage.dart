@@ -257,12 +257,14 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     List removeItemFromLocalStorageList = [];
     var getData = storage.getItem(deviceId);
 
-    _pressedButton(getData);
+    setState(() {
+      lengthOflocalStorageItems = getData.length - 1;
+    });
+    await _pressedButton(getData);
 
     setState(() {
       removeItemFromLocalStorageList = getData;
       removeItemFromLocalStorageList = dataListWithCookieName;
-      lengthOflocalStorageItems = getData.length - 1;
     });
 
     // int deleteCurrentIndex = currentIndex - 1;
@@ -325,7 +327,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       // var getData = decoding['$deviceId'];
 
       setState(() {
-        pressedButton = null;
+        pressedButton = 0;
         currentIndex = getData.length;
       });
     }
