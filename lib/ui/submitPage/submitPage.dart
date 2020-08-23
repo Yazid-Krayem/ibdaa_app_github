@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
+import 'package:ibdaa_app/ui/resultPage/resultPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
 import 'package:js_shims/js_shims.dart';
 import 'package:localstorage/localstorage.dart';
@@ -81,13 +84,22 @@ class _SubmitPageState extends State<SubmitPage> {
 
   List dataResult = [];
 
+  String resultString;
+
   _addResult(deviceId, stringResult, user_answers) async {
     final stringResult = result.toString();
     await API
         .usersAnswers(deviceId, stringResult, user_answers)
         .then((response) {
-      // print('here ${json.decode(response.body.result)}');
-      // print("${json.encode(response.body['result'])}");
+      var result = jsonDecode(response.body);
+
+      if (result['success']) {
+        setState(() {
+          resultString = result['result'];
+        });
+      } else {
+        print('here');
+      }
     });
   }
 
@@ -174,116 +186,11 @@ class _SubmitPageState extends State<SubmitPage> {
         "question_data : ${value['question_data']}",
         answersData[key]
       ]);
-
-      // print('inside for loop $value');
-
-      // questionWithAnswer.asMap().forEach((key1, value1) {
-      //   print(questionsListTest);
-      //   questionWithAnswer.
-      // });
     });
     return setState(() {
       questionWithAnswer = _insideList;
     });
   }
-
-  static const List<Key> keys = [Key('flare')];
-
-//Alert
-  void _showDialog() {
-    // flutter defined function
-    final device_id = "$deviceId";
-    final user_answers = "$questionWithAnswer";
-    showDialog(
-        context: context,
-        builder: (_) => FlareGiffyDialog(
-              flarePath: 'assets/images/space_demo.flr',
-              flareAnimation: 'loading',
-              title: Text(
-                'مبروك',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
-              ),
-              entryAnimation: EntryAnimation.DEFAULT,
-              description: Text(
-                'نتيجتك هي $result',
-                textAlign: TextAlign.center,
-                style: TextStyle(),
-              ),
-              buttonOkText: Text('إرسال'),
-              onOkButtonPressed: () async {
-                await _addResult(device_id, result, user_answers);
-                await storage.clear();
-                await progressStorage.clear();
-
-                cookie.remove('id');
-
-                setState(() {
-                  dataListWithCookieName = [];
-                });
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyApp()),
-                    (Route<dynamic> route) => false);
-              },
-              buttonCancelText: Text('عودة'),
-            ));
-
-    // showDialog(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     // return object of type Dialog
-    //     return AlertDialog(
-    //       clipBehavior: Clip.antiAliasWithSaveLayer,
-    //       title: new Text("مبروك "),
-    //       content: new Text("Your result is $result"),
-    //       actions: <Widget>[
-    //         // usually buttons at the bottom of the dialog
-
-    //         Row(
-    //           children: [
-    //             new FlatButton(
-    //               child: new Text("Sahre it "),
-    //               onPressed: () async {
-    //                 await _addResult(device_id, result, user_answers);
-    //                 Navigator.pushAndRemoveUntil(
-    //                     context,
-    //                     MaterialPageRoute(builder: (context) => MyApp()),
-    //                     (Route<dynamic> route) => false);
-    //               },
-    //             ),
-    //             FlatButton(
-    //               child: new Text("Start over "),
-    //               onPressed: () async {
-    //                 await storage.clear();
-    //                 await progressStorage.clear();
-
-    //                 cookie.remove('id');
-
-    //                 setState(() {
-    //                   dataListWithCookieName = [];
-    //                 });
-
-    //                 Navigator.pushAndRemoveUntil(
-    //                     context,
-    //                     MaterialPageRoute(builder: (context) => MyApp()),
-    //                     (Route<dynamic> route) => false);
-    //               },
-    //             ),
-    //           ],
-    //         )
-    //       ],
-    //     );
-    //   },
-    // );
-  }
-
-  void share(BuildContext context, result) {
-    final String text = "Hey, my result is $result";
-    Share.share(text, subject: "$result");
-  }
-
-  //speedDial Buttons
 
   void setDialVisible(bool value) {
     setState(() {
@@ -385,13 +292,24 @@ class _SubmitPageState extends State<SubmitPage> {
                   shape: buttonStyle,
                   color: Colors.green,
                   onPressed: () async {
-                    _showDialog();
+                    final device_id = "$deviceId";
+                    final user_answers = "$questionWithAnswer";
+                    await _addResult(device_id, result, user_answers);
+                    await storage.clear();
+                    await progressStorage.clear();
 
-                    // await _addResult(deviceId, result, answersData);
-                    // Navigator.pushAndRemoveUntil(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => MyApp()),
-                    //     (Route<dynamic> route) => false);
+                    cookie.remove('id');
+
+                    setState(() {
+                      dataListWithCookieName = [];
+                    });
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ResultPage(
+                              questionWithAnswer: questionWithAnswer,
+                              result: resultString,
+                            )));
+
+                    // _showDialog();
                   },
                   label: Text('إرسال'),
                   icon: Icon(Icons.send),
@@ -401,39 +319,4 @@ class _SubmitPageState extends State<SubmitPage> {
           )
         ])));
   }
-
-  // SpeedDial buildSpeedDial() {
-  //   return SpeedDial(
-  //     animatedIcon: AnimatedIcons.menu_arrow,
-  //     animatedIconTheme: IconThemeData(size: 22.0),
-  //     // child: Icon(Icons.add),
-  //     // onOpen: () => print('OPENING DIAL'),
-  //     // onClose: () => print('DIAL CLOSED'),
-  //     visible: dialVisible,
-  //     curve: Curves.bounceIn,
-  //     children: [
-  //       SpeedDialChild(
-  //         child: Icon(Icons.save, color: Colors.white),
-  //         backgroundColor: Colors.deepOrange,
-  //         onTap: () => _showDialog(),
-  //         label: 'Submit',
-  //         labelStyle: TextStyle(fontWeight: FontWeight.w500),
-  //         labelBackgroundColor: Colors.deepOrangeAccent,
-  //       ),
-  //       SpeedDialChild(
-  //         child: Icon(Icons.share, color: Colors.white),
-  //         backgroundColor: Colors.green,
-  //         onTap: () {
-  //           Share.share('check out my website https://example.com',
-  //               subject: 'Look what I made!');
-
-  //           // share(context, result);
-  //         },
-  //         label: 'Share',
-  //         labelStyle: TextStyle(fontWeight: FontWeight.w500),
-  //         labelBackgroundColor: Colors.green,
-  //       ),
-  //     ],
-  //   );
-  // }
 }
