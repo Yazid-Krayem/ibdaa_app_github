@@ -161,7 +161,30 @@ class _SubmitPageState extends State<SubmitPage> {
         setDialVisible(scrollController.position.userScrollDirection ==
             ScrollDirection.forward);
       });
+    this._questionWithAnswer();
     super.initState();
+  }
+
+  List questionWithAnswer = [];
+  _questionWithAnswer() async {
+    List _insideList = [];
+    questionsListTest.asMap().forEach((key, value) {
+      _insideList.insert(key, [
+        "question_id : ${value['id']}",
+        "question_data : ${value['question_data']}",
+        answersData[key]
+      ]);
+
+      // print('inside for loop $value');
+
+      // questionWithAnswer.asMap().forEach((key1, value1) {
+      //   print(questionsListTest);
+      //   questionWithAnswer.
+      // });
+    });
+    return setState(() {
+      questionWithAnswer = _insideList;
+    });
   }
 
   static const List<Key> keys = [Key('flare')];
@@ -170,7 +193,7 @@ class _SubmitPageState extends State<SubmitPage> {
   void _showDialog() {
     // flutter defined function
     final device_id = "$deviceId";
-    final user_answers = "$answersData";
+    final user_answers = "$questionWithAnswer";
     showDialog(
         context: context,
         builder: (_) => FlareGiffyDialog(
