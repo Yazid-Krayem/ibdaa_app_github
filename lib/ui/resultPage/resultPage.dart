@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ibdaa_app/models/triple.dart';
+import 'package:ibdaa_app/ui/resultPage/mobileView.dart';
+import 'package:ibdaa_app/ui/resultPage/webView.dart';
 
 import '../responsiveWIdget.dart';
 
@@ -44,9 +46,19 @@ class _ResultPageState extends State<ResultPage> {
     futureAlbum = fetchAlbum();
   }
 
+  void _showErrorSnackBar() {
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Oops... the URL couldn\'t be opened!'),
+      ),
+    );
+  }
+
   _ResultPageState(this.result);
   @override
   Widget build(BuildContext context) {
+    var orientation = MediaQuery.of(context).orientation;
+
     return SafeArea(child: ResponsiveWIdget(builder: (context, constraints) {
       return Scaffold(
           backgroundColor: Colors.white,
@@ -59,91 +71,26 @@ class _ResultPageState extends State<ResultPage> {
             future: futureAlbum,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                List vas = snapshot.data.tripleUrl.split(',');
-                return Center(
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    children: [
-                      // triple url
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.7,
-                        width: MediaQuery.of(context).size.width / 3.5,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              for (var items in vas)
-                                Text(
-                                  items,
-                                  style: TextStyle(
-                                      fontSize: 22, color: Colors.black),
-                                )
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      Icon(
-                        Icons.arrow_back,
-                        size: 60,
-                        color: Colors.blue,
-                      ),
-
-                      // triple university container
-                      Container(
-                          height: MediaQuery.of(context).size.height * 0.7,
-                          width: MediaQuery.of(context).size.width / 3.5,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: new BorderRadius.circular(25.0),
-                              border: Border.all(color: Colors.blue, width: 8)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  for (var item in vas)
-                                    Text(
-                                      item,
-                                      style: TextStyle(
-                                          fontSize: 22, color: Colors.black),
-                                    )
-                                ]),
-                          )),
-                      Icon(
-                        Icons.arrow_back,
-                        size: 60,
-                        color: Colors.blue,
-                      ),
-                      //triple_name
-                      Container(
-                          padding: EdgeInsets.all(20),
-                          height: MediaQuery.of(context).size.height * 0.7,
-                          width: MediaQuery.of(context).size.width / 3.5,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: new BorderRadius.circular(25.0),
-                              border: Border.all(color: Colors.blue, width: 8)),
-                          child: Stack(
-                            children: [
-                              Text(
-                                "${snapshot.data.tripleName}",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Center(
-                                child: Image.network(
-                                  snapshot.data.tripleImage,
-                                  height: 120,
-                                ),
-                              )
-                            ],
-                          )),
-                    ],
-                  ),
+                List tripleUrl = snapshot.data.tripleUrl.split(',');
+                List unviersitiesName = snapshot.data.universityName.split(',');
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    if (orientation == Orientation.portrait ||
+                        constraints.maxHeight < 650 ||
+                        constraints.maxWidth < 800) {
+                      return MobileView(
+                        tripleUrl: tripleUrl,
+                        unviersitiesName: unviersitiesName,
+                        snapshot: snapshot,
+                      );
+                    } else {
+                      return WebView(
+                        tripleUrl: tripleUrl,
+                        unviersitiesName: unviersitiesName,
+                        snapshot: snapshot,
+                      );
+                    }
+                  },
                 );
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
