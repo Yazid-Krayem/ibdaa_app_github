@@ -84,7 +84,7 @@ class _ResultPageState extends State<ResultPage> {
                         snapshot: snapshot,
                       );
                     } else {
-                      return WebView(
+                      return MobileView(
                         tripleUrl: tripleUrl,
                         unviersitiesName: unviersitiesName,
                         snapshot: snapshot,
