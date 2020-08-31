@@ -286,6 +286,11 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       if (currentIndex < questionsListTest.length) {
         currentIndex++;
       }
+      if (_imagesIndex == 5) {
+        setState(() {
+          _imagesIndex = 0;
+        });
+      }
       if (currentIndex == 6 || currentIndex == 12 || currentIndex == 18) {
         _imagesIndex++;
       }
@@ -298,6 +303,11 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         currentIndex--;
         _progress = _progress - 0.33;
       });
+      if (_imagesIndex == 5) {
+        setState(() {
+          _imagesIndex = 0;
+        });
+      }
       if (currentIndex == 6 || currentIndex == 12 || currentIndex == 18) {
         _imagesIndex++;
       }

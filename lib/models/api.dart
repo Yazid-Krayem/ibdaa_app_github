@@ -57,4 +57,13 @@ class API {
       body: query,
     );
   }
+
+  static Future getTriple(
+    result,
+  ) {
+    var url = baseUrl + "/triple/get/:$result";
+    return http.get(
+      url,
+    );
+  }
 }

@@ -10,9 +10,9 @@ class IntroPage extends StatefulWidget {
 
 class _IntroScreenState extends State<IntroPage> {
   static const _titles = <String>[
-    "Covid-19 made us \nuneasy",
-    "Focus on what is \nimportant for you",
-    "Create a task and \nlet the bubbles pop",
+    "النجاح ليس نهائيا أبدا. الفشل ليس قاتلا أبدا. الشجاعة هي التي تهم",
+    "ركز على ما هو مهم بالنسبة لك",
+    "لاشئ مستحيل. كلمة نفسها تقول أنا ممكن",
   ];
 
   Timer _timer;
@@ -22,8 +22,8 @@ class _IntroScreenState extends State<IntroPage> {
   void initState() {
     super.initState();
 
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (index < 3) {
+    _timer = Timer.periodic(Duration(seconds: 6), (timer) {
+      if (index < 4) {
         setState(() {
           index++;
         });
@@ -43,7 +43,7 @@ class _IntroScreenState extends State<IntroPage> {
         children: [
           Center(
             child: AnimatedSwitcher(
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 6),
               child: Text(
                 _titles[index],
                 key: ValueKey(_titles[index]),

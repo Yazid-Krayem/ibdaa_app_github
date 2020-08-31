@@ -2,17 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
 import 'package:ibdaa_app/ui/resultPage/resultPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
 import 'package:js_shims/js_shims.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:share/share.dart';
 import 'package:cooky/cooky.dart' as cookie;
-
-import '../../main.dart';
 
 class SubmitPage extends StatefulWidget {
   final List oldData;
@@ -288,7 +284,6 @@ class _SubmitPageState extends State<SubmitPage> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: RaisedButton.icon(
-                  key: keys[0],
                   shape: buttonStyle,
                   color: Colors.green,
                   onPressed: () async {
@@ -305,7 +300,6 @@ class _SubmitPageState extends State<SubmitPage> {
                     });
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ResultPage(
-                              questionWithAnswer: questionWithAnswer,
                               result: resultString,
                             )));
 
