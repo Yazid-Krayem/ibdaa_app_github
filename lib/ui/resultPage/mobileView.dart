@@ -111,13 +111,21 @@ class MobileView extends StatelessWidget {
                     children: [
                       for (var items in tripleUrl)
                         Link(
-                          child: Text(
-                            items,
-                            style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Colors.blue,
-                                fontSize: 22),
-                          ),
+                          child: RichText(
+                              textAlign: TextAlign.justify,
+                              text: TextSpan(children: <TextSpan>[
+                                TextSpan(
+                                    text: "- ",
+                                    style: TextStyle(color: Colors.black)),
+                                TextSpan(
+                                  text: "$items\n\n",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.blue,
+                                    fontSize: 22,
+                                  ),
+                                )
+                              ])),
                           url: items,
                           // onError: _showErrorSnackBar,
                         ),

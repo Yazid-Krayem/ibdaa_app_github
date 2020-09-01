@@ -61,6 +61,7 @@ class _ResultPageState extends State<ResultPage> {
 
     return SafeArea(child: ResponsiveWIdget(builder: (context, constraints) {
       return Scaffold(
+          resizeToAvoidBottomPadding: false,
           backgroundColor: Colors.white,
           appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -76,7 +77,6 @@ class _ResultPageState extends State<ResultPage> {
                 return LayoutBuilder(
                   builder: (context, constraints) {
                     if (orientation == Orientation.portrait ||
-                        constraints.maxHeight < 650 ||
                         constraints.maxWidth < 800) {
                       return MobileView(
                         tripleUrl: tripleUrl,
@@ -84,7 +84,7 @@ class _ResultPageState extends State<ResultPage> {
                         snapshot: snapshot,
                       );
                     } else {
-                      return MobileView(
+                      return WebView(
                         tripleUrl: tripleUrl,
                         unviersitiesName: unviersitiesName,
                         snapshot: snapshot,

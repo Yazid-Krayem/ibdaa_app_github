@@ -15,11 +15,11 @@ class WebView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        // alignment: WrapAlignment.center,
         children: [
           // triple url
           Container(
@@ -27,18 +27,27 @@ class WebView extends StatelessWidget {
             width: MediaQuery.of(context).size.width / 3.5,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+              child: ListView(
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   for (var items in tripleUrl)
                     Link(
-                      child: Text(
-                        items,
-                        style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Colors.blue,
-                            fontSize: 22),
-                      ),
+                      child: RichText(
+                          textAlign: TextAlign.justify,
+                          text: TextSpan(children: <TextSpan>[
+                            TextSpan(
+                                text: "-",
+                                style: TextStyle(color: Colors.black)),
+                            TextSpan(
+                              text: "$items\n\n\n",
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.blue,
+                                fontSize: 22,
+                              ),
+                            )
+                          ])),
+
                       url: items,
                       // onError: _showErrorSnackBar,
                     ),
