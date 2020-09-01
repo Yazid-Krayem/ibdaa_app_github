@@ -176,12 +176,19 @@ class _SubmitPageState extends State<SubmitPage> {
   List questionWithAnswer = [];
   _questionWithAnswer() async {
     List _insideList = [];
+
+    List answers = [];
+
+    setState(() {
+      answers = answersData;
+    });
+
     questionsListTest.asMap().forEach((key, value) {
-      _insideList.insert(key, [
-        "question_id : ${value['id']}",
-        "question_data : ${value['question_data']}",
-        answersData[key]
-      ]);
+      _insideList.insert(key, {
+        '"question_id"': '${value['id']}',
+        '"answers_text"': '"${(answers[key]['answers_text'])}"',
+        '"answer_value"': '${(answers[key]['answer_value'])}'
+      });
     });
     return setState(() {
       questionWithAnswer = _insideList;
@@ -288,7 +295,7 @@ class _SubmitPageState extends State<SubmitPage> {
                   color: Colors.green,
                   onPressed: () async {
                     final device_id = "$deviceId";
-                    final user_answers = "$questionWithAnswer";
+                    final user_answers = '$questionWithAnswer';
                     await _addResult(device_id, result, user_answers);
                     await storage.clear();
                     await progressStorage.clear();

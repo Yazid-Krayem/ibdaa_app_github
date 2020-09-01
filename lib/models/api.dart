@@ -39,9 +39,9 @@ class API {
     var url = baseUrl + "/result/add";
 
     var query = {
-      'device_id': "$device_id",
-      'user_answers': "$user_answers",
-      'user_result': result
+      "device_id": '$device_id',
+      "user_answers": '$user_answers',
+      "user_result": result
     };
 
     return http.post(

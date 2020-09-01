@@ -117,7 +117,7 @@ class WebView extends StatelessWidget {
                   Center(
                     child: Image.network(
                       snapshot.data.tripleImage,
-                      height: 120,
+                      height: 220,
                     ),
                   )
                 ],

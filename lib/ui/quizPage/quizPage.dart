@@ -316,12 +316,12 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   }
 
   List _quizPageImages = [
-    '/assets/images/1.png',
-    '/assets/images/2.jpg',
-    '/assets/images/3.jpg',
-    '/assets/images/4.jpg',
-    '/assets/images/5.jpg',
-    '/assets/images/6.jpg',
+    '/images/1.png',
+    '/images/2.jpg',
+    '/images/3.jpg',
+    '/images/4.jpg',
+    '/images/5.jpg',
+    '/images/6.jpg',
   ];
 
   int _imagesIndex = 0;
@@ -444,7 +444,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                       child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: NetworkImage(
+                                image: AssetImage(
                                     '${_quizPageImages[_imagesIndex]}'),
                                 fit: BoxFit.cover),
                           ),
