@@ -65,7 +65,7 @@ class _ResultPageState extends State<ResultPage> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text('النتيجة'),
+            title: Text('نظرية هولندا في اختيار المهنة'),
             backgroundColor: Colors.blue,
           ),
           body: FutureBuilder<GetTriple>(
@@ -74,6 +74,8 @@ class _ResultPageState extends State<ResultPage> {
               if (snapshot.hasData) {
                 List tripleUrl = snapshot.data.tripleUrl.split(',');
                 List unviersitiesName = snapshot.data.universityName.split(',');
+                List tripleDescription =
+                    snapshot.data.tripleDescription.split(',');
                 return LayoutBuilder(
                   builder: (context, constraints) {
                     if (orientation == Orientation.portrait ||
@@ -81,12 +83,14 @@ class _ResultPageState extends State<ResultPage> {
                       return MobileView(
                         tripleUrl: tripleUrl,
                         unviersitiesName: unviersitiesName,
+                        tripleDescription: tripleDescription,
                         snapshot: snapshot,
                       );
                     } else {
                       return WebView(
                         tripleUrl: tripleUrl,
                         unviersitiesName: unviersitiesName,
+                        tripleDescription: tripleDescription,
                         snapshot: snapshot,
                       );
                     }

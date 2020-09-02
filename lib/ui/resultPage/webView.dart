@@ -6,11 +6,13 @@ class WebView extends StatelessWidget {
       {Key key,
       @required this.tripleUrl,
       @required this.unviersitiesName,
+      @required this.tripleDescription,
       @required this.snapshot})
       : super(key: key);
 
   final List tripleUrl;
   final List unviersitiesName;
+  final List tripleDescription;
   final snapshot;
 
   @override
@@ -30,10 +32,24 @@ class WebView extends StatelessWidget {
               child: ListView(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      'مقالات تعريفية',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   for (var items in tripleUrl)
                     Link(
                       child: RichText(
-                          textAlign: TextAlign.justify,
+                          textAlign: TextAlign.center,
                           text: TextSpan(children: <TextSpan>[
                             TextSpan(
                                 text: "-",
@@ -101,7 +117,8 @@ class WebView extends StatelessWidget {
                   color: Colors.grey[200],
                   borderRadius: new BorderRadius.circular(25.0),
                   border: Border.all(color: Colors.blue, width: 8)),
-              child: Stack(
+              child: ListView(
+                shrinkWrap: true,
                 children: [
                   Container(
                     alignment: Alignment.topCenter,
@@ -114,12 +131,30 @@ class WebView extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Center(
-                    child: Image.network(
-                      snapshot.data.tripleImage,
-                      height: 220,
-                    ),
-                  )
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Image.network(
+                    '/assets/${snapshot.data.tripleImage}',
+                    height: 220,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Column(
+                        children: [
+                          for (var detail in tripleDescription)
+                            Text(
+                              detail,
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            )
+                        ],
+                      ))
                 ],
               )),
         ],

@@ -84,6 +84,7 @@ class _SubmitPageState extends State<SubmitPage> {
 
   _addResult(deviceId, stringResult, user_answers) async {
     final stringResult = result.toString();
+
     await API
         .usersAnswers(deviceId, stringResult, user_answers)
         .then((response) {
@@ -94,7 +95,7 @@ class _SubmitPageState extends State<SubmitPage> {
           resultString = result['result'];
         });
       } else {
-        print('here');
+        print(response.body);
       }
     });
   }

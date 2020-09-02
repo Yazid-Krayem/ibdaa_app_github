@@ -6,11 +6,13 @@ class MobileView extends StatelessWidget {
       {Key key,
       @required this.tripleUrl,
       @required this.unviersitiesName,
+      @required this.tripleDescription,
       @required this.snapshot})
       : super(key: key);
 
   final List tripleUrl;
   final List unviersitiesName;
+  final List tripleDescription;
   final snapshot;
 
   @override
@@ -34,7 +36,8 @@ class MobileView extends StatelessWidget {
                       color: Colors.grey[200],
                       borderRadius: new BorderRadius.circular(25.0),
                       border: Border.all(color: Colors.blue, width: 8)),
-                  child: Stack(
+                  child: ListView(
+                    shrinkWrap: true,
                     children: [
                       Container(
                         alignment: Alignment.topCenter,
@@ -42,17 +45,36 @@ class MobileView extends StatelessWidget {
                           "${snapshot.data.tripleName}",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold),
+                            color: Colors.black,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                      Center(
+                      Padding(
+                        padding: EdgeInsets.all(20),
                         child: Image.network(
-                          snapshot.data.tripleImage,
-                          height: 120,
+                          '/assets/${snapshot.data.tripleImage}',
+                          // height: 120,
                         ),
-                      )
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Column(
+                            children: [
+                              for (var detail in tripleDescription)
+                                Text(
+                                  detail,
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                )
+                            ],
+                          ))
                     ],
                   )),
 
@@ -109,23 +131,37 @@ class MobileView extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Text(
+                          'مقالات تعريفية',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       for (var items in tripleUrl)
                         Link(
                           child: RichText(
-                              // textAlign: TextAlign.justify,
+                              textAlign: TextAlign.center,
                               text: TextSpan(children: <TextSpan>[
-                            TextSpan(
-                                text: "- ",
-                                style: TextStyle(color: Colors.black)),
-                            TextSpan(
-                              text: "$items\n\n",
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Colors.blue,
-                                fontSize: 22,
-                              ),
-                            )
-                          ])),
+                                TextSpan(
+                                    text: "- ",
+                                    style: TextStyle(color: Colors.black)),
+                                TextSpan(
+                                  text: "$items\n\n",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.blue,
+                                    fontSize: 22,
+                                  ),
+                                )
+                              ])),
                           url: items,
                           // onError: _showErrorSnackBar,
                         ),
