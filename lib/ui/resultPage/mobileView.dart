@@ -54,7 +54,7 @@ class MobileView extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.all(20),
                         child: Image.network(
-                          '/assets/${snapshot.data.tripleImage}',
+                          '${snapshot.data.tripleImage}',
                           // height: 120,
                         ),
                       ),
@@ -82,14 +82,6 @@ class MobileView extends StatelessWidget {
                 height: 20,
               ),
 
-              // Center(
-              //   child: Icon(
-              //     Icons.arrow_back,
-              //     size: 60,
-              //     color: Colors.blue,
-              //   ),
-              // ),
-
               // triple university container
               Container(
                   height: MediaQuery.of(context).size.height * 0.9,
@@ -100,28 +92,21 @@ class MobileView extends StatelessWidget {
                       border: Border.all(color: Colors.blue, width: 8)),
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          for (var item in unviersitiesName)
-                            Text(
-                              item,
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(fontSize: 22, color: Colors.black),
-                            )
-                        ]),
+                    child: ListView(shrinkWrap: true, children: [
+                      // unviersitiesName.sort((a, b) => a.length.compareTo(b.length)),
+
+                      for (var item in unviersitiesName)
+                        Text(
+                          '$item\n',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 22, color: Colors.black),
+                        )
+                    ]),
                   )),
               SizedBox(
                 height: 20,
               ),
-              // Center(
-              //   child: Icon(
-              //     Icons.arrow_back,
-              //     size: 60,
-              //     color: Colors.blue,
-              //   ),
-              // ),
+
               // triple url
               Container(
                 height: MediaQuery.of(context).size.height * 0.9,

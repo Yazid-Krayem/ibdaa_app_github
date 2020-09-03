@@ -90,16 +90,15 @@ class WebView extends StatelessWidget {
                   border: Border.all(color: Colors.blue, width: 8)),
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      for (var item in unviersitiesName)
-                        Text(
-                          item,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 22, color: Colors.black),
-                        )
-                    ]),
+                child: ListView(shrinkWrap: true, children: [
+                  for (var item in unviersitiesName)
+                    ListTile(
+                        title: Text(
+                      '$item\n',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 22, color: Colors.black),
+                    ))
+                ]),
               )),
           Center(
             child: Icon(
@@ -135,7 +134,7 @@ class WebView extends StatelessWidget {
                     height: 10,
                   ),
                   Image.network(
-                    '/assets/${snapshot.data.tripleImage}',
+                    '${snapshot.data.tripleImage}',
                     height: 220,
                   ),
                   SizedBox(

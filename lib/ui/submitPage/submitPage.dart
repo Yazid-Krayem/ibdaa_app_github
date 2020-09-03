@@ -18,24 +18,25 @@ class SubmitPage extends StatefulWidget {
   final String cookieName;
   final double progress;
 
-  SubmitPage(
-      {Key key,
-      @required this.deviceId,
-      @required this.questionsListTest,
-      @required this.dataListWithCookieName,
-      @required this.cookieName,
-      @required this.oldData,
-      @required this.progress})
-      : super(key: key);
+  SubmitPage({
+    Key key,
+    @required this.deviceId,
+    @required this.questionsListTest,
+    @required this.dataListWithCookieName,
+    @required this.cookieName,
+    @required this.oldData,
+    @required this.progress,
+  }) : super(key: key);
 
   @override
   _SubmitPageState createState() => _SubmitPageState(
-      deviceId,
-      questionsListTest,
-      this.dataListWithCookieName,
-      cookieName,
-      oldData,
-      progress);
+        deviceId,
+        questionsListTest,
+        this.dataListWithCookieName,
+        cookieName,
+        oldData,
+        progress,
+      );
 }
 
 class _SubmitPageState extends State<SubmitPage> {
@@ -211,6 +212,7 @@ class _SubmitPageState extends State<SubmitPage> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text("نتيجة"),
+          centerTitle: true,
           backgroundColor: Colors.brown[200],
         ),
         // floatingActionButton: buildSpeedDial(),

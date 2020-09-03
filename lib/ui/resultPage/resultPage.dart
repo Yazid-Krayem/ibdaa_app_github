@@ -46,13 +46,13 @@ class _ResultPageState extends State<ResultPage> {
     futureAlbum = fetchAlbum();
   }
 
-  void _showErrorSnackBar() {
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Oops... the URL couldn\'t be opened!'),
-      ),
-    );
-  }
+  // void _showErrorSnackBar() {
+  //   Scaffold.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text('Oops... the URL couldn\'t be opened!'),
+  //     ),
+  //   );
+  // }
 
   _ResultPageState(this.result);
   @override
@@ -65,7 +65,8 @@ class _ResultPageState extends State<ResultPage> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text('نظرية هولندا في اختيار المهنة'),
+            title: Text('نظرية هولاند في اختيار المهنة'),
+            centerTitle: true,
             backgroundColor: Colors.blue,
           ),
           body: FutureBuilder<GetTriple>(
@@ -73,7 +74,9 @@ class _ResultPageState extends State<ResultPage> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List tripleUrl = snapshot.data.tripleUrl.split(',');
-                List unviersitiesName = snapshot.data.universityName.split(',');
+                List<String> unviersitiesName =
+                    snapshot.data.universityName.split('،');
+
                 List tripleDescription =
                     snapshot.data.tripleDescription.split(',');
                 return LayoutBuilder(

@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:ibdaa_app/models/answersList.dart';
 import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/models/getAnswers.dart';
-import 'package:ibdaa_app/models/getQuestions.dart';
 import 'package:ibdaa_app/ui/answersButtons/answersButtons.dart';
 import 'package:ibdaa_app/ui/linearProgressIndicator/linearProgressIndicator.dart';
 import 'package:ibdaa_app/ui/questionsList/questionsList.dart';
@@ -71,10 +70,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   void initState() {
     this._getItemsFromLocalStorage();
     this._checkOldData();
-    this._getQuestions();
+    this.fetchAnswers();
     this._getAnswers();
     this.fetchQuestions();
-    this.fetchAnswers();
     controller =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
     animation = Tween(begin: beginAnim, end: endAnim).animate(controller)
@@ -139,20 +137,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   int currentIndex = 0;
 
   // Get questions From the server
-
-  var listQuestions = new List<GetQuestions>();
-
-  _getQuestions() async {
-    new Future.delayed(const Duration(seconds: 3));
-
-    await API.getQuestions().then((response) {
-      setState(() {
-        Iterable list = json.decode(response.body)['result'];
-        listQuestions =
-            list.map((model) => GetQuestions.fromJson(model)).toList();
-      });
-    });
-  }
 
   List questionsListTest = [];
 
@@ -291,7 +275,16 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           _imagesIndex = 0;
         });
       }
-      if (currentIndex == 6 || currentIndex == 12 || currentIndex == 18) {
+      if (currentIndex == 6 ||
+          currentIndex == 12 ||
+          currentIndex == 18 ||
+          currentIndex == 24 ||
+          currentIndex == 30 ||
+          currentIndex == 36 ||
+          currentIndex == 42 ||
+          currentIndex == 60 ||
+          currentIndex == 80 ||
+          currentIndex == 110) {
         _imagesIndex++;
       }
     });
@@ -308,7 +301,16 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           _imagesIndex = 0;
         });
       }
-      if (currentIndex == 6 || currentIndex == 12 || currentIndex == 18) {
+      if (currentIndex == 6 ||
+          currentIndex == 12 ||
+          currentIndex == 18 ||
+          currentIndex == 24 ||
+          currentIndex == 30 ||
+          currentIndex == 36 ||
+          currentIndex == 42 ||
+          currentIndex == 60 ||
+          currentIndex == 80 ||
+          currentIndex == 110) {
         _imagesIndex++;
       }
       progressStorage.setItem("progress", _progress);
