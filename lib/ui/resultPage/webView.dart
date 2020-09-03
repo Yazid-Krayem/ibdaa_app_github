@@ -27,6 +27,10 @@ class WebView extends StatelessWidget {
           Container(
             height: MediaQuery.of(context).size.height * 0.7,
             width: MediaQuery.of(context).size.width / 3.5,
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: new BorderRadius.circular(25.0),
+                border: Border.all(color: Colors.blue, width: 8)),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: ListView(
@@ -91,6 +95,19 @@ class WebView extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: ListView(shrinkWrap: true, children: [
+                  Container(
+                    alignment: Alignment.topRight,
+                    child: Text(
+                      'المجالات الدراسية /المهن الملائمة',
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   for (var item in unviersitiesName)
                     ListTile(
                         title: Text(
@@ -120,14 +137,13 @@ class WebView extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   Container(
-                    alignment: Alignment.topCenter,
+                    alignment: Alignment.topRight,
                     child: Text(
-                      "${snapshot.data.tripleName}",
-                      textAlign: TextAlign.center,
+                      'أنماط الميول المهنية',
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                   ),
                   SizedBox(
@@ -139,6 +155,17 @@ class WebView extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 10,
+                  ),
+                  Container(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      "${snapshot.data.tripleName}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                   Align(
                       alignment: Alignment.bottomCenter,

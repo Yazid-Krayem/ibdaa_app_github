@@ -19,25 +19,23 @@ class QuestionsList extends StatelessWidget {
     String mainQuestions = ' :هل تحب أو ترغب في ';
 
     return Container(
+      alignment: Alignment.topRight,
       padding: EdgeInsets.all(8),
       child: Center(
           child: FittedBox(
               fit: BoxFit.fitWidth,
               child: RichText(
                   textAlign: TextAlign.right,
-                  text: TextSpan(children: <TextSpan>[
-                    TextSpan(text: " $mainQuestions \n\n", style: mainQuestion),
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: " $mainQuestions \n\n",
+                      style: mainQuestion,
+                    ),
                     TextSpan(
                       text: "${question['question_data']}",
                       style: webQuestionsFont,
                     )
-                  ]))
-
-              // Text(,
-              //     textAlign: TextAlign.center,
-              //     textDirection: TextDirection.rtl,
-              //     style: webQuestionsFont),
-              )),
+                  ])))),
     );
   }
 }

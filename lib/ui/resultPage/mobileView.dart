@@ -40,22 +40,38 @@ class MobileView extends StatelessWidget {
                     shrinkWrap: true,
                     children: [
                       Container(
-                        alignment: Alignment.topCenter,
+                        alignment: Alignment.topRight,
                         child: Text(
-                          "${snapshot.data.tripleName}",
-                          textAlign: TextAlign.center,
+                          'أنماط الميول المهنية',
                           style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                         ),
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                       Padding(
                         padding: EdgeInsets.all(20),
                         child: Image.network(
                           '${snapshot.data.tripleImage}',
                           // height: 120,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        alignment: Alignment.topCenter,
+                        child: Text(
+                          "${snapshot.data.tripleName}",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -94,7 +110,19 @@ class MobileView extends StatelessWidget {
                     padding: const EdgeInsets.all(20.0),
                     child: ListView(shrinkWrap: true, children: [
                       // unviersitiesName.sort((a, b) => a.length.compareTo(b.length)),
-
+                      Container(
+                        alignment: Alignment.topRight,
+                        child: Text(
+                          'المجالات الدراسية /المهن الملائمة',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       for (var item in unviersitiesName)
                         Text(
                           '$item\n',
@@ -111,6 +139,10 @@ class MobileView extends StatelessWidget {
               Container(
                 height: MediaQuery.of(context).size.height * 0.9,
                 width: MediaQuery.of(context).size.width * 0.8,
+                decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: new BorderRadius.circular(25.0),
+                    border: Border.all(color: Colors.blue, width: 8)),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(

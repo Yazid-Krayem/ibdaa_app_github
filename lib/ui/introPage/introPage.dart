@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:ibdaa_app/ui/startQuizPage/startQuizPage.dart';
 
@@ -9,6 +8,8 @@ class IntroPage extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroPage> {
+  // Get questions From the server
+
   static const _titles = <String>[
     "النجاح ليس نهائيا أبدا. الفشل ليس قاتلا أبدا. الشجاعة هي التي تهم",
     "ركز على ما هو مهم بالنسبة لك",
@@ -52,9 +53,8 @@ class _IntroScreenState extends State<IntroPage> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 34,
-            right: 34,
+          Align(
+            alignment: Alignment.bottomCenter,
             child: FlatButton(
               onPressed: () {
                 _timer.cancel();

@@ -55,7 +55,11 @@ class Linearprogress extends StatelessWidget {
           height: outlineContainerHeight,
           width: outlineContainerWidth,
           child: Center(
-            child: Text('$currentIndex/$totalNumberOfQuestions'),
+            child: Text(
+              '$currentIndex/$totalNumberOfQuestions',
+              style: TextStyle(
+                  color: currentIndex >= 100 ? Colors.black : Colors.white),
+            ),
           ),
         ),
       ],

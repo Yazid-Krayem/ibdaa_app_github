@@ -282,8 +282,11 @@ class _SubmitPageState extends State<SubmitPage> {
                         "$cookieName", removeItemFromLocalStorageList);
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            QuizPage(deviceId, cookieName, oldData)));
+                        builder: (context) => QuizPage(
+                              deviceId,
+                              cookieName,
+                              oldData,
+                            )));
 
                     // _decrementCurrentIndex();
                   },
@@ -297,17 +300,17 @@ class _SubmitPageState extends State<SubmitPage> {
                   shape: buttonStyle,
                   color: Colors.green,
                   onPressed: () async {
-                    final device_id = "$deviceId";
-                    final user_answers = '$questionWithAnswer';
-                    await _addResult(device_id, result, user_answers);
-                    await storage.clear();
-                    await progressStorage.clear();
+                    // final device_id = "$deviceId";
+                    // final user_answers = '$questionWithAnswer';
+                    // await _addResult(device_id, result, user_answers);
+                    // await storage.clear();
+                    // await progressStorage.clear();
 
-                    cookie.remove('id');
+                    // cookie.remove('id');
 
-                    setState(() {
-                      dataListWithCookieName = [];
-                    });
+                    // setState(() {
+                    //   dataListWithCookieName = [];
+                    // });
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ResultPage(
                               result: resultString,
