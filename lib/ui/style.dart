@@ -24,7 +24,7 @@ class AppColors {
 }
 
 final webQuestionsFont = const TextStyle(
-    fontSize: 26, color: Colors.black, fontWeight: FontWeight.bold);
+    fontSize: 23, color: Colors.black, fontWeight: FontWeight.bold);
 final mobileQuestionsFont = const TextStyle(
     fontSize: 19, color: Colors.black, fontWeight: FontWeight.bold);
 

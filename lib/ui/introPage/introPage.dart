@@ -56,9 +56,9 @@ class _IntroScreenState extends State<IntroPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: FlatButton(
-              onPressed: () {
+              onPressed: () async {
                 _timer.cancel();
-                pushReplacementOverview();
+                await pushReplacementOverview();
               },
               child: Text(
                 "تخطى",
@@ -71,7 +71,7 @@ class _IntroScreenState extends State<IntroPage> {
     );
   }
 
-  void pushReplacementOverview() {
+  pushReplacementOverview() async {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => StartQuizPage()));
   }

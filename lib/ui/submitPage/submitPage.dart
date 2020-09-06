@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ibdaa_app/models/api.dart';
@@ -11,7 +10,7 @@ import 'package:localstorage/localstorage.dart';
 class SubmitPage extends StatefulWidget {
   final List oldData;
   final deviceId;
-  final List questionsListTest;
+  final List questionsList;
   final List dataListWithCookieName;
   final String cookieName;
   final double progress;
@@ -19,7 +18,7 @@ class SubmitPage extends StatefulWidget {
   SubmitPage({
     Key key,
     @required this.deviceId,
-    @required this.questionsListTest,
+    @required this.questionsList,
     @required this.dataListWithCookieName,
     @required this.cookieName,
     @required this.oldData,
@@ -29,7 +28,7 @@ class SubmitPage extends StatefulWidget {
   @override
   _SubmitPageState createState() => _SubmitPageState(
         deviceId,
-        questionsListTest,
+        questionsList,
         this.dataListWithCookieName,
         cookieName,
         oldData,
@@ -42,11 +41,11 @@ class _SubmitPageState extends State<SubmitPage> {
   final double progress;
   final cookieName;
   final deviceId;
-  final List questionsListTest;
+  final List questionsList;
   List dataListWithCookieName;
   _SubmitPageState(
     this.deviceId,
-    this.questionsListTest,
+    this.questionsList,
     this.dataListWithCookieName,
     this.cookieName,
     this.oldData,
@@ -112,6 +111,7 @@ class _SubmitPageState extends State<SubmitPage> {
     answersData.asMap().forEach((index, post) {
       listItems.add(Container(
           height: 150,
+          // width: 400,
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -132,7 +132,7 @@ class _SubmitPageState extends State<SubmitPage> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         Text(
-                          questionsListTest[index]['question_data'],
+                          questionsList[index]['question_data'],
                           style: questionStyle,
                           textDirection: TextDirection.rtl,
                         ),
@@ -188,7 +188,7 @@ class _SubmitPageState extends State<SubmitPage> {
       answers = answersData;
     });
 
-    questionsListTest.asMap().forEach((key, value) {
+    questionsList.asMap().forEach((key, value) {
       _insideList.insert(key, {
         '"question_id"': '${value['id']}',
         '"answers_text"': '"${(answers[key]['answers_text'])}"',
@@ -212,126 +212,126 @@ class _SubmitPageState extends State<SubmitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text("نتيجة"),
-          centerTitle: true,
-          backgroundColor: Colors.brown[200],
-        ),
+        // appBar: AppBar(
+        //   automaticallyImplyLeading: false,
+        //   title: Text("نتيجة"),
+        //   centerTitle: true,
+        //   backgroundColor: Colors.brown[200],
+        // ),
         // floatingActionButton: buildSpeedDial(),
         body: SafeArea(
             child: Column(children: [
-          Expanded(
-            child: Scrollbar(
-              isAlwaysShown: true,
+      Expanded(
+        child: Scrollbar(
+          isAlwaysShown: true,
+          controller: controller,
+          child: ListView.builder(
               controller: controller,
-              child: ListView.builder(
-                  controller: controller,
-                  itemCount: itemsData.length,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    double scale = 1.0;
-                    if (topContainer > 0.5) {
-                      scale = index + 0.5 - topContainer;
-                      if (scale < 0) {
-                        scale = 0;
-                      } else if (scale > 1) {
-                        scale = 1;
-                      }
-                    }
-                    return Opacity(
-                      opacity: scale,
-                      child: Transform(
-                        transform: Matrix4.identity()..scale(scale, scale),
-                        alignment: Alignment.bottomCenter,
-                        child: Align(
-                            heightFactor: 0.7,
-                            alignment: Alignment.topCenter,
-                            child: Container(
-                                width: MediaQuery.of(context).size.width / 1.5,
-                                child: itemsData[index])),
-                      ),
-                    );
-                  }),
+              itemCount: itemsData.length,
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                double scale = 1.0;
+                if (topContainer > 0.5) {
+                  scale = index + 0.5 - topContainer;
+                  if (scale < 0) {
+                    scale = 0;
+                  } else if (scale > 1) {
+                    scale = 1;
+                  }
+                }
+                return Opacity(
+                  opacity: scale,
+                  child: Transform(
+                    transform: Matrix4.identity()..scale(scale, scale),
+                    alignment: Alignment.bottomCenter,
+                    child: Align(
+                        heightFactor: 0.7,
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                            width: MediaQuery.of(context).size.width / 1.5,
+                            child: itemsData[index])),
+                  ),
+                );
+              }),
+        ),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        // crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: RaisedButton.icon(
+              shape: buttonStyle,
+              color: Colors.blue,
+              onPressed: () async {
+                // await storage.ready;
+                // await progressStorage.ready;
+
+                setState(() {
+                  newProgress = progress - 0.33;
+                });
+
+                // progressStorage.setItem('progress', newProgress);
+
+                // List removeItemFromLocalStorageList = [];
+                // var getData = storage.getItem(deviceId);
+
+                // setState(() {
+                //   removeItemFromLocalStorageList = getData;
+                //   removeItemFromLocalStorageList = dataListWithCookieName;
+                // });
+
+                // int deleteCurrentIndex = currentIndex - 1;
+                // await pop(removeItemFromLocalStorageList);
+
+                // await storage.deleteItem('ibdaa');
+                // storage.setItem(
+                //     "$cookieName", removeItemFromLocalStorageList);
+                // Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => EditPage(
+                          deviceId,
+                          questionsList,
+                          oldData,
+                        )));
+
+                // _decrementCurrentIndex();
+              },
+              label: Text('تعديل'),
+              icon: Icon(Icons.arrow_back),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: RaisedButton.icon(
-                  shape: buttonStyle,
-                  color: Colors.blue,
-                  onPressed: () async {
-                    // await storage.ready;
-                    // await progressStorage.ready;
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: RaisedButton.icon(
+              shape: buttonStyle,
+              color: Colors.green,
+              onPressed: () async {
+                final device_id = "$deviceId";
+                final user_answers = '$questionWithAnswer';
+                await _addResult(device_id, result, user_answers);
+                // await storage.clear();
+                // await progressStorage.clear();
 
-                    setState(() {
-                      newProgress = progress - 0.33;
-                    });
+                // cookie.remove('id');
 
-                    // progressStorage.setItem('progress', newProgress);
+                // setState(() {
+                //   dataListWithCookieName = [];
+                // });
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ResultPage(
+                          result: resultString,
+                        )));
 
-                    // List removeItemFromLocalStorageList = [];
-                    // var getData = storage.getItem(deviceId);
-
-                    // setState(() {
-                    //   removeItemFromLocalStorageList = getData;
-                    //   removeItemFromLocalStorageList = dataListWithCookieName;
-                    // });
-
-                    // int deleteCurrentIndex = currentIndex - 1;
-                    // await pop(removeItemFromLocalStorageList);
-
-                    // await storage.deleteItem('ibdaa');
-                    // storage.setItem(
-                    //     "$cookieName", removeItemFromLocalStorageList);
-                    // Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => EditPage(
-                              deviceId,
-                              questionsListTest,
-                              oldData,
-                            )));
-
-                    // _decrementCurrentIndex();
-                  },
-                  label: Text('تعديل'),
-                  icon: Icon(Icons.arrow_back),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: RaisedButton.icon(
-                  shape: buttonStyle,
-                  color: Colors.green,
-                  onPressed: () async {
-                    final device_id = "$deviceId";
-                    final user_answers = '$questionWithAnswer';
-                    await _addResult(device_id, result, user_answers);
-                    // await storage.clear();
-                    // await progressStorage.clear();
-
-                    // cookie.remove('id');
-
-                    // setState(() {
-                    //   dataListWithCookieName = [];
-                    // });
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ResultPage(
-                              result: resultString,
-                            )));
-
-                    // _showDialog();
-                  },
-                  label: Text('إرسال'),
-                  icon: Icon(Icons.send),
-                ),
-              ),
-            ],
-          )
-        ])));
+                // _showDialog();
+              },
+              label: Text('إرسال'),
+              icon: Icon(Icons.send),
+            ),
+          ),
+        ],
+      )
+    ])));
   }
 }

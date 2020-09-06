@@ -17,21 +17,30 @@ import '../style.dart';
 
 class QuizPage extends StatefulWidget {
   final deviceId;
-  final cookieName;
+  final String cookieName;
   final List oldData;
+  final List questionsListTest;
+  final List answersList;
 
-  QuizPage(this.deviceId, this.cookieName, this.oldData) : super();
+  QuizPage(this.deviceId, this.cookieName, this.oldData, this.questionsListTest,
+      this.answersList)
+      : super();
   @override
-  _QuizPageState createState() => _QuizPageState(deviceId, cookieName, oldData);
+  _QuizPageState createState() => _QuizPageState(
+      deviceId, cookieName, oldData, questionsListTest, answersList);
 
   static of(BuildContext context) {}
 }
 
 class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   final deviceId;
-  final cookieName;
+  final String cookieName;
   final List oldData;
-  _QuizPageState(this.deviceId, this.cookieName, this.oldData) : super();
+  final List questionsListTest;
+  final List answersList;
+  _QuizPageState(this.deviceId, this.cookieName, this.oldData,
+      this.questionsListTest, this.answersList)
+      : super();
 
 //LinearProgressIndicator methods
 
@@ -65,14 +74,19 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     controller.reverse();
   }
 
+  __getQuestionList() async {
+    setState(() {
+      questionsList = questionsListTest;
+    });
+  }
+
   @override
   void initState() {
+    this.__getQuestionList();
     this._onLoadCurrentIndex();
     this._getItemsFromLocalStorage();
     this._checkOldData();
-    this.fetchAnswers();
     this._getAnswers();
-    this.fetchQuestions();
     controller =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
     animation = Tween(begin: beginAnim, end: endAnim).animate(controller)
@@ -130,12 +144,12 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       });
     } else if (currentIndex < dataListWithCookieName.length) {
       dataListWithCookieName.asMap().forEach((key, value) {
-        if (questionsListTest[currentIndex]['id'] == key) {
+        if (questionsList[currentIndex]['id'] == key) {
           setState(() {
             setState(() {
               final item = new GetAnswers(
                   id: id, answersText: answersText, answerValue: answerValue);
-              dataListWithCookieName[currentIndex - 1] = item;
+              dataListWithCookieName[currentIndex] = item;
 
               storage.clear();
 
@@ -163,53 +177,12 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
 
   // Get questions From the server
 
-  List questionsListTest = [];
+  List questionsList = [];
 
   final url = 'https://ibdaa.herokuapp.com';
-  final url1 = 'http://localhost:8000';
-
-  Future<List<dynamic>> fetchQuestions() async {
-    var result = await http.get(
-      '$url/questions/list',
-      headers: {
-        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-        "Access-Control-Allow-Credentials":
-            'true', // Required for cookies, authorization headers with HTTPS
-        "Access-Control-Allow-Headers":
-            "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-        "Access-Control-Allow-Methods": "POST, OPTIONS"
-      },
-    );
-
-    setState(() {
-      questionsListTest = json.decode(result.body)['result'];
-      _load = !_load;
-    });
-    return json.decode(result.body)['result'];
-  }
 
 //Get answers From the serve
   var listAnswers = new List<GetAnswers>();
-  List answersList = [];
-
-  Future<List<dynamic>> fetchAnswers() async {
-    var result = await http.get(
-      '$url/answers/list',
-      headers: {
-        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-        "Access-Control-Allow-Credentials":
-            'true', // Required for cookies, authorization headers with HTTPS
-        "Access-Control-Allow-Headers":
-            "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-        "Access-Control-Allow-Methods": "POST, OPTIONS"
-      },
-    );
-
-    setState(() {
-      answersList = json.decode(result.body)['result'];
-    });
-    return json.decode(result.body)['result'];
-  }
 
   _getAnswers() async {
     new Future.delayed(const Duration(seconds: 3));
@@ -269,11 +242,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       lengthOflocalStorageItems = getData.length - 1;
     });
     await _pressedButton(getData);
-
     _decrementCurrentIndex();
-    setState(() {
-      pressedButton = null;
-    });
 
     if (getData == []) {
       return false;
@@ -283,7 +252,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   // seState functions
   _incrementCurrentIndex() {
     setState(() {
-      if (currentIndex < questionsListTest.length) {
+      if (currentIndex < questionsList.length) {
         currentIndex++;
       }
       if (_imagesIndex == 5) {
@@ -350,13 +319,13 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     _incrementCurrentIndex();
     var getData = storage.getItem(deviceId);
 
-    if (getData.length == questionsListTest.length) {
+    if (getData.length == questionsList.length) {
       Navigator.push<bool>(
           context,
           MaterialPageRoute(
             builder: (BuildContext context) => SubmitPage(
               deviceId: deviceId,
-              questionsListTest: questionsListTest,
+              questionsList: questionsList,
               dataListWithCookieName: dataListWithCookieName,
               cookieName: cookieName,
               oldData: oldData,
@@ -379,8 +348,8 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         pressedButton = 0;
         currentIndex = getData.length;
       });
-      print('getDta $currentIndex');
-      print('getDta ${getData.length}');
+      // print('getDta $currentIndex');
+      // print('getDta ${getData.length}');
     }
   }
 
@@ -388,19 +357,22 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   //Answers function
 
   answersCallBack(item) async {
+    setState(() {
+      pressedButton = 0;
+    });
     _addItem(item.id, item.answersText, item.answerValue);
     startProgress();
     _incrementCurrentIndex();
 
-    // if (getData.length == questionsListTest.length) {
+    // if (getData.length == questionsList.length) {
 
-    if (currentIndex > questionsListTest.length) {
+    if (currentIndex > questionsList.length) {
       Navigator.push<bool>(
           context,
           MaterialPageRoute(
             builder: (BuildContext context) => SubmitPage(
               deviceId: deviceId,
-              questionsListTest: questionsListTest,
+              questionsList: questionsList,
               dataListWithCookieName: dataListWithCookieName,
               cookieName: cookieName,
               oldData: oldData,
@@ -441,13 +413,13 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
             ),
           ),
           child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 1000),
+              duration: Duration(milliseconds: 700),
               child: IndexedStack(
                   key: ValueKey<int>(currentIndex),
                   index: currentIndex,
-                  children: questionsListTest.map((question) {
-                    if (questionsListTest.indexOf(question) <=
-                        questionsListTest.length) {
+                  children: questionsList.map((question) {
+                    if (questionsList.indexOf(question) <=
+                        questionsList.length) {
                       return QuestionsList(
                           currentIndex: currentIndex,
                           progress: _progress,
@@ -477,7 +449,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         ));
   }
 
-  bool _load = true;
+  bool _load = false;
 
   @override
   Widget build(BuildContext context) {
@@ -485,12 +457,12 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     var width = MediaQuery.of(context).size.width;
 
     return SafeArea(child: ResponsiveWIdget(builder: (context, constraints) {
-      if (oldData.length == questionsListTest.length)
+      if (questionsList.length == oldData.length)
         return _load
             ? Center(child: CircularProgressIndicator())
             : SubmitPage(
                 deviceId: deviceId,
-                questionsListTest: questionsListTest,
+                questionsList: questionsList,
                 dataListWithCookieName: dataListWithCookieName,
                 cookieName: cookieName,
                 oldData: oldData,
@@ -534,10 +506,11 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   Widget _mobileScreen() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         // return button
         Container(
-          alignment: Alignment.topRight,
+          // alignment: Alignment.topRight,
           padding: const EdgeInsets.all(20.0),
           child: RaisedButton(
             shape: buttonStyle,
@@ -553,36 +526,13 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
             },
             child: FittedBox(
                 fit: BoxFit.fitWidth,
-                child: Text("السؤال السابق", style: TextStyle(fontSize: 20))),
+                child: Text("السؤال السابق", style: TextStyle(fontSize: 16))),
           ),
         ),
 
-        // currentIndex == 120
-        //     ? Container(
-        //         alignment: Alignment.topRight,
-        //         padding: const EdgeInsets.all(20.0),
-        //         child: RaisedButton(
-        //           shape: buttonStyle,
-        //           textColor: Colors.black,
-        //           color: Colors.grey[400],
-        //           onPressed: () => {
-        //             if (currentIndex == 0)
-        //               null
-        //             else
-        //               {
-        //                 returnButtonFunction(),
-        //               }
-        //           },
-        //           child: FittedBox(
-        //               fit: BoxFit.fitWidth,
-        //               child: Text("السؤال ", style: TextStyle(fontSize: 20))),
-        //         ),
-        //       )
-        //     : Container(),
-
         Linearprogress(
           currentIndex: currentIndex + 1,
-          totalNumberOfQuestions: questionsListTest.length,
+          totalNumberOfQuestions: questionsList.length,
         ),
         SizedBox(
           height: 8.0,

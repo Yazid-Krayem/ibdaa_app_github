@@ -17,20 +17,20 @@ import '../style.dart';
 
 class EditPage extends StatefulWidget {
   final deviceId;
-  final List questionsListTest;
+  final List questionsList;
   final List oldData;
 
-  EditPage(this.deviceId, this.questionsListTest, this.oldData) : super();
+  EditPage(this.deviceId, this.questionsList, this.oldData) : super();
   @override
   _QuizPageState createState() =>
-      _QuizPageState(deviceId, questionsListTest, oldData);
+      _QuizPageState(deviceId, questionsList, oldData);
 }
 
 class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
   final deviceId;
-  final List questionsListTest;
+  final List questionsList;
   final List oldData;
-  _QuizPageState(this.deviceId, this.questionsListTest, this.oldData) : super();
+  _QuizPageState(this.deviceId, this.questionsList, this.oldData) : super();
 
 //LinearProgressIndicator methods
 
@@ -103,7 +103,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
 
   _addItem(int id, String answersText, double answerValue) async {
     dataListWithCookieName.asMap().forEach((key, value) {
-      if (questionsListTest[currentIndex]['id'] == key) {
+      if (questionsList[currentIndex]['id'] == key) {
         // print(dataListWithCookieName[currentIndex - 1]);
         setState(() {
           final item = new GetAnswers(
@@ -169,7 +169,10 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
   int lengthOflocalStorageItems;
   int pressedButton;
 
-  _pressedButton(getData) async {
+  _pressedButton() async {
+    await storage.ready;
+
+    var getData = storage.getItem(deviceId);
     setState(() {
       pressedButton = getData[currentIndex]['id'];
     });
@@ -183,7 +186,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
     setState(() {
       lengthOflocalStorageItems = getData.length - 1;
     });
-    await _pressedButton(getData);
+    await _pressedButton();
 
     _decrementCurrentIndex();
 
@@ -195,7 +198,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
   // seState functions
   _incrementCurrentIndex() {
     setState(() {
-      if (currentIndex < questionsListTest.length) {
+      if (currentIndex < questionsList.length) {
         currentIndex++;
       }
       if (_imagesIndex == 5) {
@@ -275,7 +278,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
     startProgress();
     _incrementCurrentIndex();
 
-    // if (getData.length == questionsListTest.length) {
+    // if (getData.length == questionsList.length) {
 
     setState(() {
       _progress = (_progress + 0.333);
@@ -312,9 +315,8 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
           child: IndexedStack(
               key: ValueKey<int>(currentIndex),
               index: currentIndex,
-              children: questionsListTest.map((question) {
-                if (questionsListTest.indexOf(question) <=
-                    questionsListTest.length) {
+              children: questionsList.map((question) {
+                if (questionsList.indexOf(question) <= questionsList.length) {
                   return QuestionsList(
                       currentIndex: currentIndex,
                       progress: _progress,
@@ -369,57 +371,62 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         // return button
-        Container(
-          alignment: Alignment.topRight,
-          padding: const EdgeInsets.all(20.0),
-          child: RaisedButton(
-            shape: buttonStyle,
-            textColor: Colors.black,
-            color: Colors.grey[400],
-            onPressed: () => {
-              if (currentIndex == 0)
-                null
-              else
-                {
-                  returnButtonFunction(),
-                }
-            },
-            child: FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Text("السؤال السابق", style: TextStyle(fontSize: 20))),
-          ),
-        ),
 
-        Container(
-          alignment: Alignment.topRight,
-          padding: const EdgeInsets.all(20.0),
-          child: RaisedButton(
-            shape: buttonStyle,
-            textColor: Colors.black,
-            color: Colors.grey[400],
-            onPressed: () async {
-              Navigator.push<bool>(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => SubmitPage(
-                      deviceId: deviceId,
-                      questionsListTest: questionsListTest,
-                      dataListWithCookieName: dataListWithCookieName,
-                      cookieName: deviceId,
-                      oldData: oldData,
-                      progress: _progress,
-                    ),
-                  ));
-            },
-            child: FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Text("السؤال ", style: TextStyle(fontSize: 20))),
-          ),
+        Row(
+          children: [
+            Container(
+              alignment: Alignment.topRight,
+              padding: const EdgeInsets.all(20.0),
+              child: RaisedButton(
+                shape: buttonStyle,
+                textColor: Colors.black,
+                color: Colors.grey[400],
+                onPressed: () => {
+                  if (currentIndex == 0)
+                    null
+                  else
+                    {
+                      returnButtonFunction(),
+                    }
+                },
+                child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child:
+                        Text("السؤال السابق", style: TextStyle(fontSize: 20))),
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(20.0),
+              child: RaisedButton(
+                shape: buttonStyle,
+                textColor: Colors.black,
+                color: Colors.grey[400],
+                onPressed: () async {
+                  Navigator.push<bool>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => SubmitPage(
+                          deviceId: deviceId,
+                          questionsList: questionsList,
+                          dataListWithCookieName: dataListWithCookieName,
+                          cookieName: deviceId,
+                          oldData: oldData,
+                          progress: _progress,
+                        ),
+                      ));
+                },
+                child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text("السؤال ", style: TextStyle(fontSize: 20))),
+              ),
+            ),
+          ],
         ),
 
         Linearprogress(
           currentIndex: currentIndex + 1,
-          totalNumberOfQuestions: questionsListTest.length,
+          totalNumberOfQuestions: questionsList.length,
         ),
         SizedBox(
           height: 8.0,
@@ -439,6 +446,8 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
   }
 
   _answersButtonMobileScreen() {
+    this._pressedButton();
+
     return Column(
       children: [
         for (var item in listAnswers)

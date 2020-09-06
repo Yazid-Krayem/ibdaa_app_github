@@ -34,7 +34,7 @@ class AnswersButtons extends StatelessWidget {
           textColor: Colors.black,
           // color: Colors.grey[400],
           color:
-              pressedButton == item.id ? Colors.orangeAccent : Colors.grey[400],
+              item.id == pressedButton ? Colors.orangeAccent : Colors.grey[400],
           onPressed: () async {
             answersCallBack(item);
           },

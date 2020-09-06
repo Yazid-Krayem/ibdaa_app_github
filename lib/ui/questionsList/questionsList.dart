@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../style.dart';
@@ -17,34 +18,38 @@ class QuestionsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    String mainQuestions = ' :هل تحب أو ترغب في ';
-
-    return Container(
-      alignment: Alignment.topRight,
-      padding: EdgeInsets.all(8),
-      child: Center(
-          child: Stack(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.all(8),
-            alignment: Alignment.topRight,
-            child: Text(
-              "$mainQuestions \n",
-              style: width < 500 ? mainQuestionWeb : mainQuestionWeb,
-              textAlign: TextAlign.right,
+    String mainQuestions = ' :هل تحب أو ترغب في';
+    return GridPaper(
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        alignment: Alignment.topRight,
+        padding: EdgeInsets.only(right: 8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              alignment: Alignment.topRight,
+              child: Text(
+                "$mainQuestions\n",
+                style: width < 500 ? mainQuestionWeb : mainQuestionWeb,
+                textAlign: TextAlign.right,
+              ),
             ),
-          ),
-          Center(
-            child: Text(
-              "\n${question['question_data']}",
-              style: width < 500 ? mobileQuestionsFont : webQuestionsFont,
+            SizedBox(
+              height: 10,
+            ),
+            AutoSizeText(
+              "${question['question_data']}",
+              style: webQuestionsFont,
+              minFontSize: 19,
+              maxFontSize: 26,
+              maxLines: 2,
               textAlign: TextAlign.center,
             ),
-          )
-        ],
-      )),
+          ],
+        ),
+      ),
     );
   }
 }

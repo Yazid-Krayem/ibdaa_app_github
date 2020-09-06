@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ibdaa_app/common/button.dart';
 import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
@@ -5,6 +6,7 @@ import 'package:ibdaa_app/ui/style.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cooky/cooky.dart' as cookie;
+import 'package:http/http.dart' as http;
 
 class StartQuizPage extends StatefulWidget {
   @override
@@ -83,13 +85,59 @@ class _StartQuizPageState extends State<StartQuizPage> {
     }
   }
 
+  final url = 'https://ibdaa.herokuapp.com';
+  List questionsListTest = [];
+
+  Future<List<dynamic>> fetchQuestions() async {
+    var result = await http.get(
+      '$url/questions/list',
+      headers: {
+        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+        "Access-Control-Allow-Credentials":
+            'true', // Required for cookies, authorization headers with HTTPS
+        "Access-Control-Allow-Headers":
+            "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Methods": "POST, OPTIONS"
+      },
+    );
+
+    setState(() {
+      questionsListTest = json.decode(result.body)['result'];
+    });
+    return json.decode(result.body)['result'];
+  }
+
+  List answersList = [];
+
+  Future<List<dynamic>> fetchAnswers() async {
+    var result = await http.get(
+      '$url/answers/list',
+      headers: {
+        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+        "Access-Control-Allow-Credentials":
+            'true', // Required for cookies, authorization headers with HTTPS
+        "Access-Control-Allow-Headers":
+            "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Methods": "POST, OPTIONS"
+      },
+    );
+
+    setState(() {
+      answersList = json.decode(result.body)['result'];
+    });
+    return json.decode(result.body)['result'];
+  }
+
   @override
   void initState() {
     super.initState();
+    this.fetchQuestions();
+    this.fetchAnswers();
     this._checkCookie();
     this._copyTheOldDataFromLocalStorage();
   }
 
+  bool _load = false;
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -141,88 +189,28 @@ class _StartQuizPageState extends State<StartQuizPage> {
                             Container(
                               child: Button(
                                   buttonLabel: 'ابدأ الاختبار',
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    setState(() {
+                                      _load = !_load;
+                                    });
+                                    await Future.delayed(Duration(seconds: 2));
                                     Navigator.push<bool>(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              QuizPage(deviceid, cookieName,
-                                                  oldData),
-                                        ));
+                                            builder: (BuildContext context) =>
+                                                QuizPage(
+                                                    deviceid,
+                                                    cookieName,
+                                                    oldData,
+                                                    questionsListTest,
+                                                    answersList)));
                                   }),
                             ),
+                            _load ? CircularProgressIndicator() : Container()
                           ],
                         ))
                   ],
-                ))
-
-            // Column(
-            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //     crossAxisAlignment: CrossAxisAlignment.end,
-            //     children: [
-            //       Container(
-            //         width: MediaQuery.of(context).size.width / 2,
-            //         child: Text('data'),
-            //       ),
-            //       Padding(
-            //         padding: const EdgeInsets.all(20.0),
-            //         child: Container(
-            //             width: MediaQuery.of(context).size.width / 2,
-            //             child: Row(
-            //               crossAxisAlignment: CrossAxisAlignment.start,
-            //               mainAxisAlignment: MainAxisAlignment.center,
-            //               children: [
-            //                 Padding(
-            //                   padding: const EdgeInsets.all(20.0),
-            //                   child: Column(
-            //                     mainAxisAlignment: MainAxisAlignment.start,
-            //                     crossAxisAlignment: CrossAxisAlignment.center,
-            //                     children: [
-            //                       Align(
-            //                         alignment: Alignment.center,
-            //                         child: RichText(
-            //                             textDirection: TextDirection.rtl,
-            //                             text: TextSpan(children: [
-            //                               TextSpan(
-            //                                   text: "$webText \n\n",
-            //                                   style: width < 700
-            //                                       ? startQuizPageTextMobile
-            //                                       : startQuizPageTextWeb),
-            //                               TextSpan(
-            //                                   text: 'مبادرة إبدا',
-            //                                   style: width < 700
-            //                                       ? startQuizPageTextMobile
-            //                                       : startQuizPageTextWeb),
-            //                             ])),
-            //                       ),
-            //                       SizedBox(
-            //                         height: 40,
-            //                       ),
-            //                       Container(
-            //                         child: Button(
-            //                             buttonLabel: 'ابدأ الاختبار',
-            //                             onPressed: () {
-            //                               Navigator.push<bool>(
-            //                                   context,
-            //                                   MaterialPageRoute(
-            //                                     builder:
-            //                                         (BuildContext context) =>
-            //                                             QuizPage(
-            //                                                 deviceid,
-            //                                                 cookieName,
-            //                                                 oldData),
-            //                                   ));
-            //                             }),
-            //                       ),
-            //                     ],
-            //                   ),
-            //                 ),
-            //               ],
-            //             )),
-            //       ),
-            //     ])
-
-            ),
+                ))),
       ),
     );
   }
