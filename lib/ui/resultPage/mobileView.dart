@@ -17,6 +17,9 @@ class MobileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    tripleDescription.sort();
+    unviersitiesName.sort((a, b) => a.length.compareTo(b.length));
+
     return SafeArea(
       child: SingleChildScrollView(
         child: Center(
@@ -109,7 +112,6 @@ class MobileView extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: ListView(shrinkWrap: true, children: [
-                      // unviersitiesName.sort((a, b) => a.length.compareTo(b.length)),
                       Container(
                         alignment: Alignment.topRight,
                         child: Text(

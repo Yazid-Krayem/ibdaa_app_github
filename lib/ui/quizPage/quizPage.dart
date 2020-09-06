@@ -12,7 +12,6 @@ import 'package:ibdaa_app/ui/linearProgressIndicator/linearProgressIndicator.dar
 import 'package:ibdaa_app/ui/questionsList/questionsList.dart';
 import 'package:ibdaa_app/ui/responsiveWIdget.dart';
 import 'package:ibdaa_app/ui/submitPage/submitPage.dart';
-import 'package:js_shims/js_shims.dart';
 import 'package:localstorage/localstorage.dart';
 import '../style.dart';
 
@@ -68,6 +67,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    this._onLoadCurrentIndex();
     this._getItemsFromLocalStorage();
     this._checkOldData();
     this.fetchAnswers();
@@ -119,16 +119,41 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   }
 
   _addItem(int id, String answersText, double answerValue) async {
-    //save the old items in the new list
+    if (dataListWithCookieName.isEmpty) {
+      setState(() {
+        final item = new GetAnswers(
+            id: id, answersText: answersText, answerValue: answerValue);
+        list1.items.add(item);
+        dataListWithCookieName.add(item);
 
-    setState(() {
-      final item = new GetAnswers(
-          id: id, answersText: answersText, answerValue: answerValue);
-      list1.items.add(item);
-      dataListWithCookieName.add(item);
+        storage.setItem("$cookieName", dataListWithCookieName);
+      });
+    } else if (currentIndex < dataListWithCookieName.length) {
+      dataListWithCookieName.asMap().forEach((key, value) {
+        if (questionsListTest[currentIndex]['id'] == key) {
+          setState(() {
+            setState(() {
+              final item = new GetAnswers(
+                  id: id, answersText: answersText, answerValue: answerValue);
+              dataListWithCookieName[currentIndex - 1] = item;
 
-      storage.setItem("$cookieName", dataListWithCookieName);
-    });
+              storage.clear();
+
+              storage.setItem("$cookieName", dataListWithCookieName);
+            });
+          });
+        }
+      });
+    } else {
+      setState(() {
+        final item = new GetAnswers(
+            id: id, answersText: answersText, answerValue: answerValue);
+        list1.items.add(item);
+        dataListWithCookieName.add(item);
+
+        storage.setItem("$cookieName", dataListWithCookieName);
+      });
+    }
   }
 
   //// Get the existing data
@@ -231,14 +256,13 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
 
   _pressedButton(getData) async {
     setState(() {
-      pressedButton = getData[lengthOflocalStorageItems]['id'];
+      pressedButton = getData[currentIndex - 1]['id'];
     });
   }
 
   returnButtonFunction() async {
     await storage.ready;
 
-    List removeItemFromLocalStorageList = [];
     var getData = storage.getItem(deviceId);
 
     setState(() {
@@ -246,18 +270,10 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     });
     await _pressedButton(getData);
 
-    setState(() {
-      removeItemFromLocalStorageList = getData;
-      removeItemFromLocalStorageList = dataListWithCookieName;
-    });
-
-    // int deleteCurrentIndex = currentIndex - 1;
-    await pop(removeItemFromLocalStorageList);
-
-    await storage.deleteItem('ibdaa');
-    storage.setItem("$cookieName", removeItemFromLocalStorageList);
-
     _decrementCurrentIndex();
+    setState(() {
+      pressedButton = null;
+    });
 
     if (getData == []) {
       return false;
@@ -275,16 +291,12 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           _imagesIndex = 0;
         });
       }
-      if (currentIndex == 6 ||
-          currentIndex == 12 ||
-          currentIndex == 18 ||
-          currentIndex == 24 ||
-          currentIndex == 30 ||
-          currentIndex == 36 ||
-          currentIndex == 42 ||
+      if (currentIndex == 20 ||
+          currentIndex == 40 ||
           currentIndex == 60 ||
           currentIndex == 80 ||
-          currentIndex == 110) {
+          currentIndex == 100 ||
+          currentIndex == 120) {
         _imagesIndex++;
       }
     });
@@ -301,16 +313,12 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           _imagesIndex = 0;
         });
       }
-      if (currentIndex == 6 ||
-          currentIndex == 12 ||
-          currentIndex == 18 ||
-          currentIndex == 24 ||
-          currentIndex == 30 ||
-          currentIndex == 36 ||
-          currentIndex == 42 ||
+      if (currentIndex == 20 ||
+          currentIndex == 40 ||
           currentIndex == 60 ||
           currentIndex == 80 ||
-          currentIndex == 110) {
+          currentIndex == 100 ||
+          currentIndex == 120) {
         _imagesIndex++;
       }
       progressStorage.setItem("progress", _progress);
@@ -328,29 +336,65 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
 
   int _imagesIndex = 0;
 
-  /////////
-  //Answers function
-
-  answersCallBack(item) async {
+  clickFunctionWithoutAddToLocalStorage(item) async {
     await storage.ready;
     if (currentIndex != 0) {
-      var getData = storage.getItem(deviceId);
-      // final decoding = json.decode(items);
-      // var getData = decoding['$deviceId'];
+      // var getData = storage.getItem(deviceId);
+      setState(() {
+        pressedButton = 0;
+        currentIndex++;
+      });
+    }
 
+    startProgress();
+    _incrementCurrentIndex();
+    var getData = storage.getItem(deviceId);
+
+    if (getData.length == questionsListTest.length) {
+      Navigator.push<bool>(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => SubmitPage(
+              deviceId: deviceId,
+              questionsListTest: questionsListTest,
+              dataListWithCookieName: dataListWithCookieName,
+              cookieName: cookieName,
+              oldData: oldData,
+              progress: _progress,
+            ),
+          ));
+    }
+    setState(() {
+      _progress = (_progress + 0.333);
+    });
+
+    progressStorage.setItem("progress", _progress);
+  }
+
+  _onLoadCurrentIndex() async {
+    await storage.ready;
+    var getData = storage.getItem(deviceId);
+    if (currentIndex != 0) {
       setState(() {
         pressedButton = 0;
         currentIndex = getData.length;
       });
+      print('getDta $currentIndex');
+      print('getDta ${getData.length}');
     }
-    _addItem(
-      item.id,
-      item.answersText,
-      item.answerValue,
-    );
+  }
+
+  /////////
+  //Answers function
+
+  answersCallBack(item) async {
+    _addItem(item.id, item.answersText, item.answerValue);
     startProgress();
     _incrementCurrentIndex();
-    if (currentIndex == questionsListTest.length) {
+
+    // if (getData.length == questionsListTest.length) {
+
+    if (currentIndex > questionsListTest.length) {
       Navigator.push<bool>(
           context,
           MaterialPageRoute(
@@ -396,19 +440,40 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
               colors: [Colors.white, Colors.grey[400]],
             ),
           ),
-          child: IndexedStack(
-              index: currentIndex,
-              children: questionsListTest.map((question) {
-                if (questionsListTest.indexOf(question) <=
-                    questionsListTest.length) {
-                  return QuestionsList(
-                      currentIndex: currentIndex,
-                      progress: _progress,
-                      question: question);
+          child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 1000),
+              child: IndexedStack(
+                  key: ValueKey<int>(currentIndex),
+                  index: currentIndex,
+                  children: questionsListTest.map((question) {
+                    if (questionsListTest.indexOf(question) <=
+                        questionsListTest.length) {
+                      return QuestionsList(
+                          currentIndex: currentIndex,
+                          progress: _progress,
+                          question: question);
+                    } else {
+                      return Container();
+                    }
+                  }).toList()),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                Widget fadeChild;
+                if (animation.status == AnimationStatus.dismissed) {
+                  // current page includes an additional scale transition
+                  fadeChild = ScaleTransition(
+                    scale: Tween<double>(begin: 0.5, end: 1).animate(animation),
+                    child: child,
+                  );
                 } else {
-                  return Container();
+                  // previous page just fades out
+                  fadeChild = child;
                 }
-              }).toList()),
+
+                return FadeTransition(
+                  opacity: animation,
+                  child: fadeChild,
+                );
+              }),
         ));
   }
 
@@ -472,7 +537,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       children: <Widget>[
         // return button
         Container(
-          alignment: Alignment.topLeft,
+          alignment: Alignment.topRight,
           padding: const EdgeInsets.all(20.0),
           child: RaisedButton(
             shape: buttonStyle,
@@ -491,6 +556,29 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                 child: Text("السؤال السابق", style: TextStyle(fontSize: 20))),
           ),
         ),
+
+        // currentIndex == 120
+        //     ? Container(
+        //         alignment: Alignment.topRight,
+        //         padding: const EdgeInsets.all(20.0),
+        //         child: RaisedButton(
+        //           shape: buttonStyle,
+        //           textColor: Colors.black,
+        //           color: Colors.grey[400],
+        //           onPressed: () => {
+        //             if (currentIndex == 0)
+        //               null
+        //             else
+        //               {
+        //                 returnButtonFunction(),
+        //               }
+        //           },
+        //           child: FittedBox(
+        //               fit: BoxFit.fitWidth,
+        //               child: Text("السؤال ", style: TextStyle(fontSize: 20))),
+        //         ),
+        //       )
+        //     : Container(),
 
         Linearprogress(
           currentIndex: currentIndex + 1,
@@ -517,7 +605,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     return Column(
       children: [
         for (var item in listAnswers)
-          AnswersButtons(
+          new AnswersButtons(
+              clickFunctionWithoutAddToLocalStorage:
+                  clickFunctionWithoutAddToLocalStorage,
               answersList: answersList,
               answersCallBack: answersCallBack,
               item: item,

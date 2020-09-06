@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ibdaa_app/ui/style.dart';
 
 class Button extends StatelessWidget {
   final String buttonLabel;
@@ -16,8 +15,8 @@ class Button extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
-        color: Theme.of(context).accentColor,
-        disabledColor: AppColors.darkSlateBlue,
+        color: Colors.blue,
+        // disabledColor: AppColors.darkSlateBlue,
         child: Text(
           buttonLabel,
           style: TextStyle(

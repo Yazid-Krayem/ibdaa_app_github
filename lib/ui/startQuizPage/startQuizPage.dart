@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ibdaa_app/common/button.dart';
 import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
+import 'package:ibdaa_app/ui/style.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cooky/cooky.dart' as cookie;
@@ -91,36 +92,137 @@ class _StartQuizPageState extends State<StartQuizPage> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+
+    String webText = "اختبار تحديد الميول المهنية";
+    // String mobileText = "اختبار تحديد \nالميول المهنية";
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('/images/intro.png'), fit: BoxFit.fill),
-        ),
-        child: Center(
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 2,
+      body: SafeArea(
+        child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('/images/intro.png'), fit: BoxFit.fill),
             ),
-            Container(
-              // alignment: Alignment.centerRight,
-              // padding: EdgeInsets.only(left: 200),
-              child: Button(
-                  buttonLabel: 'ابدأ الاختبار',
-                  onPressed: () {
-                    Navigator.push<bool>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              QuizPage(deviceid, cookieName, oldData),
-                        ));
-                  }),
+            child: Container(
+                width: width,
+                height: height,
+                child: Row(
+                  children: [
+                    Container(
+                      width: width * 0.65,
+                      height: height / 2,
+                    ),
+                    Container(
+                        width: width * 0.35,
+                        height: height / 2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              alignment: Alignment.topCenter,
+                              child: Text(webText,
+                                  style: width < 700
+                                      ? startQuizPageTextMobile
+                                      : startQuizPageTextWeb),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Text('مبادرة إبدا',
+                                style: width < 700
+                                    ? startQuizPageTextMobile
+                                    : startQuizPageTextWeb),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Container(
+                              child: Button(
+                                  buttonLabel: 'ابدأ الاختبار',
+                                  onPressed: () {
+                                    Navigator.push<bool>(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              QuizPage(deviceid, cookieName,
+                                                  oldData),
+                                        ));
+                                  }),
+                            ),
+                          ],
+                        ))
+                  ],
+                ))
+
+            // Column(
+            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //     crossAxisAlignment: CrossAxisAlignment.end,
+            //     children: [
+            //       Container(
+            //         width: MediaQuery.of(context).size.width / 2,
+            //         child: Text('data'),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.all(20.0),
+            //         child: Container(
+            //             width: MediaQuery.of(context).size.width / 2,
+            //             child: Row(
+            //               crossAxisAlignment: CrossAxisAlignment.start,
+            //               mainAxisAlignment: MainAxisAlignment.center,
+            //               children: [
+            //                 Padding(
+            //                   padding: const EdgeInsets.all(20.0),
+            //                   child: Column(
+            //                     mainAxisAlignment: MainAxisAlignment.start,
+            //                     crossAxisAlignment: CrossAxisAlignment.center,
+            //                     children: [
+            //                       Align(
+            //                         alignment: Alignment.center,
+            //                         child: RichText(
+            //                             textDirection: TextDirection.rtl,
+            //                             text: TextSpan(children: [
+            //                               TextSpan(
+            //                                   text: "$webText \n\n",
+            //                                   style: width < 700
+            //                                       ? startQuizPageTextMobile
+            //                                       : startQuizPageTextWeb),
+            //                               TextSpan(
+            //                                   text: 'مبادرة إبدا',
+            //                                   style: width < 700
+            //                                       ? startQuizPageTextMobile
+            //                                       : startQuizPageTextWeb),
+            //                             ])),
+            //                       ),
+            //                       SizedBox(
+            //                         height: 40,
+            //                       ),
+            //                       Container(
+            //                         child: Button(
+            //                             buttonLabel: 'ابدأ الاختبار',
+            //                             onPressed: () {
+            //                               Navigator.push<bool>(
+            //                                   context,
+            //                                   MaterialPageRoute(
+            //                                     builder:
+            //                                         (BuildContext context) =>
+            //                                             QuizPage(
+            //                                                 deviceid,
+            //                                                 cookieName,
+            //                                                 oldData),
+            //                                   ));
+            //                             }),
+            //                       ),
+            //                     ],
+            //                   ),
+            //                 ),
+            //               ],
+            //             )),
+            //       ),
+            //     ])
+
             ),
-          ],
-        )),
       ),
     );
   }

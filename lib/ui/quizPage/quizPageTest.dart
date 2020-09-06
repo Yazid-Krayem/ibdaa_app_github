@@ -134,7 +134,7 @@ class _QuizPageState extends State<QuizPageTest> with TickerProviderStateMixin {
   //// Get the existing data
   ///
   ///
-  int currentIndex = 0;
+  int currentIndex = 1;
 
   // Get questions From the server
 
@@ -327,6 +327,40 @@ class _QuizPageState extends State<QuizPageTest> with TickerProviderStateMixin {
   ];
 
   int _imagesIndex = 0;
+  clickFunctionWithoutAddToLocalStorage(item) async {
+    await storage.ready;
+    if (currentIndex != 0) {
+      var getData = storage.getItem(deviceId);
+      setState(() {
+        pressedButton = 0;
+        currentIndex = getData.length;
+      });
+    }
+
+    startProgress();
+    _incrementCurrentIndex();
+    var getData = storage.getItem(deviceId);
+
+    if (getData.length == questionsListTest.length) {
+      Navigator.push<bool>(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => SubmitPage(
+              deviceId: deviceId,
+              questionsListTest: questionsListTest,
+              dataListWithCookieName: dataListWithCookieName,
+              cookieName: cookieName,
+              oldData: oldData,
+              progress: _progress,
+            ),
+          ));
+    }
+    setState(() {
+      _progress = (_progress + 0.333);
+    });
+
+    progressStorage.setItem("progress", _progress);
+  }
 
   /////////
   //Answers function
@@ -350,7 +384,7 @@ class _QuizPageState extends State<QuizPageTest> with TickerProviderStateMixin {
     );
     startProgress();
     _incrementCurrentIndex();
-    if (currentIndex == questionsListTest.length) {
+    if (currentIndex > 120) {
       Navigator.push<bool>(
           context,
           MaterialPageRoute(
@@ -534,7 +568,7 @@ class _WebViewTestState extends State<WebViewTest> {
         ),
 
         Linearprogress(
-          currentIndex: widget.currentIndex + 1,
+          currentIndex: widget.currentIndex,
           totalNumberOfQuestions: widget.questionsListTest.length,
         ),
         SizedBox(
@@ -550,6 +584,7 @@ class _WebViewTestState extends State<WebViewTest> {
                   children: [
                     for (var item in widget.listAnswers)
                       AnswersButtons(
+                          clickFunctionWithoutAddToLocalStorage: null,
                           answersList: widget.answersList,
                           answersCallBack: widget.answersCallBack,
                           item: item,

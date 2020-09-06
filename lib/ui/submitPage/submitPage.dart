@@ -3,12 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ibdaa_app/models/api.dart';
-import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
+import 'package:ibdaa_app/ui/editPage/editPage.dart';
 import 'package:ibdaa_app/ui/resultPage/resultPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
-import 'package:js_shims/js_shims.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:cooky/cooky.dart' as cookie;
 
 class SubmitPage extends StatefulWidget {
   final List oldData;
@@ -47,12 +45,13 @@ class _SubmitPageState extends State<SubmitPage> {
   final List questionsListTest;
   List dataListWithCookieName;
   _SubmitPageState(
-      this.deviceId,
-      this.questionsListTest,
-      this.dataListWithCookieName,
-      this.cookieName,
-      this.oldData,
-      this.progress);
+    this.deviceId,
+    this.questionsListTest,
+    this.dataListWithCookieName,
+    this.cookieName,
+    this.oldData,
+    this.progress,
+  );
   ScrollController controller = ScrollController();
   bool closeTopContainer = false;
   double topContainer = 0;
@@ -120,30 +119,34 @@ class _SubmitPageState extends State<SubmitPage> {
               boxShadow: [
                 BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
               ]),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        questionsListTest[index]['question_data'],
-                        style: questionStyle,
-                        textDirection: TextDirection.rtl,
-                      ),
-                      Text(
-                        post["answers_text"],
-                        style: answerStyle,
-                        textAlign: TextAlign.justify,
-                        textDirection: TextDirection.rtl,
-                      ),
-                    ],
+          child: Scrollbar(
+            isAlwaysShown: true,
+            controller: controller,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Text(
+                          questionsListTest[index]['question_data'],
+                          style: questionStyle,
+                          textDirection: TextDirection.rtl,
+                        ),
+                        Text(
+                          post["answers_text"],
+                          style: answerStyle,
+                          textAlign: TextAlign.justify,
+                          textDirection: TextDirection.rtl,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )));
     });
@@ -219,6 +222,9 @@ class _SubmitPageState extends State<SubmitPage> {
         body: SafeArea(
             child: Column(children: [
           Expanded(
+            child: Scrollbar(
+              isAlwaysShown: true,
+              controller: controller,
               child: ListView.builder(
                   controller: controller,
                   itemCount: itemsData.length,
@@ -246,7 +252,9 @@ class _SubmitPageState extends State<SubmitPage> {
                                 child: itemsData[index])),
                       ),
                     );
-                  })),
+                  }),
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             // crossAxisAlignment: CrossAxisAlignment.end,
@@ -257,34 +265,34 @@ class _SubmitPageState extends State<SubmitPage> {
                   shape: buttonStyle,
                   color: Colors.blue,
                   onPressed: () async {
-                    await storage.ready;
-                    await progressStorage.ready;
+                    // await storage.ready;
+                    // await progressStorage.ready;
 
                     setState(() {
                       newProgress = progress - 0.33;
                     });
 
-                    progressStorage.setItem('progress', newProgress);
+                    // progressStorage.setItem('progress', newProgress);
 
-                    List removeItemFromLocalStorageList = [];
-                    var getData = storage.getItem(deviceId);
+                    // List removeItemFromLocalStorageList = [];
+                    // var getData = storage.getItem(deviceId);
 
-                    setState(() {
-                      removeItemFromLocalStorageList = getData;
-                      removeItemFromLocalStorageList = dataListWithCookieName;
-                    });
+                    // setState(() {
+                    //   removeItemFromLocalStorageList = getData;
+                    //   removeItemFromLocalStorageList = dataListWithCookieName;
+                    // });
 
                     // int deleteCurrentIndex = currentIndex - 1;
-                    await pop(removeItemFromLocalStorageList);
+                    // await pop(removeItemFromLocalStorageList);
 
-                    await storage.deleteItem('ibdaa');
-                    storage.setItem(
-                        "$cookieName", removeItemFromLocalStorageList);
-                    Navigator.of(context).pop();
+                    // await storage.deleteItem('ibdaa');
+                    // storage.setItem(
+                    //     "$cookieName", removeItemFromLocalStorageList);
+                    // Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => QuizPage(
+                        builder: (context) => EditPage(
                               deviceId,
-                              cookieName,
+                              questionsListTest,
                               oldData,
                             )));
 
@@ -300,9 +308,9 @@ class _SubmitPageState extends State<SubmitPage> {
                   shape: buttonStyle,
                   color: Colors.green,
                   onPressed: () async {
-                    // final device_id = "$deviceId";
-                    // final user_answers = '$questionWithAnswer';
-                    // await _addResult(device_id, result, user_answers);
+                    final device_id = "$deviceId";
+                    final user_answers = '$questionWithAnswer';
+                    await _addResult(device_id, result, user_answers);
                     // await storage.clear();
                     // await progressStorage.clear();
 

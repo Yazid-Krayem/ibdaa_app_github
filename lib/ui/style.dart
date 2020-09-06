@@ -25,12 +25,19 @@ class AppColors {
 
 final webQuestionsFont = const TextStyle(
     fontSize: 26, color: Colors.black, fontWeight: FontWeight.bold);
+final mobileQuestionsFont = const TextStyle(
+    fontSize: 19, color: Colors.black, fontWeight: FontWeight.bold);
 
-final mainQuestion = const TextStyle(
-  fontSize: 20,
-);
+final mainQuestionWeb = const TextStyle(fontSize: 20, color: Colors.red);
+final mainQuestionMobile = const TextStyle(fontSize: 16, color: Colors.red);
 
 final webAnswersFont = const TextStyle(
   fontSize: 25,
   color: Colors.black,
 );
+
+final startQuizPageTextWeb = const TextStyle(
+    fontSize: 30, color: Colors.blue, fontWeight: FontWeight.bold);
+
+final startQuizPageTextMobile = const TextStyle(
+    fontSize: 18, color: Colors.blue, fontWeight: FontWeight.bold);

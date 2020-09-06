@@ -32,8 +32,12 @@ class _ResultPageState extends State<ResultPage> {
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
+
+      print(result);
       return GetTriple.fromJson(json.decode(response.body)['result']);
     } else {
+      print(result);
+
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load triple');
@@ -79,6 +83,7 @@ class _ResultPageState extends State<ResultPage> {
 
                 List tripleDescription =
                     snapshot.data.tripleDescription.split(',');
+
                 return LayoutBuilder(
                   builder: (context, constraints) {
                     if (orientation == Orientation.portrait ||

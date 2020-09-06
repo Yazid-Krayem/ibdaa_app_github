@@ -17,6 +17,8 @@ class WebView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    tripleDescription.sort();
+    unviersitiesName.sort((a, b) => a.length.compareTo(b.length));
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(

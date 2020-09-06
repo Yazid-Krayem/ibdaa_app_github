@@ -4,6 +4,7 @@ import '../style.dart';
 class AnswersButtons extends StatelessWidget {
   final List answersList;
   final Function answersCallBack;
+  final Function clickFunctionWithoutAddToLocalStorage;
   final item;
   final int currentIndex;
   final int lengthOflocalStorageItems;
@@ -16,7 +17,8 @@ class AnswersButtons extends StatelessWidget {
       @required this.item,
       @required this.currentIndex,
       @required this.lengthOflocalStorageItems,
-      @required this.pressedButton})
+      @required this.pressedButton,
+      @required this.clickFunctionWithoutAddToLocalStorage})
       : super(key: key);
 
   @override
@@ -25,6 +27,7 @@ class AnswersButtons extends StatelessWidget {
       width: MediaQuery.of(context).size.width / 3,
       padding: const EdgeInsets.all(8.0),
       child: FlatButton(
+          hoverColor: Colors.orangeAccent,
 
           // elevation: 8,
           shape: buttonStyle,
