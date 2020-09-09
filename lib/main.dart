@@ -17,10 +17,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Ibdaa',
         theme: ThemeData(
-          brightness: Brightness.dark,
-          primaryColor: AppColors.darkSlateGray,
+          // brightness: Brightness.dark,
+          primaryColor: Colors.white,
           accentColor: AppColors.dodgerBlue,
-          scaffoldBackgroundColor: Colors.grey[800],
+          scaffoldBackgroundColor: Colors.white,
           fontFamily: GoogleFonts.oxygen().fontFamily,
           primarySwatch: Colors.blue,
         ),

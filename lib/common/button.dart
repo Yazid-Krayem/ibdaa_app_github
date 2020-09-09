@@ -8,21 +8,20 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return ButtonTheme(
       minWidth: 120,
-      height: 60,
+      height: width < 500 ? 40 : 50,
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
-        color: Colors.blue,
+        color: Colors.lightBlue,
         // disabledColor: AppColors.darkSlateBlue,
         child: Text(
           buttonLabel,
           style: TextStyle(
-            fontWeight: FontWeight.w900,
-            fontSize: 20,
-          ),
+              fontWeight: FontWeight.w900, fontSize: 15, color: Colors.white),
         ),
         onPressed: onPressed,
       ),

@@ -179,7 +179,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
 
   List questionsList = [];
 
-  final url = 'https://ibdaa.herokuapp.com';
+  // final url = 'https://ibdaa.herokuapp.com';
 
 //Get answers From the serve
   var listAnswers = new List<GetAnswers>();
@@ -357,14 +357,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   //Answers function
 
   answersCallBack(item) async {
-    setState(() {
-      pressedButton = 0;
-    });
-    _addItem(item.id, item.answersText, item.answerValue);
-    startProgress();
-    _incrementCurrentIndex();
-
-    // if (getData.length == questionsList.length) {
+    await Future.delayed(const Duration(seconds: 1));
 
     if (currentIndex > questionsList.length) {
       Navigator.push<bool>(
@@ -380,6 +373,15 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
             ),
           ));
     }
+    setState(() {
+      pressedButton = 0;
+    });
+    _addItem(item.id, item.answersText, item.answerValue);
+    startProgress();
+    _incrementCurrentIndex();
+
+    // if (getData.length == questionsList.length) {
+
     setState(() {
       _progress = (_progress + 0.333);
     });
@@ -398,55 +400,31 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   Widget indexStacked() {
     var orientation = MediaQuery.of(context).orientation;
 
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          alignment: Alignment.center,
-          width: orientation == Orientation.portrait
-              ? MediaQuery.of(context).size.width * 0.6
-              : MediaQuery.of(context).size.width * 0.4,
-          height: MediaQuery.of(context).size.height * 0.2,
-          decoration: BoxDecoration(
-            color: Colors.lightBlueAccent,
-            gradient: LinearGradient(
-              colors: [Colors.white, Colors.grey[400]],
-            ),
-          ),
-          child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 700),
-              child: IndexedStack(
-                  key: ValueKey<int>(currentIndex),
-                  index: currentIndex,
-                  children: questionsList.map((question) {
-                    if (questionsList.indexOf(question) <=
-                        questionsList.length) {
-                      return QuestionsList(
-                          currentIndex: currentIndex,
-                          progress: _progress,
-                          question: question);
-                    } else {
-                      return Container();
-                    }
-                  }).toList()),
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                Widget fadeChild;
-                if (animation.status == AnimationStatus.dismissed) {
-                  // current page includes an additional scale transition
-                  fadeChild = ScaleTransition(
-                    scale: Tween<double>(begin: 0.5, end: 1).animate(animation),
-                    child: child,
-                  );
-                } else {
-                  // previous page just fades out
-                  fadeChild = child;
-                }
-
-                return FadeTransition(
-                  opacity: animation,
-                  child: fadeChild,
-                );
-              }),
-        ));
+    return Container(
+      alignment: Alignment.center,
+      width: orientation == Orientation.portrait
+          ? MediaQuery.of(context).size.width * 0.6
+          : MediaQuery.of(context).size.width * 0.4,
+      height: MediaQuery.of(context).size.height * 0.2,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        border: Border.all(color: Colors.lightBlue, width: 2),
+        color: Colors.lightBlue,
+      ),
+      child: IndexedStack(
+          key: ValueKey<int>(currentIndex),
+          index: currentIndex,
+          children: questionsList.map((question) {
+            if (questionsList.indexOf(question) <= questionsList.length) {
+              return QuestionsList(
+                  currentIndex: currentIndex,
+                  progress: _progress,
+                  question: question);
+            } else {
+              return Container();
+            }
+          }).toList()),
+    );
   }
 
   bool _load = false;
@@ -510,12 +488,14 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       children: <Widget>[
         // return button
         Container(
-          // alignment: Alignment.topRight,
+          alignment: Alignment.bottomLeft,
           padding: const EdgeInsets.all(20.0),
-          child: RaisedButton(
+          child: RaisedButton.icon(
+            label: Text("السؤال السابق", style: TextStyle(fontSize: 16)),
+            icon: Icon(Icons.keyboard_return),
             shape: buttonStyle,
-            textColor: Colors.black,
-            color: Colors.grey[400],
+            textColor: Colors.lightBlue,
+            color: Colors.white,
             onPressed: () => {
               if (currentIndex == 0)
                 null
@@ -524,27 +504,34 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                   returnButtonFunction(),
                 }
             },
-            child: FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Text("السؤال السابق", style: TextStyle(fontSize: 16))),
           ),
-        ),
-
-        Linearprogress(
-          currentIndex: currentIndex + 1,
-          totalNumberOfQuestions: questionsList.length,
         ),
         SizedBox(
           height: 8.0,
         ),
-
         Column(
           children: [
             indexStacked(),
             Container(
               height: 300,
               child: _answersButtonMobileScreen(),
-            )
+            ),
+            Linearprogress(
+              currentIndex: currentIndex + 1,
+              totalNumberOfQuestions: questionsList.length,
+            ),
+            Container(
+                // height: outlineContainerHeight,
+                // width: outlineContainerWidth,
+                child: Center(
+              child: Text(
+                '${currentIndex + 1} /${questionsList.length}',
+                style: TextStyle(
+                    color: currentIndex >= 100
+                        ? Colors.lightBlue
+                        : Colors.lightBlue),
+              ),
+            ))
           ],
         )
       ],

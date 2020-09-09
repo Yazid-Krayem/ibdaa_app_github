@@ -86,6 +86,8 @@ class _StartQuizPageState extends State<StartQuizPage> {
   }
 
   final url = 'https://ibdaa.herokuapp.com';
+  // final url = 'http://localhost:8000';
+
   List questionsListTest = [];
 
   Future<List<dynamic>> fetchQuestions() async {
@@ -124,6 +126,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
 
     setState(() {
       answersList = json.decode(result.body)['result'];
+      _load = !_load;
     });
     return json.decode(result.body)['result'];
   }
@@ -137,7 +140,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
     this._copyTheOldDataFromLocalStorage();
   }
 
-  bool _load = false;
+  bool _load = true;
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -186,27 +189,31 @@ class _StartQuizPageState extends State<StartQuizPage> {
                             SizedBox(
                               height: 30,
                             ),
-                            Container(
-                              child: Button(
-                                  buttonLabel: 'ابدأ الاختبار',
-                                  onPressed: () async {
-                                    setState(() {
-                                      _load = !_load;
-                                    });
-                                    await Future.delayed(Duration(seconds: 2));
-                                    Navigator.push<bool>(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                QuizPage(
-                                                    deviceid,
-                                                    cookieName,
-                                                    oldData,
-                                                    questionsListTest,
-                                                    answersList)));
-                                  }),
-                            ),
-                            _load ? CircularProgressIndicator() : Container()
+                            _load
+                                ? CircularProgressIndicator()
+                                : Container(
+                                    child: Button(
+                                        buttonLabel: 'ابدأ الاختبار',
+                                        onPressed: () async {
+                                          // setState(() {
+                                          //   _load = !_load;
+                                          // });
+                                          _load
+                                              ? await Future.delayed(
+                                                  Duration(seconds: 2))
+                                              : Navigator.push<bool>(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          QuizPage(
+                                                              deviceid,
+                                                              cookieName,
+                                                              oldData,
+                                                              questionsListTest,
+                                                              answersList)));
+                                        }),
+                                  ),
                           ],
                         ))
                   ],

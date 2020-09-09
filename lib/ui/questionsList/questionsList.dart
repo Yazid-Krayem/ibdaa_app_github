@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../style.dart';
@@ -19,36 +18,32 @@ class QuestionsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     String mainQuestions = ' :هل تحب أو ترغب في';
-    return GridPaper(
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        alignment: Alignment.topRight,
-        padding: EdgeInsets.only(right: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              alignment: Alignment.topRight,
-              child: Text(
-                "$mainQuestions\n",
-                style: width < 500 ? mainQuestionWeb : mainQuestionWeb,
-                textAlign: TextAlign.right,
-              ),
+    return Container(
+      margin: EdgeInsets.all(8),
+      height: MediaQuery.of(context).size.height,
+      alignment: Alignment.topRight,
+      padding: EdgeInsets.only(right: 8),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            alignment: Alignment.topRight,
+            child: Text(
+              "$mainQuestions\n",
+              style: width < 500 ? mainQuestionWeb : mainQuestionWeb,
+              textAlign: TextAlign.right,
             ),
-            SizedBox(
-              height: 10,
-            ),
-            AutoSizeText(
-              "${question['question_data']}",
-              style: webQuestionsFont,
-              minFontSize: 19,
-              maxFontSize: 26,
-              maxLines: 2,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "${question['question_data']}",
+            textAlign: TextAlign.center,
+            style: width < 500 ? mobileQuestionsFont : webQuestionsFont,
+          )
+        ],
       ),
     );
   }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import '../style.dart';
 
-class AnswersButtons extends StatelessWidget {
+class AnswersButtons extends StatefulWidget {
   final List answersList;
   final Function answersCallBack;
   final Function clickFunctionWithoutAddToLocalStorage;
@@ -22,28 +23,39 @@ class AnswersButtons extends StatelessWidget {
       : super(key: key);
 
   @override
+  _AnswersButtonsState createState() => _AnswersButtonsState();
+}
+
+class _AnswersButtonsState extends State<AnswersButtons> {
+  Color changeColor = Colors.lightBlue;
+
+  Color hoverColor = Colors.lightBlue;
+
+  @override
   Widget build(BuildContext context) {
+    print(changeColor);
     return Container(
       width: MediaQuery.of(context).size.width / 3,
       padding: const EdgeInsets.all(8.0),
       child: FlatButton(
-          hoverColor: Colors.orangeAccent,
-
-          // elevation: 8,
+          hoverColor: Colors.lightBlue,
           shape: buttonStyle,
-          textColor: Colors.black,
-          // color: Colors.grey[400],
-          color:
-              item.id == pressedButton ? Colors.orangeAccent : Colors.grey[400],
+          textColor: changeColor,
+          color: widget.item.id == widget.pressedButton
+              ? Colors.lightBlue
+              : Colors.white,
           onPressed: () async {
-            answersCallBack(item);
+            widget.answersCallBack(widget.item);
           },
           child: FittedBox(
             fit: BoxFit.fitWidth,
-            child: Text(
-              "${item.answersText}",
-              style: webAnswersFont,
-            ),
+            child: Text("${widget.item.answersText}",
+                style: TextStyle(
+                  fontSize: 24,
+                  color: widget.item.id == widget.pressedButton
+                      ? Colors.white
+                      : Colors.lightBlue,
+                )),
           )),
     );
   }

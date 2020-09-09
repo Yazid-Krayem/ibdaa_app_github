@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 
 final buttonStyle = new RoundedRectangleBorder(
-  borderRadius: new BorderRadius.circular(30.0),
-);
+    borderRadius: new BorderRadius.circular(30.0),
+    side: BorderSide(color: Colors.lightBlue, width: 2));
 
-final questionStyle = const TextStyle(
-    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black);
+final questionStyleWeb = const TextStyle(
+    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.lightBlue);
+final questionStyleMobile = const TextStyle(
+    fontSize: 14, fontWeight: FontWeight.bold, color: Colors.lightBlue);
 
-final answerStyle = const TextStyle(fontSize: 18, color: Colors.black);
+final answerStyleWeb = const TextStyle(fontSize: 18, color: Colors.lightBlue);
+final answerStyleMobile =
+    const TextStyle(fontSize: 12, color: Colors.lightBlue);
 
 final outOfQuestionsTextStyle = const TextStyle(
     fontSize: 28, fontWeight: FontWeight.bold, color: Colors.red);
@@ -24,20 +28,20 @@ class AppColors {
 }
 
 final webQuestionsFont = const TextStyle(
-    fontSize: 23, color: Colors.black, fontWeight: FontWeight.bold);
+    fontSize: 22.5, color: Colors.white, fontWeight: FontWeight.bold);
 final mobileQuestionsFont = const TextStyle(
-    fontSize: 19, color: Colors.black, fontWeight: FontWeight.bold);
+    fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold);
 
-final mainQuestionWeb = const TextStyle(fontSize: 20, color: Colors.red);
-final mainQuestionMobile = const TextStyle(fontSize: 16, color: Colors.red);
+final mainQuestionWeb = const TextStyle(fontSize: 15, color: Colors.white);
+final mainQuestionMobile = const TextStyle(fontSize: 10, color: Colors.white);
 
 final webAnswersFont = const TextStyle(
   fontSize: 25,
-  color: Colors.black,
+  color: Colors.lightBlue,
 );
 
 final startQuizPageTextWeb = const TextStyle(
-    fontSize: 30, color: Colors.blue, fontWeight: FontWeight.bold);
+    fontSize: 30, color: Colors.lightBlue, fontWeight: FontWeight.bold);
 
 final startQuizPageTextMobile = const TextStyle(
-    fontSize: 18, color: Colors.blue, fontWeight: FontWeight.bold);
+    fontSize: 18, color: Colors.lightBlue, fontWeight: FontWeight.bold);

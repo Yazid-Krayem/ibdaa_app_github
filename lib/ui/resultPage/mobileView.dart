@@ -30,15 +30,52 @@ class MobileView extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
+              // triple university container
+              Container(
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  decoration: BoxDecoration(
+                      color: Colors.lightBlue,
+                      borderRadius: new BorderRadius.circular(25.0),
+                      border: Border.all(color: Colors.lightBlue, width: 8)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: ListView(shrinkWrap: true, children: [
+                      Container(
+                        alignment: Alignment.topRight,
+                        child: Text(
+                          'المجالات الدراسية /المهن الملائمة',
+                          maxLines: 2,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      for (var item in unviersitiesName)
+                        Text(
+                          '$item\n',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 22, color: Colors.white),
+                        )
+                    ]),
+                  )),
+
+              SizedBox(
+                height: 20,
+              ),
               //triple_name
               Container(
                   padding: EdgeInsets.all(20),
                   height: MediaQuery.of(context).size.height * 0.9,
                   width: MediaQuery.of(context).size.width * 0.8,
                   decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: Colors.white,
                       borderRadius: new BorderRadius.circular(25.0),
-                      border: Border.all(color: Colors.blue, width: 8)),
+                      border: Border.all(color: Colors.lightBlue, width: 8)),
                   child: ListView(
                     shrinkWrap: true,
                     children: [
@@ -49,7 +86,7 @@ class MobileView extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                              color: Colors.lightBlue),
                         ),
                       ),
                       SizedBox(
@@ -65,21 +102,6 @@ class MobileView extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        alignment: Alignment.topCenter,
-                        child: Text(
-                          "${snapshot.data.tripleName}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
                       Align(
                           alignment: Alignment.bottomCenter,
                           child: Column(
@@ -89,49 +111,12 @@ class MobileView extends StatelessWidget {
                                   detail,
                                   textDirection: TextDirection.rtl,
                                   style: TextStyle(
-                                    color: Colors.black,
+                                    color: Colors.lightBlue,
                                   ),
                                 )
                             ],
                           ))
                     ],
-                  )),
-
-              SizedBox(
-                height: 20,
-              ),
-
-              // triple university container
-              Container(
-                  height: MediaQuery.of(context).size.height * 0.9,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: new BorderRadius.circular(25.0),
-                      border: Border.all(color: Colors.blue, width: 8)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: ListView(shrinkWrap: true, children: [
-                      Container(
-                        alignment: Alignment.topRight,
-                        child: Text(
-                          'المجالات الدراسية /المهن الملائمة',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      for (var item in unviersitiesName)
-                        Text(
-                          '$item\n',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 22, color: Colors.black),
-                        )
-                    ]),
                   )),
               SizedBox(
                 height: 20,
@@ -142,9 +127,9 @@ class MobileView extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.9,
                 width: MediaQuery.of(context).size.width * 0.8,
                 decoration: BoxDecoration(
-                    color: Colors.grey[200],
+                    color: Colors.lightBlue,
                     borderRadius: new BorderRadius.circular(25.0),
-                    border: Border.all(color: Colors.blue, width: 8)),
+                    border: Border.all(color: Colors.lightBlue, width: 8)),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
@@ -156,7 +141,7 @@ class MobileView extends StatelessWidget {
                           'مقالات تعريفية',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontSize: 22,
                               fontWeight: FontWeight.bold),
                         ),
@@ -170,13 +155,10 @@ class MobileView extends StatelessWidget {
                               textAlign: TextAlign.center,
                               text: TextSpan(children: <TextSpan>[
                                 TextSpan(
-                                    text: "- ",
-                                    style: TextStyle(color: Colors.black)),
-                                TextSpan(
                                   text: "$items\n\n",
                                   style: TextStyle(
                                     decoration: TextDecoration.underline,
-                                    color: Colors.blue,
+                                    color: Colors.white,
                                     fontSize: 22,
                                   ),
                                 )

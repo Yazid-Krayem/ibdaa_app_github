@@ -94,9 +94,24 @@ class _SubmitPageState extends State<SubmitPage> {
           resultString = result['result'];
         });
       } else {
-        print(response.body);
+        _showNewVersionAvailableDialog(context);
       }
     });
+  }
+
+  void _showNewVersionAvailableDialog(BuildContext context) {
+    final alert = AlertDialog(
+      title: Text("Error"),
+      content: Text("There was an error during login."),
+      actions: [FlatButton(child: Text("OK"), onPressed: () {})],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   List<Widget> itemsData = [];
@@ -117,36 +132,46 @@ class _SubmitPageState extends State<SubmitPage> {
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
               color: Colors.white,
               boxShadow: [
-                BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
+                BoxShadow(color: Colors.lightBlue, blurRadius: 10.0),
               ]),
-          child: Scrollbar(
-            isAlwaysShown: true,
-            controller: controller,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          questionsList[index]['question_data'],
-                          style: questionStyle,
-                          textDirection: TextDirection.rtl,
-                        ),
-                        Text(
-                          post["answers_text"],
-                          style: answerStyle,
-                          textAlign: TextAlign.justify,
-                          textDirection: TextDirection.rtl,
-                        ),
-                      ],
-                    ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        " ${questionsList[index]['question_data']}",
+                        style: questionStyleWeb,
+                        textDirection: TextDirection.rtl,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "  ${post["answers_text"]}",
+                            style: answerStyleWeb,
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.rtl,
+                          ),
+                          Icon(
+                            Icons.assignment_turned_in,
+                            color: Colors.lightBlue,
+                          ),
+                        ],
+                      )
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           )));
     });
@@ -263,7 +288,8 @@ class _SubmitPageState extends State<SubmitPage> {
             padding: const EdgeInsets.all(20.0),
             child: RaisedButton.icon(
               shape: buttonStyle,
-              color: Colors.blue,
+              textColor: Colors.lightBlue,
+              color: Colors.white,
               onPressed: () async {
                 // await storage.ready;
                 // await progressStorage.ready;
@@ -299,14 +325,15 @@ class _SubmitPageState extends State<SubmitPage> {
                 // _decrementCurrentIndex();
               },
               label: Text('تعديل'),
-              icon: Icon(Icons.arrow_back),
+              icon: Icon(Icons.keyboard_return),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: RaisedButton.icon(
+              textColor: Colors.white,
+              color: Colors.lightBlue,
               shape: buttonStyle,
-              color: Colors.green,
               onPressed: () async {
                 final device_id = "$deviceId";
                 final user_answers = '$questionWithAnswer';

@@ -25,6 +25,7 @@ class _ResultPageState extends State<ResultPage> {
   Future<GetTriple> futureAlbum;
 
   final url = 'https://ibdaa.herokuapp.com';
+  // final url = 'http://localhost:8000';
 
   Future<GetTriple> fetchAlbum() async {
     final response = await http.get('$url/triple/get/$result');
@@ -69,9 +70,12 @@ class _ResultPageState extends State<ResultPage> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text('نظرية هولاند في اختيار المهنة'),
+            title: Text(
+              'نظرية هولاند في اختيار المهنة',
+              style: TextStyle(color: Colors.white),
+            ),
             centerTitle: true,
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.lightBlue,
           ),
           body: FutureBuilder<GetTriple>(
             future: futureAlbum,

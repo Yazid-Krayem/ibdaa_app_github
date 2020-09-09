@@ -34,11 +34,11 @@ class Linearprogress extends StatelessWidget {
           width: fillContainerWidth,
           margin: EdgeInsets.all(_fillContainerMargin),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(_circularBorderRadius),
-            gradient: LinearGradient(
-              colors: [Colors.orange, Colors.white, Colors.black],
-            ),
-          ),
+              borderRadius: BorderRadius.circular(_circularBorderRadius),
+              // gradient: LinearGradient(
+              //   colors: [Colors.orange, Colors.white, Colors.black],
+              // ),
+              color: Colors.lightBlue),
         ),
         Container(
           height: outlineContainerHeight,
@@ -47,21 +47,19 @@ class Linearprogress extends StatelessWidget {
             borderRadius: BorderRadius.circular(_circularBorderRadius),
             border: Border.all(
               width: _borderWidth,
-              color: AppColors.darkSlateBlue,
+              color: Colors.lightBlue,
             ),
           ),
         ),
-        Container(
-          height: outlineContainerHeight,
-          width: outlineContainerWidth,
-          child: Center(
-            child: Text(
-              '$currentIndex/$totalNumberOfQuestions',
-              style: TextStyle(
-                  color: currentIndex >= 100 ? Colors.black : Colors.white),
-            ),
-          ),
-        ),
+        // Container(
+        //   height: outlineContainerHeight,
+        //   width: outlineContainerWidth,
+        //   child: Center(
+        //     child: Text(
+        //       '$currentIndex/$totalNumberOfQuestions',
+        //       style: TextStyle(
+        //           color: currentIndex >= 100 ? Colors.grey : Colors.grey),
+        //     ),
       ],
     );
   }
