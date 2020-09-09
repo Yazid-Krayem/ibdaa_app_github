@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
 
-const baseUrl = "https://ibdaa.herokuapp.com";
-// final baseUrl = 'http://localhost:8000';
+// const baseUrl = "https://ibdaa.herokuapp.com";
+final baseUrl = 'http://localhost:8000';
 
 class API {
   static Future getQuestions() {

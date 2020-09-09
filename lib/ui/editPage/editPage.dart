@@ -127,8 +127,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
 
   // Get questions From the server
 
-  // final url = 'https://ibdaa.herokuapp.com';
-  final url = '';
+  final url = 'https://ibdaa.herokuapp.com';
 
 //Get answers From the serve
   var listAnswers = new List<GetAnswers>();

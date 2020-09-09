@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:ibdaa_app/ui/startQuizPage/startQuizPage.dart';
-import 'package:ibdaa_app/ui/style.dart';
 
 class IntroPage extends StatefulWidget {
   @override

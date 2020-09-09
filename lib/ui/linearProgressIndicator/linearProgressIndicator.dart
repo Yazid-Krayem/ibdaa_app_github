@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../style.dart';
-
 class Linearprogress extends StatelessWidget {
   static const _totalHeight = 20.0;
   static const _circularBorderRadius = 40.0;
