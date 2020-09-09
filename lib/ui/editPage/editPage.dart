@@ -370,34 +370,53 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
         // return button
 
         Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          // shrinkWrap: true,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // return button
+            currentIndex == 0
+                ? SizedBox()
+                : Container(
+                    // alignment: Alignment.topRight,
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton.icon(
+                      label:
+                          Text("السؤال السابق", style: TextStyle(fontSize: 16)),
+                      icon: Icon(Icons.keyboard_return),
+                      shape: buttonStyle,
+                      textColor: Colors.lightBlue,
+                      color: Colors.white,
+                      onPressed: () => {
+                        if (currentIndex == 0)
+                          null
+                        else
+                          {
+                            returnButtonFunction(),
+                          }
+                      },
+                    ),
+                  ),
             Container(
-              // alignment: Alignment.topRight,
-              padding: const EdgeInsets.all(20.0),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(8.0),
               child: RaisedButton.icon(
-                label: Text("السؤال السابق", style: TextStyle(fontSize: 16)),
-                icon: Icon(Icons.keyboard_return),
                 shape: buttonStyle,
                 textColor: Colors.lightBlue,
                 color: Colors.white,
-                onPressed: () => {
-                  if (currentIndex == 0)
-                    null
-                  else
-                    {
-                      returnButtonFunction(),
-                    }
+                onPressed: () async {
+                  setState(() {
+                    currentIndex++;
+                  });
                 },
-                //   child: FittedBox(
-                //       fit: BoxFit.fitWidth,
-                //       child: Text("السؤال السابق", style: TextStyle(fontSize: 16))),
-                // ),
+                label: Text('السؤال التالي'),
+                icon: Icon(Icons.navigate_next),
               ),
             ),
             Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(8.0),
               child: RaisedButton.icon(
                 shape: buttonStyle,
                 textColor: Colors.white,
@@ -416,7 +435,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
                         ),
                       ));
                 },
-                label: Text('إرسال'),
+                label: Text('عرض النتيجة'),
                 icon: Icon(Icons.send),
               ),
             ),

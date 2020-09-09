@@ -356,11 +356,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   /////////
   //Answers function
 
-  answersCallBack(item) async {
-    await Future.delayed(const Duration(seconds: 1));
-
+  _questionLengthCheck() async {
     if (currentIndex > questionsList.length) {
-      Navigator.push<bool>(
+      return Navigator.push<bool>(
           context,
           MaterialPageRoute(
             builder: (BuildContext context) => SubmitPage(
@@ -373,6 +371,10 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
             ),
           ));
     }
+  }
+
+  answersCallBack(item) async {
+    await _questionLengthCheck();
     setState(() {
       pressedButton = 0;
     });

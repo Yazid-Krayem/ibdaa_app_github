@@ -32,6 +32,8 @@ class WebView extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.7,
           width: MediaQuery.of(context).size.width / 3.5,
           decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.lightBlue[200], Colors.blue[50]]),
               color: Colors.lightBlue,
               borderRadius: new BorderRadius.circular(25.0),
               border: Border.all(color: Colors.lightBlue, width: 8)),

@@ -31,10 +31,6 @@ class _ResultPageState extends State<ResultPage> {
     final response = await http.get('$url/triple/get/$result');
 
     if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-
-      print(result);
       return GetTriple.fromJson(json.decode(response.body)['result']);
     } else {
       print(result);

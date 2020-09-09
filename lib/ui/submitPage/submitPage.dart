@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/ui/editPage/editPage.dart';
+import 'package:ibdaa_app/ui/introPage/introPage.dart';
 import 'package:ibdaa_app/ui/resultPage/resultPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
 import 'package:localstorage/localstorage.dart';
@@ -79,7 +80,7 @@ class _SubmitPageState extends State<SubmitPage> {
 
   List dataResult = [];
 
-  String resultString;
+  String resultString = '';
 
   _addResult(deviceId, stringResult, user_answers) async {
     final stringResult = result.toString();
@@ -93,23 +94,39 @@ class _SubmitPageState extends State<SubmitPage> {
         setState(() {
           resultString = result['result'];
         });
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ResultPage(
+                  result: resultString,
+                )));
       } else {
-        _showNewVersionAvailableDialog(context);
+        _showDialog();
       }
     });
   }
 
-  void _showNewVersionAvailableDialog(BuildContext context) {
-    final alert = AlertDialog(
-      title: Text("Error"),
-      content: Text("There was an error during login."),
-      actions: [FlatButton(child: Text("OK"), onPressed: () {})],
-    );
-
+  void _showDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return alert;
+        return AlertDialog(
+          title: Text('You ALready finished the quiz '),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Start Over "),
+              onPressed: () async {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => IntroPage()));
+              },
+            ),
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
       },
     );
   }
@@ -237,13 +254,6 @@ class _SubmitPageState extends State<SubmitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   automaticallyImplyLeading: false,
-        //   title: Text("نتيجة"),
-        //   centerTitle: true,
-        //   backgroundColor: Colors.brown[200],
-        // ),
-        // floatingActionButton: buildSpeedDial(),
         body: SafeArea(
             child: Column(children: [
       Expanded(
@@ -335,8 +345,10 @@ class _SubmitPageState extends State<SubmitPage> {
               color: Colors.lightBlue,
               shape: buttonStyle,
               onPressed: () async {
+                print(resultString);
                 final device_id = "$deviceId";
                 final user_answers = '$questionWithAnswer';
+
                 await _addResult(device_id, result, user_answers);
                 // await storage.clear();
                 // await progressStorage.clear();
@@ -346,10 +358,6 @@ class _SubmitPageState extends State<SubmitPage> {
                 // setState(() {
                 //   dataListWithCookieName = [];
                 // });
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ResultPage(
-                          result: resultString,
-                        )));
 
                 // _showDialog();
               },
