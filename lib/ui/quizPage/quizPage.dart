@@ -177,9 +177,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
 
   List questionsList = [];
 
-  // final url = 'https://ibdaa.herokuapp.com';
+  final url = 'https://ibdaa.herokuapp.com';
 
-  final url = 'http://localhost:8000';
+  // final url = 'http://localhost:8000';
 
 //Get answers From the serve
   var listAnswers = new List<GetAnswers>();

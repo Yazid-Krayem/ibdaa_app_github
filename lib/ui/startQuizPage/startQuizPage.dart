@@ -85,8 +85,8 @@ class _StartQuizPageState extends State<StartQuizPage> {
     }
   }
 
-  // final url = 'https://ibdaa.herokuapp.com';
-  final url = 'http://localhost:8000';
+  final url = 'https://ibdaa.herokuapp.com';
+  // final url = 'http://localhost:8000';
 
   List questionsListTest = [];
 

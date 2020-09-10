@@ -414,31 +414,6 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
                 icon: Icon(Icons.navigate_next),
               ),
             ),
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(8.0),
-              child: RaisedButton.icon(
-                shape: buttonStyle,
-                textColor: Colors.white,
-                color: Colors.lightBlue,
-                onPressed: () async {
-                  Navigator.push<bool>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => SubmitPage(
-                          deviceId: deviceId,
-                          questionsList: questionsList,
-                          dataListWithCookieName: dataListWithCookieName,
-                          cookieName: deviceId,
-                          oldData: oldData,
-                          progress: _progress,
-                        ),
-                      ));
-                },
-                label: Text('عرض النتيجة'),
-                icon: Icon(Icons.send),
-              ),
-            ),
           ],
         ),
 
@@ -470,7 +445,32 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
               ),
             ))
           ],
-        )
+        ),
+        Container(
+          alignment: Alignment.bottomRight,
+          padding: const EdgeInsets.all(8.0),
+          child: RaisedButton.icon(
+            shape: buttonStyle,
+            textColor: Colors.white,
+            color: Colors.lightBlue,
+            onPressed: () async {
+              Navigator.push<bool>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => SubmitPage(
+                      deviceId: deviceId,
+                      questionsList: questionsList,
+                      dataListWithCookieName: dataListWithCookieName,
+                      cookieName: deviceId,
+                      oldData: oldData,
+                      progress: _progress,
+                    ),
+                  ));
+            },
+            label: Text('عرض النتيجة'),
+            icon: Icon(Icons.send),
+          ),
+        ),
       ],
     );
   }

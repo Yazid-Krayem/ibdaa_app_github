@@ -30,7 +30,7 @@ class QuestionsList extends StatelessWidget {
           Container(
             alignment: Alignment.topRight,
             child: Text(
-              "$mainQuestions\n",
+              "$mainQuestions",
               style: width < 500 ? mainQuestionWeb : mainQuestionWeb,
               textAlign: TextAlign.right,
             ),

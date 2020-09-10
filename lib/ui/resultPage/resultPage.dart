@@ -24,8 +24,8 @@ class _ResultPageState extends State<ResultPage> {
 
   Future<GetTriple> futureAlbum;
 
-  // final url = 'https://ibdaa.herokuapp.com';
-  final url = 'http://localhost:8000';
+  final url = 'https://ibdaa.herokuapp.com';
+  // final url = 'http://localhost:8000';
 
   Future<GetTriple> fetchAlbum() async {
     final response = await http.get('$url/triple/get/$result');
