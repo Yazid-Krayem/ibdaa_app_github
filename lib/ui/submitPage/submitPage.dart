@@ -7,6 +7,7 @@ import 'package:ibdaa_app/ui/introPage/introPage.dart';
 import 'package:ibdaa_app/ui/resultPage/resultPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:cooky/cooky.dart' as cookie;
 
 class SubmitPage extends StatefulWidget {
   final List oldData;
@@ -109,20 +110,46 @@ class _SubmitPageState extends State<SubmitPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('You ALready finished the quiz '),
+          title: Text('لقد قمت بإجراء الاختبار من قبل ',
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: Colors.lightBlue,
+              )),
+          content: Text(' هل ترغب بعرض النتيجة أو الإعادة من جديد ؟ ',
+              locale: Locale('ar'),
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: Colors.lightBlue,
+              )),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
+
             new FlatButton(
-              child: new Text("Start Over "),
-              onPressed: () async {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => IntroPage()));
+              color: Colors.white,
+              child: new Text(
+                "عرض النتيجة",
+                style: TextStyle(color: Colors.lightBlue),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
               },
             ),
             new FlatButton(
-              child: new Text("Close"),
-              onPressed: () {
-                Navigator.of(context).pop();
+              color: Colors.lightBlue,
+              child: new Text(
+                "الإعادة من جديد",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () async {
+                await storage.ready;
+                await progressStorage.ready;
+
+                storage.clear();
+                progressStorage.clear();
+                cookie.remove('id');
+
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => IntroPage()));
               },
             ),
           ],
@@ -292,7 +319,6 @@ class _SubmitPageState extends State<SubmitPage> {
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        // crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
@@ -301,38 +327,16 @@ class _SubmitPageState extends State<SubmitPage> {
               textColor: Colors.lightBlue,
               color: Colors.white,
               onPressed: () async {
-                // await storage.ready;
-                // await progressStorage.ready;
-
                 setState(() {
                   newProgress = progress - 0.33;
                 });
 
-                // progressStorage.setItem('progress', newProgress);
-
-                // List removeItemFromLocalStorageList = [];
-                // var getData = storage.getItem(deviceId);
-
-                // setState(() {
-                //   removeItemFromLocalStorageList = getData;
-                //   removeItemFromLocalStorageList = dataListWithCookieName;
-                // });
-
-                // int deleteCurrentIndex = currentIndex - 1;
-                // await pop(removeItemFromLocalStorageList);
-
-                // await storage.deleteItem('ibdaa');
-                // storage.setItem(
-                //     "$cookieName", removeItemFromLocalStorageList);
-                // Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => EditPage(
                           deviceId,
                           questionsList,
                           oldData,
                         )));
-
-                // _decrementCurrentIndex();
               },
               label: Text('تعديل'),
               icon: Icon(Icons.keyboard_return),
@@ -350,16 +354,6 @@ class _SubmitPageState extends State<SubmitPage> {
                 final user_answers = '$questionWithAnswer';
 
                 await _addResult(device_id, result, user_answers);
-                // await storage.clear();
-                // await progressStorage.clear();
-
-                // cookie.remove('id');
-
-                // setState(() {
-                //   dataListWithCookieName = [];
-                // });
-
-                // _showDialog();
               },
               label: Text('إرسال'),
               icon: Icon(Icons.send),

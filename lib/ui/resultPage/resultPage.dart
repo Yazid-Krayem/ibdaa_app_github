@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ibdaa_app/models/triple.dart';
+import 'package:ibdaa_app/ui/introPage/introPage.dart';
 import 'package:ibdaa_app/ui/resultPage/mobileView.dart';
 import 'package:ibdaa_app/ui/resultPage/webView.dart';
-
+import 'package:cooky/cooky.dart' as cookie;
+import 'package:localstorage/localstorage.dart';
 import '../responsiveWIdget.dart';
 
 class ResultPage extends StatefulWidget {
@@ -20,6 +22,9 @@ class ResultPage extends StatefulWidget {
 }
 
 class _ResultPageState extends State<ResultPage> {
+  final LocalStorage storage = new LocalStorage('ibdaa');
+
+  final LocalStorage progressStorage = new LocalStorage('progress');
   final String result;
 
   Future<GetTriple> futureAlbum;
@@ -33,12 +38,55 @@ class _ResultPageState extends State<ResultPage> {
     if (response.statusCode == 200) {
       return GetTriple.fromJson(json.decode(response.body)['result']);
     } else {
-      print(result);
+      _showDialog();
 
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load triple');
     }
+  }
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "لفرع المناسب غير موجود في الجامعات السورية",
+            textAlign: TextAlign.right,
+            style: TextStyle(color: Colors.lightBlue),
+          ),
+          content: Text(
+            'يرجى اعادة الاختبار والتركيز اكثر عند الإجابة للحصول على نتيجة دقيقة',
+            textAlign: TextAlign.right,
+            style: TextStyle(color: Colors.lightBlue),
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            Center(
+              child: new FlatButton(
+                child: new Text(
+                  "اعادة الاختبار ",
+                  style: TextStyle(color: Colors.white),
+                ),
+                color: Colors.lightBlue,
+                onPressed: () async {
+                  await storage.ready;
+                  await progressStorage.ready;
+
+                  storage.clear();
+                  progressStorage.clear();
+                  cookie.remove('id');
+
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => IntroPage()));
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

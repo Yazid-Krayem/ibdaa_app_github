@@ -414,7 +414,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         color: Colors.lightBlue,
       ),
       child: IndexedStack(
-          key: ValueKey<int>(currentIndex),
           index: currentIndex,
           children: questionsList.map((question) {
             if (questionsList.indexOf(question) <= questionsList.length) {
