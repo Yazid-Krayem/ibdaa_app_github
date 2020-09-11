@@ -338,7 +338,7 @@ class _SubmitPageState extends State<SubmitPage> {
                           oldData,
                         )));
               },
-              label: Text('تعديل'),
+              label: Text('مراجعة الاجابات'),
               icon: Icon(Icons.keyboard_return),
             ),
           ),

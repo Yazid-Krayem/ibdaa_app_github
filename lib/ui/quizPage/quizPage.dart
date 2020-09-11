@@ -357,7 +357,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   //Answers function
 
   _questionLengthCheck() async {
-    if (currentIndex > questionsList.length) {
+    if (currentIndex > 120) {
       return Navigator.push<bool>(
           context,
           MaterialPageRoute(
@@ -378,7 +378,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     setState(() {
       pressedButton = 0;
     });
-    _addItem(item.id, item.answersText, item.answerValue);
+    await _addItem(item.id, item.answersText, item.answerValue);
     startProgress();
     _incrementCurrentIndex();
 

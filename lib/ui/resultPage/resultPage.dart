@@ -115,7 +115,7 @@ class _ResultPageState extends State<ResultPage> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: Text(
-              'نظرية هولاند في اختيار المهنة',
+              'نتيجة اختبار تحديد الميل ',
               style: TextStyle(color: Colors.white),
             ),
             centerTitle: true,
