@@ -150,10 +150,12 @@ class _SubmitPageState extends State<SubmitPage> {
               onPressed: () async {
                 await storage.ready;
                 await progressStorage.ready;
+                await tripleName.clear();
 
                 storage.clear();
                 progressStorage.clear();
                 cookie.remove('id');
+                tripleName.clear();
 
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => IntroPage()));
