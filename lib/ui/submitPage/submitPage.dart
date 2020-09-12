@@ -60,6 +60,7 @@ class _SubmitPageState extends State<SubmitPage> {
   final LocalStorage storage = new LocalStorage('ibdaa');
 
   final LocalStorage progressStorage = new LocalStorage('progress');
+  final LocalStorage tripleName = new LocalStorage('tripleName');
 
   double newProgress;
 
@@ -95,6 +96,7 @@ class _SubmitPageState extends State<SubmitPage> {
         setState(() {
           resultString = result['result'];
         });
+        tripleName.setItem('tripleName', resultString);
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ResultPage(
                   result: resultString,
@@ -130,8 +132,13 @@ class _SubmitPageState extends State<SubmitPage> {
                 "عرض النتيجة",
                 style: TextStyle(color: Colors.lightBlue),
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
+              onPressed: () async {
+                await tripleName.ready;
+
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ResultPage(
+                          result: tripleName.getItem('tripleName'),
+                        )));
               },
             ),
             new FlatButton(
@@ -164,60 +171,71 @@ class _SubmitPageState extends State<SubmitPage> {
 
   List<Widget> listItems = [];
   double result;
+  int newCurrentIndex;
   void getPostsData() {
     List<Widget> listItems = [];
 
     answersData.asMap().forEach((index, post) {
-      listItems.add(Container(
-          height: 150,
-          // width: 400,
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(color: Colors.lightBlue, blurRadius: 10.0),
-              ]),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        " ${questionsList[index]['question_data']}",
-                        style: questionStyleWeb,
-                        textDirection: TextDirection.rtl,
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "  ${post["answers_text"]}",
-                            style: answerStyleWeb,
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.rtl,
-                          ),
-                          Icon(
-                            Icons.assignment_turned_in,
-                            color: Colors.lightBlue,
-                          ),
-                        ],
-                      )
-                    ],
+      listItems.add(InkWell(
+        onTap: () {
+          setState(() {
+            newCurrentIndex = questionsList[index]['id'];
+          });
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  EditPage(deviceId, questionsList, oldData, newCurrentIndex)));
+        },
+        child: Container(
+            height: 150,
+            // width: 400,
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(color: Colors.lightBlue, blurRadius: 10.0),
+                ]),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          " ${questionsList[index]['question_data']}",
+                          style: questionStyleWeb,
+                          textDirection: TextDirection.rtl,
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "  ${post["answers_text"]}",
+                              style: answerStyleWeb,
+                              textAlign: TextAlign.center,
+                              textDirection: TextDirection.rtl,
+                            ),
+                            Icon(
+                              Icons.assignment_turned_in,
+                              color: Colors.lightBlue,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          )));
+                ],
+              ),
+            )),
+      ));
     });
     setState(() {
       itemsData = listItems;
@@ -333,10 +351,7 @@ class _SubmitPageState extends State<SubmitPage> {
 
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => EditPage(
-                          deviceId,
-                          questionsList,
-                          oldData,
-                        )));
+                        deviceId, questionsList, oldData, newCurrentIndex)));
               },
               label: Text('مراجعة الاجابات'),
               icon: Icon(Icons.keyboard_return),

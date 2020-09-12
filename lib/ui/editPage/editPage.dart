@@ -19,18 +19,25 @@ class EditPage extends StatefulWidget {
   final deviceId;
   final List questionsList;
   final List oldData;
+  final int newCurrentIndex;
 
-  EditPage(this.deviceId, this.questionsList, this.oldData) : super();
+  EditPage(
+      this.deviceId, this.questionsList, this.oldData, this.newCurrentIndex)
+      : super();
   @override
   _QuizPageState createState() =>
-      _QuizPageState(deviceId, questionsList, oldData);
+      _QuizPageState(deviceId, questionsList, oldData, newCurrentIndex);
 }
 
 class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
   final deviceId;
   final List questionsList;
   final List oldData;
-  _QuizPageState(this.deviceId, this.questionsList, this.oldData) : super();
+  final int newCurrentIndex;
+
+  _QuizPageState(
+      this.deviceId, this.questionsList, this.oldData, this.newCurrentIndex)
+      : super();
 
 //LinearProgressIndicator methods
 
@@ -64,8 +71,15 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
     controller.reverse();
   }
 
+  _changeCurrentIndex() async {
+    setState(() {
+      currentIndex = newCurrentIndex - 1;
+    });
+  }
+
   @override
   void initState() {
+    this._changeCurrentIndex();
     this._editLocalStorageList();
     this.fetchAnswers();
     this._getAnswers();

@@ -28,39 +28,42 @@ class MobileView extends StatelessWidget {
             // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: 10,
+                height: 20,
               ),
               // triple university container
-              Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                decoration: BoxDecoration(
-                    color: Colors.lightBlue,
-                    borderRadius: new BorderRadius.circular(25.0),
-                    border: Border.all(color: Colors.lightBlue, width: 8)),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(children: [
-                    Container(
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        'المجالات الدراسية /المهن الملائمة',
-                        maxLines: 2,
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  decoration: BoxDecoration(
+                      color: Colors.lightBlue,
+                      borderRadius: new BorderRadius.circular(25.0),
+                      border: Border.all(color: Colors.lightBlue, width: 8)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(children: [
+                      Container(
+                        alignment: Alignment.topRight,
+                        child: Text(
+                          'المجالات الدراسية /المهن الملائمة',
+                          maxLines: 2,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    for (var item in unviersitiesName)
-                      Text(
-                        '$item\n',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 22, color: Colors.white),
-                      )
-                  ]),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      for (var item in unviersitiesName)
+                        Text(
+                          '$item\n',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 22, color: Colors.white),
+                        )
+                    ]),
+                  ),
                 ),
               ),
 
@@ -120,16 +123,15 @@ class MobileView extends StatelessWidget {
               ),
 
               // triple url
-              Container(
-                padding: EdgeInsets.all(20),
-                // height: MediaQuery.of(context).size.height * 0.9,
-                width: MediaQuery.of(context).size.width * 0.8,
-                decoration: BoxDecoration(
-                    color: Colors.lightBlue,
-                    borderRadius: new BorderRadius.circular(25.0),
-                    border: Border.all(color: Colors.lightBlue, width: 8)),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  decoration: BoxDecoration(
+                      color: Colors.lightBlue,
+                      borderRadius: new BorderRadius.circular(25.0),
+                      border: Border.all(color: Colors.lightBlue, width: 8)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -168,6 +170,9 @@ class MobileView extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 10,
+              )
             ],
           ),
         ),
