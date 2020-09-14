@@ -449,6 +449,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     var orientation = MediaQuery.of(context).orientation;
     var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
 
     return SafeArea(child: ResponsiveWIdget(builder: (context, constraints) {
       return SingleChildScrollView(
@@ -456,7 +457,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            orientation == Orientation.landscape
+            orientation == Orientation.landscape && height > 500
                 ? ClipRRect(
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(20.0),
