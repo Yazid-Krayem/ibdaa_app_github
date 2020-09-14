@@ -55,23 +55,36 @@ class WebView extends StatelessWidget {
                   height: 10,
                 ),
                 for (var items in tripleUrl)
-                  Link(
-                    child: RichText(
+                  if (items.contains('لا'))
+                    RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(children: <TextSpan>[
                           TextSpan(
                             text: "$items\n\n\n",
                             style: TextStyle(
-                              decoration: TextDecoration.underline,
                               color: Colors.white,
                               fontSize: 22,
                             ),
                           )
-                        ])),
+                        ]))
+                  else
+                    Link(
+                      child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(children: <TextSpan>[
+                            TextSpan(
+                              text: "$items\n\n\n",
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.white,
+                                fontSize: 22,
+                              ),
+                            )
+                          ])),
 
-                    url: items,
-                    // onError: _showErrorSnackBar,
-                  ),
+                      url: items,
+                      // onError: _showErrorSnackBar,
+                    ),
               ],
             ),
           ),
@@ -120,10 +133,15 @@ class WebView extends StatelessWidget {
                 Align(
                     alignment: Alignment.bottomCenter,
                     child: Column(
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         for (var detail in tripleDescription)
                           Text(
                             detail,
+                            strutStyle: StrutStyle(
+                              fontSize: 18.0,
+                              height: 1,
+                            ),
                             textDirection: TextDirection.rtl,
                             style: TextStyle(
                               color: Colors.lightBlue,

@@ -45,3 +45,16 @@ final startQuizPageTextWeb = const TextStyle(
 
 final startQuizPageTextMobile = const TextStyle(
     fontSize: 18, color: Colors.lightBlue, fontWeight: FontWeight.bold);
+
+///intro Page
+///
+///
+
+final introPageMobile = const TextStyle(
+  color: Colors.lightBlue,
+  fontSize: 18,
+);
+final introPageWeb = const TextStyle(
+  color: Colors.lightBlue,
+  fontSize: 24,
+);

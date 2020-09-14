@@ -13,7 +13,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        locale: Locale('ar', ''),
+        // localizationsDelegates: [
+        //   // ... app-specific localization delegate[s] here
+        //   GlobalMaterialLocalizations.delegate,
+        //   GlobalWidgetsLocalizations.delegate,
+        //   GlobalCupertinoLocalizations.delegate,
+        // ],
+        // supportedLocales: [
+        //   const Locale('ar', ''), // English, no country code
+        //   // ... other locales the app supports
+        // ],
         debugShowCheckedModeBanner: false,
         title: 'Ibdaa',
         theme: ThemeData(
@@ -21,6 +30,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.white,
           accentColor: AppColors.dodgerBlue,
           scaffoldBackgroundColor: Colors.white,
+          // fontFamily: ArabicFonts.Cairo,
           fontFamily: GoogleFonts.oxygen().fontFamily,
           primarySwatch: Colors.blue,
         ),

@@ -85,14 +85,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     this._getItemsFromLocalStorage();
     this._checkOldData();
     this._getAnswers();
-    controller =
-        AnimationController(duration: const Duration(seconds: 2), vsync: this);
-    animation = Tween(begin: beginAnim, end: endAnim).animate(controller)
-      ..addListener(() {
-        setState(() {
-          // Change here any Animation object value.
-        });
-      });
 
     super.initState();
   }
@@ -251,24 +243,26 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
 
   // seState functions
   _incrementCurrentIndex() {
-    setState(() {
-      if (currentIndex < questionsList.length) {
+    if (currentIndex < questionsList.length) {
+      setState(() {
         currentIndex++;
-      }
-      if (_imagesIndex == 5) {
-        setState(() {
-          _imagesIndex = 0;
-        });
-      }
-      if (currentIndex == 20 ||
-          currentIndex == 40 ||
-          currentIndex == 60 ||
-          currentIndex == 80 ||
-          currentIndex == 100 ||
-          currentIndex == 120) {
+      });
+    }
+    if (_imagesIndex == 5) {
+      setState(() {
+        _imagesIndex = 0;
+      });
+    }
+    if (currentIndex == 20 ||
+        currentIndex == 40 ||
+        currentIndex == 60 ||
+        currentIndex == 80 ||
+        currentIndex == 100 ||
+        currentIndex == 120) {
+      setState(() {
         _imagesIndex++;
-      }
-    });
+      });
+    }
   }
 
   _decrementCurrentIndex() {
@@ -294,14 +288,34 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     }
   }
 
-  List _quizPageImages = [
-    '/images/1.png',
-    '/images/2.jpg',
-    '/images/3.jpg',
-    '/images/4.jpg',
-    '/images/5.jpg',
-    '/images/6.jpg',
+  //image
+  final List theImage = [
+    AssetImage(
+      '/images/1.png',
+    ),
+    AssetImage(
+      '/images/2.jpg',
+    ),
+    AssetImage(
+      '/images/3.jpg',
+    ),
+    AssetImage(
+      '/images/4.jpg',
+    ),
+    AssetImage(
+      '/images/5.jpg',
+    ),
+    AssetImage(
+      '/images/6.jpg',
+    )
   ];
+
+  /// Did Change Dependencies
+  @override
+  void didChangeDependencies() {
+    precacheImage(theImage[_imagesIndex], context);
+    super.didChangeDependencies();
+  }
 
   int _imagesIndex = 0;
 
@@ -379,7 +393,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       pressedButton = 0;
     });
     await _addItem(item.id, item.answersText, item.answerValue);
-    startProgress();
     _incrementCurrentIndex();
 
     // if (getData.length == questionsList.length) {
@@ -462,8 +475,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                       child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(
-                                    '${_quizPageImages[_imagesIndex]}'),
+                                image: theImage[_imagesIndex],
                                 fit: BoxFit.cover),
                           ),
                           width: MediaQuery.of(context).size.width / 2,

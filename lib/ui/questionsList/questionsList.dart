@@ -40,6 +40,10 @@ class QuestionsList extends StatelessWidget {
           ),
           Text(
             "${question['question_data']}",
+            strutStyle: StrutStyle(
+              fontSize: 14.0,
+              height: 1,
+            ),
             textAlign: TextAlign.center,
             style: width < 500 ? mobileQuestionsFont : webQuestionsFont,
           )

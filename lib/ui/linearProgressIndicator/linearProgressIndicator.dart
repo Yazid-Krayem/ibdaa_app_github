@@ -33,9 +33,6 @@ class Linearprogress extends StatelessWidget {
           margin: EdgeInsets.all(_fillContainerMargin),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(_circularBorderRadius),
-              // gradient: LinearGradient(
-              //   colors: [Colors.orange, Colors.white, Colors.black],
-              // ),
               color: Colors.lightBlue),
         ),
         Container(
@@ -49,15 +46,6 @@ class Linearprogress extends StatelessWidget {
             ),
           ),
         ),
-        // Container(
-        //   height: outlineContainerHeight,
-        //   width: outlineContainerWidth,
-        //   child: Center(
-        //     child: Text(
-        //       '$currentIndex/$totalNumberOfQuestions',
-        //       style: TextStyle(
-        //           color: currentIndex >= 100 ? Colors.grey : Colors.grey),
-        //     ),
       ],
     );
   }

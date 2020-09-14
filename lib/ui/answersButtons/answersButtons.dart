@@ -89,7 +89,7 @@ class AnswersButtonsState extends State<AnswersButtons> {
                     ? Colors.lightBlue
                     : Colors.white,
                 onPressed: () async {
-                  widget.answersCallBack(widget.item);
+                  await widget.answersCallBack(widget.item);
                 },
                 child: FittedBox(
                   fit: BoxFit.fitWidth,

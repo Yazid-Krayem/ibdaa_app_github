@@ -118,6 +118,10 @@ class _SubmitPageState extends State<SubmitPage> {
                 color: Colors.lightBlue,
               )),
           content: Text(' هل ترغب بعرض النتيجة أو الإعادة من جديد ؟ ',
+              strutStyle: StrutStyle(
+                fontSize: 14.0,
+                height: 1,
+              ),
               locale: Locale('ar'),
               textAlign: TextAlign.right,
               style: TextStyle(
@@ -179,6 +183,7 @@ class _SubmitPageState extends State<SubmitPage> {
 
     answersData.asMap().forEach((index, post) {
       listItems.add(InkWell(
+        hoverColor: Colors.white,
         onTap: () {
           setState(() {
             newCurrentIndex = questionsList[index]['id'];
@@ -209,12 +214,16 @@ class _SubmitPageState extends State<SubmitPage> {
                       children: <Widget>[
                         Text(
                           " ${questionsList[index]['question_data']}",
+                          strutStyle: StrutStyle(
+                            fontSize: 20.0,
+                            height: 1,
+                          ),
                           style: questionStyleWeb,
                           textDirection: TextDirection.rtl,
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 5,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -350,10 +359,14 @@ class _SubmitPageState extends State<SubmitPage> {
                 setState(() {
                   newProgress = progress - 0.33;
                 });
-
+                newCurrentIndex = 1;
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => EditPage(
-                        deviceId, questionsList, oldData, newCurrentIndex)));
+                          deviceId,
+                          questionsList,
+                          oldData,
+                          newCurrentIndex,
+                        )));
               },
               label: Text('مراجعة الاجابات'),
               icon: Icon(Icons.keyboard_return),
@@ -366,7 +379,6 @@ class _SubmitPageState extends State<SubmitPage> {
               color: Colors.lightBlue,
               shape: buttonStyle,
               onPressed: () async {
-                print(resultString);
                 final device_id = "$deviceId";
                 final user_answers = '$questionWithAnswer';
 

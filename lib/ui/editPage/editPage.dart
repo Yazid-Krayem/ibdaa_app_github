@@ -5,15 +5,19 @@ import 'package:flutter/rendering.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:ibdaa_app/models/answersList.dart';
+
 import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/models/getAnswers.dart';
 import 'package:ibdaa_app/ui/answersButtons/answersButtons.dart';
+import 'package:ibdaa_app/ui/introPage/introPage.dart';
 import 'package:ibdaa_app/ui/linearProgressIndicator/linearProgressIndicator.dart';
 import 'package:ibdaa_app/ui/questionsList/questionsList.dart';
 import 'package:ibdaa_app/ui/responsiveWIdget.dart';
+import 'package:ibdaa_app/ui/resultPage/resultPage.dart';
 import 'package:ibdaa_app/ui/submitPage/submitPage.dart';
 import 'package:localstorage/localstorage.dart';
 import '../style.dart';
+import 'package:cooky/cooky.dart' as cookie;
 
 class EditPage extends StatefulWidget {
   final deviceId;
@@ -43,38 +47,128 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
 
   double _progress = 0.33;
 
-// to aviod meomory leak
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-//animation fucntions
-  Animation<double> animation;
-  AnimationController controller;
-  double beginAnim = 0.0;
-  double endAnim = 1.0;
-  startProgress() {
-    controller.forward();
-  }
-
-  stopProgress() {
-    controller.stop();
-  }
-
-  resetProgress() {
-    controller.reset();
-  }
-
-  reserveProgress() {
-    controller.reverse();
-  }
-
   _changeCurrentIndex() async {
     setState(() {
       currentIndex = newCurrentIndex - 1;
     });
+  }
+
+  final LocalStorage tripleName = new LocalStorage('tripleName');
+  List answersData = [];
+  _getLocalStorageData() async {
+    var items = storage.getItem(deviceId);
+    setState(() {
+      answersData = items;
+    });
+  }
+
+  List questionWithAnswer = [];
+  _questionWithAnswer() async {
+    await _getLocalStorageData();
+    List _insideList = [];
+
+    List answers = [];
+
+    setState(() {
+      answers = answersData;
+    });
+
+    questionsList.asMap().forEach((key, value) {
+      _insideList.insert(key, {
+        '"question_id"': '${value['id']}',
+        '"answers_text"': '"${(answers[key]['answers_text'])}"',
+        '"answer_value"': '${(answers[key]['answer_value'])}'
+      });
+    });
+    return setState(() {
+      questionWithAnswer = _insideList;
+    });
+  }
+
+  String resultString;
+  _addResult(deviceId, stringResult, user_answers) async {
+    await API
+        .usersAnswers(deviceId, stringResult, user_answers)
+        .then((response) {
+      var result = jsonDecode(response.body);
+
+      if (result['success']) {
+        setState(() {
+          resultString = result['result'];
+        });
+        tripleName.setItem('tripleName', resultString);
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ResultPage(
+                  result: resultString,
+                )));
+      } else {
+        _showDialog();
+      }
+    });
+  }
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('لقد قمت بإجراء الاختبار من قبل ',
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: Colors.lightBlue,
+              )),
+          content: Text(' هل ترغب بعرض النتيجة أو الإعادة من جديد ؟ ',
+              strutStyle: StrutStyle(
+                fontSize: 14.0,
+                height: 1,
+              ),
+              locale: Locale('ar'),
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: Colors.lightBlue,
+              )),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+
+            new FlatButton(
+              color: Colors.white,
+              child: new Text(
+                "عرض النتيجة",
+                style: TextStyle(color: Colors.lightBlue),
+              ),
+              onPressed: () async {
+                await tripleName.ready;
+
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ResultPage(
+                          result: tripleName.getItem('tripleName'),
+                        )));
+              },
+            ),
+            new FlatButton(
+              color: Colors.lightBlue,
+              child: new Text(
+                "الإعادة من جديد",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () async {
+                await storage.ready;
+                await progressStorage.ready;
+                await tripleName.clear();
+
+                storage.clear();
+                progressStorage.clear();
+                cookie.remove('id');
+                tripleName.clear();
+
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => IntroPage()));
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -83,15 +177,6 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
     this._editLocalStorageList();
     this.fetchAnswers();
     this._getAnswers();
-    controller =
-        AnimationController(duration: const Duration(seconds: 2), vsync: this);
-    animation = Tween(begin: beginAnim, end: endAnim).animate(controller)
-      ..addListener(() {
-        setState(() {
-          // Change here any Animation object value.
-        });
-      });
-
     super.initState();
   }
 
@@ -122,8 +207,6 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
         setState(() {
           final item = new GetAnswers(
               id: id, answersText: answersText, answerValue: answerValue);
-          print(item);
-
           dataListWithCookieName[currentIndex] = item;
 
           storage.clear();
@@ -211,8 +294,13 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
 
   // seState functions
   _incrementCurrentIndex() {
+    if (currentIndex > 119) {
+      setState(() {
+        currentIndex = 0;
+      });
+    }
     setState(() {
-      if (currentIndex < questionsList.length) {
+      if (currentIndex < questionsList.length - 1) {
         currentIndex++;
       }
       if (_imagesIndex == 5) {
@@ -273,8 +361,6 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
         currentIndex++;
       });
     }
-
-    startProgress();
     _incrementCurrentIndex();
 
     setState(() {
@@ -286,10 +372,27 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
 
   /////////
   //Answers function
+  _questionLengthCheck() async {
+    if (currentIndex > 118) {
+      return Navigator.push<bool>(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => SubmitPage(
+              deviceId: deviceId,
+              questionsList: questionsList,
+              dataListWithCookieName: dataListWithCookieName,
+              cookieName: deviceId,
+              oldData: oldData,
+              progress: _progress,
+            ),
+          ));
+    }
+  }
 
   answersCallBack(item) async {
-    _addItem(item.id, item.answersText, item.answerValue);
-    startProgress();
+    await _questionLengthCheck();
+
+    await _addItem(item.id, item.answersText, item.answerValue);
     _incrementCurrentIndex();
 
     // if (getData.length == questionsList.length) {
@@ -468,18 +571,8 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
             textColor: Colors.white,
             color: Colors.lightBlue,
             onPressed: () async {
-              Navigator.push<bool>(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => SubmitPage(
-                      deviceId: deviceId,
-                      questionsList: questionsList,
-                      dataListWithCookieName: dataListWithCookieName,
-                      cookieName: deviceId,
-                      oldData: oldData,
-                      progress: _progress,
-                    ),
-                  ));
+              await _questionWithAnswer();
+              await _addResult(deviceId, '3', questionWithAnswer);
             },
             label: Text('عرض النتيجة'),
             icon: Icon(Icons.send),

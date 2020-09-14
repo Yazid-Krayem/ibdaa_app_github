@@ -71,6 +71,7 @@ class MobileView extends StatelessWidget {
                 height: 20,
               ),
               //triple_name
+
               Container(
                 padding: EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width * 0.8,
@@ -84,6 +85,10 @@ class MobileView extends StatelessWidget {
                       alignment: Alignment.topRight,
                       child: Text(
                         'أنماط الميول المهنية',
+                        strutStyle: StrutStyle(
+                          fontSize: 18.0,
+                          height: 1,
+                        ),
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -93,8 +98,8 @@ class MobileView extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    Padding(
-                      padding: EdgeInsets.all(20),
+                    SizedBox(
+                      height: 150,
                       child: Image.network(
                         '${snapshot.data.tripleImage}',
                         // height: 120,
@@ -106,18 +111,24 @@ class MobileView extends StatelessWidget {
                     Column(
                       children: [
                         for (var detail in tripleDescription)
-                          Text(
-                            detail,
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(
-                              color: Colors.lightBlue,
-                            ),
-                          )
+                          RichText(
+                              strutStyle: StrutStyle(
+                                fontSize: 12.0,
+                                height: 1,
+                              ),
+                              textDirection: TextDirection.rtl,
+                              text: TextSpan(
+                                text: detail,
+                                style: TextStyle(
+                                  color: Colors.lightBlue,
+                                ),
+                              ))
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
+
               SizedBox(
                 height: 20,
               ),
@@ -150,22 +161,36 @@ class MobileView extends StatelessWidget {
                         height: 10,
                       ),
                       for (var items in tripleUrl)
-                        Link(
-                          child: RichText(
+                        if (items.contains('لا'))
+                          RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(children: <TextSpan>[
                                 TextSpan(
-                                  text: "$items\n\n",
+                                  text: "$items\n\n\n",
                                   style: TextStyle(
-                                    decoration: TextDecoration.underline,
                                     color: Colors.white,
                                     fontSize: 22,
                                   ),
                                 )
-                              ])),
-                          url: items,
-                          // onError: _showErrorSnackBar,
-                        ),
+                              ]))
+                        else
+                          Link(
+                            child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(children: <TextSpan>[
+                                  TextSpan(
+                                    text: "$items\n\n\n",
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: Colors.white,
+                                      fontSize: 22,
+                                    ),
+                                  )
+                                ])),
+
+                            url: items,
+                            // onError: _showErrorSnackBar,
+                          ),
                     ],
                   ),
                 ),

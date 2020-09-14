@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:ibdaa_app/ui/startQuizPage/startQuizPage.dart';
+import 'package:ibdaa_app/ui/style.dart';
 
 class IntroPage extends StatefulWidget {
   @override
@@ -40,6 +41,7 @@ class _IntroScreenState extends State<IntroPage> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Material(
       child: Stack(
         children: [
@@ -47,9 +49,14 @@ class _IntroScreenState extends State<IntroPage> {
             child: AnimatedSwitcher(
               duration: Duration(seconds: 6),
               child: Text(_titles[index],
+                  strutStyle: StrutStyle(
+                    fontSize: 18.0,
+                    height: 1,
+                  ),
+                  maxLines: 4,
                   key: ValueKey(_titles[index]),
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.lightBlue, fontSize: 24)),
+                  style: width < 500 ? introPageMobile : introPageWeb),
             ),
           ),
           Align(
@@ -61,6 +68,10 @@ class _IntroScreenState extends State<IntroPage> {
               },
               child: Text(
                 "تخطى",
+                strutStyle: StrutStyle(
+                  fontSize: 16.0,
+                  height: 1,
+                ),
                 style: TextStyle(color: Colors.lightBlue, fontSize: 16),
               ),
             ),

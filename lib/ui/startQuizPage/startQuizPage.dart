@@ -131,6 +131,18 @@ class _StartQuizPageState extends State<StartQuizPage> {
     return json.decode(result.body)['result'];
   }
 
+  //image
+  final theImage = AssetImage(
+    '/images/intro.png',
+  );
+
+  /// Did Change Dependencies
+  @override
+  void didChangeDependencies() {
+    precacheImage(theImage, context);
+    super.didChangeDependencies();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -153,8 +165,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
       body: SafeArea(
         child: Container(
             decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('/images/intro.png'), fit: BoxFit.fill),
+              image: DecorationImage(image: theImage, fit: BoxFit.fill),
             ),
             child: Container(
                 width: width,
@@ -175,6 +186,10 @@ class _StartQuizPageState extends State<StartQuizPage> {
                             Container(
                               alignment: Alignment.topCenter,
                               child: Text(webText,
+                                  strutStyle: StrutStyle(
+                                    fontSize: 18.0,
+                                    height: 1,
+                                  ),
                                   style: width < 700
                                       ? startQuizPageTextMobile
                                       : startQuizPageTextWeb),

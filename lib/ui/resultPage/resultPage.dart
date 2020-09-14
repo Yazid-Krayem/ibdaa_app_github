@@ -58,6 +58,10 @@ class _ResultPageState extends State<ResultPage> {
           ),
           content: Text(
             'يرجى اعادة الاختبار والتركيز اكثر عند الإجابة للحصول على نتيجة دقيقة',
+            strutStyle: StrutStyle(
+              fontSize: 14.0,
+              height: 1,
+            ),
             textAlign: TextAlign.right,
             style: TextStyle(color: Colors.lightBlue),
           ),
