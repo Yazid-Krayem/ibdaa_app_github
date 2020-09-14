@@ -85,26 +85,38 @@ class _SubmitPageState extends State<SubmitPage> {
   String resultString = '';
 
   _addResult(deviceId, stringResult, user_answers) async {
-    final stringResult = result.toString();
+    final stringResult = '2';
 
-    await API
-        .usersAnswers(deviceId, stringResult, user_answers)
-        .then((response) {
-      var result = jsonDecode(response.body);
+    await tripleName.ready;
+    String getTripleName = tripleName.getItem('tripleName');
 
-      if (result['success']) {
-        setState(() {
-          resultString = result['result'];
-        });
-        tripleName.setItem('tripleName', resultString);
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ResultPage(
-                  result: resultString,
-                )));
-      } else {
-        _showDialog();
-      }
-    });
+    if (getTripleName != null) {
+      await API.getTriple(getTripleName);
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ResultPage(
+                result: getTripleName,
+              )));
+    } else {
+      await API
+          .usersAnswers(deviceId, stringResult, user_answers)
+          .then((response) {
+        var result = jsonDecode(response.body);
+
+        if (result['success']) {
+          setState(() {
+            resultString = result['result'];
+          });
+
+          tripleName.setItem('tripleName', resultString);
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ResultPage(
+                    result: resultString,
+                  )));
+        } else {
+          _showDialog();
+        }
+      });
+    }
   }
 
   void _showDialog() {
@@ -134,6 +146,10 @@ class _SubmitPageState extends State<SubmitPage> {
               color: Colors.white,
               child: new Text(
                 "عرض النتيجة",
+                strutStyle: StrutStyle(
+                  fontSize: 14.0,
+                  height: 1,
+                ),
                 style: TextStyle(color: Colors.lightBlue),
               ),
               onPressed: () async {
@@ -149,6 +165,10 @@ class _SubmitPageState extends State<SubmitPage> {
               color: Colors.lightBlue,
               child: new Text(
                 "الإعادة من جديد",
+                strutStyle: StrutStyle(
+                  fontSize: 14.0,
+                  height: 1,
+                ),
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () async {

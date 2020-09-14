@@ -71,6 +71,10 @@ class _ResultPageState extends State<ResultPage> {
               child: new FlatButton(
                 child: new Text(
                   "اعادة الاختبار ",
+                  strutStyle: StrutStyle(
+                    fontSize: 14.0,
+                    height: 1,
+                  ),
                   style: TextStyle(color: Colors.white),
                 ),
                 color: Colors.lightBlue,
@@ -119,7 +123,7 @@ class _ResultPageState extends State<ResultPage> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: Text(
-              'نتيجة اختبار تحديد الميل ',
+              'نتيجة اختبار تحديد الميول ',
               style: TextStyle(color: Colors.white),
             ),
             centerTitle: true,

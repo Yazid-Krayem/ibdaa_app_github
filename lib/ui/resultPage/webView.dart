@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:link/link.dart';
 
@@ -52,7 +54,7 @@ class WebView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 40,
                 ),
                 for (var items in tripleUrl)
                   if (items.contains('لا'))
@@ -180,7 +182,7 @@ class WebView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 40,
                 ),
                 for (var item in unviersitiesName)
                   ListTile(

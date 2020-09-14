@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ibdaa_app/common/button.dart';
+import 'package:ibdaa_app/ui/introPage/introPage.dart';
 import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
+import 'package:ibdaa_app/ui/submitPage/submitPage.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cooky/cooky.dart' as cookie;
@@ -23,6 +25,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
 
   final LocalStorage storage = new LocalStorage('ibdaa');
   final progressStorage = LocalStorage('progress');
+  final tripleName = LocalStorage('tripleName');
 
   _copyTheOldDataFromLocalStorage() async {
     await storage.ready;
@@ -210,23 +213,27 @@ class _StartQuizPageState extends State<StartQuizPage> {
                                     child: Button(
                                         buttonLabel: 'ابدأ الاختبار',
                                         onPressed: () async {
-                                          // setState(() {
-                                          //   _load = !_load;
-                                          // });
-                                          _load
-                                              ? await Future.delayed(
-                                                  Duration(seconds: 2))
-                                              : Navigator.push<bool>(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          QuizPage(
-                                                              deviceid,
-                                                              cookieName,
-                                                              oldData,
-                                                              questionsListTest,
-                                                              answersList)));
+                                          await tripleName.ready;
+                                          String getTripleName =
+                                              tripleName.getItem('tripleName');
+
+                                          if (getTripleName != null) {
+                                            _showDialog();
+                                          } else {
+                                            await Future.delayed(const Duration(
+                                                milliseconds: 1500));
+                                            Navigator.push<bool>(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        QuizPage(
+                                                            deviceid,
+                                                            cookieName,
+                                                            oldData,
+                                                            questionsListTest,
+                                                            answersList)));
+                                          }
                                         }),
                                   ),
                           ],
@@ -234,6 +241,75 @@ class _StartQuizPageState extends State<StartQuizPage> {
                   ],
                 ))),
       ),
+    );
+  }
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('لقد قمت بإجراء الاختبار من قبل ',
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: Colors.lightBlue,
+              )),
+          content: Text(' هل ترغب بعرض النتيجة أو الإعادة من جديد ؟ ',
+              strutStyle: StrutStyle(
+                fontSize: 14.0,
+                height: 1,
+              ),
+              locale: Locale('ar'),
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: Colors.lightBlue,
+              )),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+
+            new FlatButton(
+              color: Colors.white,
+              child: new Text(
+                "عرض النتيجة",
+                style: TextStyle(color: Colors.lightBlue),
+              ),
+              onPressed: () async {
+                await tripleName.ready;
+
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => SubmitPage(
+                          deviceId: deviceid,
+                          cookieName: deviceid,
+                          questionsList: questionsListTest,
+                          progress: 33.3,
+                          oldData: oldData,
+                          dataListWithCookieName: oldData,
+                        )));
+              },
+            ),
+            new FlatButton(
+              color: Colors.lightBlue,
+              child: new Text(
+                "الإعادة من جديد",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () async {
+                await storage.ready;
+                await progressStorage.ready;
+                await tripleName.clear();
+
+                storage.clear();
+                progressStorage.clear();
+                cookie.remove('id');
+                tripleName.clear();
+
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => IntroPage()));
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -415,12 +415,16 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   Widget indexStacked() {
     var orientation = MediaQuery.of(context).orientation;
 
+    var height = MediaQuery.of(context).size.height;
+
     return Container(
       alignment: Alignment.center,
       width: orientation == Orientation.portrait
           ? MediaQuery.of(context).size.width * 0.6
           : MediaQuery.of(context).size.width * 0.4,
-      height: MediaQuery.of(context).size.height * 0.2,
+      height: orientation == Orientation.landscape && height < 500
+          ? MediaQuery.of(context).size.height * 0.4
+          : MediaQuery.of(context).size.height * 0.2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
         border: Border.all(color: Colors.lightBlue, width: 2),
@@ -447,6 +451,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     var orientation = MediaQuery.of(context).orientation;
     var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
 
     return SafeArea(child: ResponsiveWIdget(builder: (context, constraints) {
       if (questionsList.length == oldData.length)
@@ -466,22 +471,21 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              orientation == Orientation.landscape
+              orientation == Orientation.landscape && height > 500
                   ? ClipRRect(
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(20.0),
                         bottomRight: Radius.circular(20.0),
                       ),
                       child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: theImage[_imagesIndex],
-                                fit: BoxFit.cover),
-                          ),
-                          width: MediaQuery.of(context).size.width / 2,
-                          height: MediaQuery.of(context).size.height,
-                          child: null),
-                    )
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: theImage[_imagesIndex], fit: BoxFit.cover),
+                        ),
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: MediaQuery.of(context).size.height,
+                        child: null,
+                      ))
                   : Container(),
               Container(
                   width:

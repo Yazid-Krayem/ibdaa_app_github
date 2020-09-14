@@ -414,13 +414,16 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
 
   Widget indexStacked() {
     var orientation = MediaQuery.of(context).orientation;
+    var height = MediaQuery.of(context).size.height;
 
     return Container(
       alignment: Alignment.center,
       width: orientation == Orientation.portrait
           ? MediaQuery.of(context).size.width * 0.6
           : MediaQuery.of(context).size.width * 0.4,
-      height: MediaQuery.of(context).size.height * 0.2,
+      height: orientation == Orientation.landscape && height < 500
+          ? MediaQuery.of(context).size.height * 0.4
+          : MediaQuery.of(context).size.height * 0.2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
         border: Border.all(color: Colors.lightBlue, width: 2),
@@ -564,7 +567,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
           ],
         ),
         Container(
-          alignment: Alignment.bottomRight,
+          alignment: Alignment.bottomCenter,
           padding: const EdgeInsets.all(8.0),
           child: RaisedButton.icon(
             shape: buttonStyle,
