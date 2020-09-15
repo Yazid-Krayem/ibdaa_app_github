@@ -8,6 +8,7 @@ import 'package:ibdaa_app/ui/resultPage/resultPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:cooky/cooky.dart' as cookie;
+import 'dart:js' as js;
 
 class SubmitPage extends StatefulWidget {
   final List oldData;
@@ -403,6 +404,7 @@ class _SubmitPageState extends State<SubmitPage> {
                 final user_answers = '$questionWithAnswer';
 
                 await _addResult(device_id, result, user_answers);
+                js.context.callMethod('alertMessage');
               },
               label: Text('إرسال'),
               icon: Icon(Icons.send),
