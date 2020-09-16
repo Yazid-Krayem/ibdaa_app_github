@@ -1,13 +1,22 @@
 function alertMessage() {
 
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){
+        var x = dataLayer.push(arguments);
+        console.log(x);
+    	console.log('hete');
+            console.log(arguments);
+
+    }
     gtag('js', new Date());
-  
-    gtag('config', 'UA-177911673-1');
-    gtag('send','event','submit','TRACK_EVENT')
+      gtag('send','event','submit','TRACK_EVENT')
             gtag('send', 'event', 'submit', 'Click Text',);
             gtag('send', 'event', 'submit1', 'Click Text',);
+
+
+            console.log(dataLayer);
+
+
 
 
 }

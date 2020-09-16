@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ibdaa_app/common/button.dart';
+import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/ui/introPage/introPage.dart';
 import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
@@ -26,6 +27,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
   final LocalStorage storage = new LocalStorage('ibdaa');
   final progressStorage = LocalStorage('progress');
   final tripleName = LocalStorage('tripleName');
+  final logId = LocalStorage('logId');
 
   _copyTheOldDataFromLocalStorage() async {
     await storage.ready;
@@ -156,6 +158,26 @@ class _StartQuizPageState extends State<StartQuizPage> {
   }
 
   bool _load = true;
+
+  // add log function
+
+  int startQuizId;
+  _addLog() async {
+    await API.createLog(deviceid).then((response) {
+      var result = jsonDecode(response.body);
+      print(result);
+      print(deviceid);
+
+      if (result['success']) {
+        setState(() {
+          startQuizId = result['result'];
+        });
+      } else {
+        print('error');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -221,7 +243,18 @@ class _StartQuizPageState extends State<StartQuizPage> {
                                             _showDialog();
                                           } else {
                                             await Future.delayed(const Duration(
-                                                milliseconds: 1500));
+                                                milliseconds: 500));
+                                            await logId.ready;
+
+                                            var getLogId =
+                                                logId.getItem('logId');
+                                            if (getLogId == null) {
+                                              await _addLog();
+
+                                              logId.setItem(
+                                                  'logId', startQuizId);
+                                            }
+
                                             Navigator.push<bool>(
                                                 context,
                                                 MaterialPageRoute(

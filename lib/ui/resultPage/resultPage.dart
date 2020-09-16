@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/models/triple.dart';
 import 'package:ibdaa_app/ui/introPage/introPage.dart';
 import 'package:ibdaa_app/ui/resultPage/mobileView.dart';
@@ -25,7 +26,26 @@ class _ResultPageState extends State<ResultPage> {
   final LocalStorage storage = new LocalStorage('ibdaa');
 
   final LocalStorage progressStorage = new LocalStorage('progress');
+  final LocalStorage logId = new LocalStorage('logId');
   final String result;
+  int endQuizId;
+
+  _addLog() async {
+    await logId.ready;
+
+    var getlogId = logId.getItem('logId');
+    await API.updateLog(getlogId).then((response) {
+      var result = jsonDecode(response.body);
+
+      print(result);
+
+      if (result['success']) {
+        print('ok');
+      } else {
+        print('error');
+      }
+    });
+  }
 
   Future<GetTriple> futureAlbum;
 
@@ -101,6 +121,7 @@ class _ResultPageState extends State<ResultPage> {
   void initState() {
     super.initState();
     futureAlbum = fetchAlbum();
+    this._addLog();
   }
 
   // void _showErrorSnackBar() {

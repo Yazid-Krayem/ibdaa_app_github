@@ -33,6 +33,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
   flare_flutter: ^2.0.6
+  js: ^0.6.2
+  google_tag_manager: ^0.0.3
 
 dev_dependencies:
   flutter_test:

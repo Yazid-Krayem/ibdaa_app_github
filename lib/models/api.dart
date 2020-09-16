@@ -67,4 +67,32 @@ class API {
       url,
     );
   }
+
+  static Future createLog(
+    deviceId,
+  ) {
+    var url = baseUrl + "/log/add/";
+    return http.post(url, body: {"deviceId": deviceId});
+  }
+
+  static Future updateLog(
+    id,
+  ) {
+    var url = baseUrl + "/log/update/$id";
+    return http.get(
+      url,
+    );
+  }
+
+  static Future feedBackAdd(deviceId, name, phoneNumber, message) {
+    var url = baseUrl + "/feedback/add/";
+
+    var query = {
+      "deviceId": '$deviceId',
+      "name": '$name',
+      "phone_number": phoneNumber,
+      "message": message
+    };
+    return http.post(url, body: query);
+  }
 }
