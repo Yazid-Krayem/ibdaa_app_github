@@ -1,7 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:ibdaa_app/models/api.dart';
 import 'package:link/link.dart';
+import 'package:cooky/cooky.dart' as cookie;
 
-class MobileView extends StatelessWidget {
+import '../style.dart';
+
+class MobileView extends StatefulWidget {
   const MobileView(
       {Key key,
       @required this.tripleUrl,
@@ -16,9 +21,59 @@ class MobileView extends StatelessWidget {
   final snapshot;
 
   @override
+  _MobileViewState createState() => _MobileViewState();
+}
+
+class _MobileViewState extends State<MobileView> {
+  String mobile = '';
+  String name = '';
+  String message = '';
+  bool authState = false;
+
+  final TextEditingController _mobileController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
+
+  @override
+  void initState() {
+    _mobileController.addListener(_updateMobile);
+    _nameController.addListener(_updateName);
+    _messageController.addListener(_message);
+    super.initState();
+  }
+
+  @override
+  dispose() {
+    _mobileController.removeListener(_updateMobile);
+    _mobileController.dispose();
+    _nameController.removeListener(_updateName());
+    _nameController.dispose();
+    _messageController.removeListener(_message());
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  _updateMobile() => setState(() => mobile = _mobileController.text);
+  _updateName() => setState(() => name = _nameController.text);
+  _message() => setState(() => message = _messageController.text);
+
+  _addFeedback() async {
+    var deviceId = cookie.get('id');
+    await API.feedBackAdd(deviceId, name, mobile, message).then((response) {
+      var result = jsonDecode(response.body);
+
+      if (result['success']) {
+        print('ok');
+      } else {
+        print('error');
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    tripleDescription.sort();
-    unviersitiesName.sort((a, b) => a.length.compareTo(b.length));
+    widget.tripleDescription.sort();
+    widget.unviersitiesName.sort((a, b) => a.length.compareTo(b.length));
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -32,7 +87,7 @@ class MobileView extends StatelessWidget {
               ),
               // triple university container
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.8,
                   decoration: BoxDecoration(
@@ -56,7 +111,7 @@ class MobileView extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      for (var item in unviersitiesName)
+                      for (var item in widget.unviersitiesName)
                         Text(
                           '$item\n',
                           textAlign: TextAlign.center,
@@ -101,7 +156,7 @@ class MobileView extends StatelessWidget {
                     SizedBox(
                       height: 150,
                       child: Image.network(
-                        '${snapshot.data.tripleImage}',
+                        '${widget.snapshot.data.tripleImage}',
                         // height: 120,
                       ),
                     ),
@@ -110,7 +165,7 @@ class MobileView extends StatelessWidget {
                     ),
                     Column(
                       children: [
-                        for (var detail in tripleDescription)
+                        for (var detail in widget.tripleDescription)
                           RichText(
                               strutStyle: StrutStyle(
                                 fontSize: 12.0,
@@ -160,7 +215,7 @@ class MobileView extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      for (var items in tripleUrl)
+                      for (var items in widget.tripleUrl)
                         if (items.contains('لا'))
                           RichText(
                               textAlign: TextAlign.center,
@@ -197,6 +252,162 @@ class MobileView extends StatelessWidget {
               ),
               SizedBox(
                 height: 10,
+              ),
+              Directionality(
+                textDirection: TextDirection.rtl,
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Text(
+                          'ملاحظاتك حول الموقع',
+                          style: TextStyle(
+                              fontSize: 26,
+                              color: Colors.lightBlue,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: 50,
+                        child: TextFormField(
+                          textDirection: TextDirection.rtl,
+                          keyboardType: TextInputType.number,
+                          enabled: true,
+                          decoration: InputDecoration(
+                            prefixIcon:
+                                Icon(Icons.topic, color: Colors.lightBlue),
+                            labelText: 'الاسم',
+                            hintText: 'اكتب اسمك',
+                            hintStyle: TextStyle(color: Colors.grey[350]),
+                            labelStyle: TextStyle(color: Colors.lightBlue[50]),
+                            enabled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.lightBlue, width: 2.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.lightBlue, width: 1.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                          ),
+                          controller: _nameController,
+                          onChanged: (String name) {
+                            setState(() {
+                              name = name;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: 50,
+                        child: TextFormField(
+                          textDirection: TextDirection.rtl,
+                          enabled: true,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.mobile_friendly,
+                                color: Colors.lightBlue),
+                            labelText: 'رقم الهاتف',
+                            hintText: 'اكتب رقم هاتفك',
+                            hintStyle: TextStyle(color: Colors.grey[350]),
+                            // helperText: 'helper',
+                            labelStyle: TextStyle(color: Colors.lightBlue[50]),
+                            enabled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.lightBlue, width: 2.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.lightBlue, width: 1.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                          ),
+                          controller: _mobileController,
+                          onChanged: (String mobile) {
+                            setState(() {
+                              mobile = mobile;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: TextFormField(
+                          maxLines: 4,
+                          textDirection: TextDirection.rtl,
+                          enabled: true,
+                          decoration: InputDecoration(
+                            prefixIcon:
+                                Icon(Icons.message, color: Colors.lightBlue),
+                            labelText: 'رسالة',
+                            hintText: 'اكتب رسالتك',
+                            hintStyle: TextStyle(color: Colors.grey[350]),
+                            // helperText: 'helper',
+                            labelStyle: TextStyle(color: Colors.lightBlue[50]),
+                            enabled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.lightBlue, width: 2.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.lightBlue, width: 1.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                          ),
+                          controller: _messageController,
+                          onChanged: (String message) {
+                            setState(() {
+                              message = message;
+                            });
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: RaisedButton.icon(
+                          shape: buttonStyle,
+                          textColor: Colors.lightBlue,
+                          color: Colors.white,
+                          onPressed: () async {
+                            _addFeedback();
+                          },
+                          label: Text('تقييم'),
+                          icon: Icon(Icons.feedback),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               )
             ],
           ),

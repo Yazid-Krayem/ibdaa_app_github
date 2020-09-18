@@ -8,10 +8,6 @@ import 'package:ibdaa_app/ui/resultPage/resultPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:cooky/cooky.dart' as cookie;
-import 'package:google_tag_manager/google_tag_manager.dart' as gtm;
-
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:js' as js;
 
 class SubmitPage extends StatefulWidget {
   final List oldData;

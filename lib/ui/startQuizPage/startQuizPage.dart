@@ -238,22 +238,17 @@ class _StartQuizPageState extends State<StartQuizPage> {
                                           await tripleName.ready;
                                           String getTripleName =
                                               tripleName.getItem('tripleName');
+                                          await logId.ready;
+
+                                          await _addLog();
+
+                                          logId.setItem('logId', startQuizId);
 
                                           if (getTripleName != null) {
                                             _showDialog();
                                           } else {
                                             await Future.delayed(const Duration(
                                                 milliseconds: 500));
-                                            await logId.ready;
-
-                                            var getLogId =
-                                                logId.getItem('logId');
-                                            if (getLogId == null) {
-                                              await _addLog();
-
-                                              logId.setItem(
-                                                  'logId', startQuizId);
-                                            }
 
                                             Navigator.push<bool>(
                                                 context,
