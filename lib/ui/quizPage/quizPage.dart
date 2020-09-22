@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:ibdaa_app/common/imageClass.dart';
 import 'package:ibdaa_app/models/answersList.dart';
 import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/models/getAnswers.dart';
@@ -41,8 +42,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       : super();
 
 //LinearProgressIndicator methods
-
-  double _progress = 0.33;
 
 // to aviod meomory leak
   @override
@@ -195,22 +194,18 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     await progressStorage.ready;
     // final decoding = storage.getItem(deviceId);
 
-    final progressLocalStorage = progressStorage.getItem('progress');
-
     setState(() {
       dataListWithCookieName = oldData;
     });
     var findEmpty = dataListWithCookieName.contains('empty');
 
-    if (findEmpty || progressLocalStorage == null) {
+    if (findEmpty) {
       setState(() {
         currentIndex = 0;
-        _progress = 0.33;
       });
     } else {
       setState(() {
         currentIndex = dataListWithCookieName.length;
-        _progress = progressLocalStorage;
       });
     }
     return currentIndex;
@@ -269,7 +264,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     if (currentIndex != 0) {
       setState(() {
         currentIndex--;
-        _progress = _progress - 0.33;
       });
       if (_imagesIndex == 5) {
         setState(() {
@@ -284,7 +278,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           currentIndex == 120) {
         _imagesIndex++;
       }
-      progressStorage.setItem("progress", _progress);
     }
   }
 
@@ -343,15 +336,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
               dataListWithCookieName: dataListWithCookieName,
               cookieName: cookieName,
               oldData: oldData,
-              progress: _progress,
             ),
           ));
     }
-    setState(() {
-      _progress = (_progress + 0.333);
-    });
-
-    progressStorage.setItem("progress", _progress);
   }
 
   _onLoadCurrentIndex() async {
@@ -381,7 +368,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
               dataListWithCookieName: dataListWithCookieName,
               cookieName: cookieName,
               oldData: oldData,
-              progress: _progress,
             ),
           ));
     }
@@ -394,14 +380,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     });
     await _addItem(item.id, item.answersText, item.answerValue);
     _incrementCurrentIndex();
-
-    // if (getData.length == questionsList.length) {
-
-    setState(() {
-      _progress = (_progress + 0.333);
-    });
-
-    progressStorage.setItem("progress", _progress);
   }
 
   /// new design for stack
@@ -435,9 +413,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           children: questionsList.map((question) {
             if (questionsList.indexOf(question) <= questionsList.length) {
               return QuestionsList(
-                  currentIndex: currentIndex,
-                  progress: _progress,
-                  question: question);
+                  currentIndex: currentIndex, question: question);
             } else {
               return Container();
             }
@@ -463,12 +439,13 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                 dataListWithCookieName: dataListWithCookieName,
                 cookieName: cookieName,
                 oldData: oldData,
-                progress: _progress,
               );
       else {
         return SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
@@ -482,14 +459,14 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                         bottomRight: Radius.circular(20.0),
                       ),
                       child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: theImage[_imagesIndex], fit: BoxFit.cover),
+                        width: width / 2,
+                        height: height,
+                        child: ImageWidgetPlaceholder(
+                          image: theImage[_imagesIndex],
+                          height: height,
                         ),
-                        width: MediaQuery.of(context).size.width / 2,
-                        height: MediaQuery.of(context).size.height,
-                        child: null,
-                      ))
+                      ),
+                    )
                   : Container()
             ],
           ),

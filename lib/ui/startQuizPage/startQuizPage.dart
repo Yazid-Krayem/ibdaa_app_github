@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ibdaa_app/common/button.dart';
+import 'package:ibdaa_app/common/imageClass.dart';
 import 'package:ibdaa_app/models/api.dart';
-import 'package:ibdaa_app/ui/introPage/introPage.dart';
 import 'package:ibdaa_app/ui/quizPage/quizPage.dart';
+import 'package:ibdaa_app/ui/startQuizPage/alertStartQuiz.dart';
 import 'package:ibdaa_app/ui/style.dart';
-import 'package:ibdaa_app/ui/submitPage/submitPage.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cooky/cooky.dart' as cookie;
@@ -188,155 +188,92 @@ class _StartQuizPageState extends State<StartQuizPage> {
       body: SafeArea(
         child: Container(
             decoration: BoxDecoration(
-              image: DecorationImage(image: theImage, fit: BoxFit.fill),
-            ),
-            child: Container(
-                width: width,
-                height: height,
-                child: Row(
-                  children: [
-                    Container(
-                        alignment: Alignment.centerRight,
-                        width: width * 0.35,
-                        height: height / 2,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              alignment: Alignment.topCenter,
-                              child: Text(webText,
-                                  strutStyle: StrutStyle(
-                                    fontSize: 18.0,
-                                    height: 1,
-                                  ),
-                                  style: width < 700
-                                      ? startQuizPageTextMobile
-                                      : startQuizPageTextWeb),
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Text('مبادرة إبدا',
-                                style: width < 700
-                                    ? startQuizPageTextMobile
-                                    : startQuizPageTextWeb),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            _load
-                                ? CircularProgressIndicator()
-                                : Container(
-                                    child: Button(
-                                        buttonLabel: 'ابدأ الاختبار',
-                                        onPressed: () async {
-                                          await tripleName.ready;
-                                          String getTripleName =
-                                              tripleName.getItem('tripleName');
-                                          await logId.ready;
+                // image: DecorationImage(image: theImage, fit: BoxFit.fill),
+                ),
+            child: Stack(
+              alignment: Alignment.centerRight,
+              children: [
+                ImageWidgetPlaceholder(
+                  image: theImage,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                ),
+                Container(
+                    alignment: Alignment.centerRight,
+                    width: width * 0.35,
+                    height: height / 2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(20),
+                          alignment: Alignment.topCenter,
+                          child: Text(webText,
+                              strutStyle: StrutStyle(
+                                fontSize: 18.0,
+                                height: 1,
+                              ),
+                              style: width < 700
+                                  ? startQuizPageTextMobile
+                                  : startQuizPageTextWeb),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Text('مبادرة إبدا',
+                            style: width < 700
+                                ? startQuizPageTextMobile
+                                : startQuizPageTextWeb),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        _load
+                            ? CircularProgressIndicator()
+                            : Container(
+                                child: Button(
+                                    buttonLabel: 'ابدأ الاختبار',
+                                    onPressed: () async {
+                                      await tripleName.ready;
+                                      String getTripleName =
+                                          tripleName.getItem('tripleName');
+                                      await logId.ready;
 
-                                          await _addLog();
+                                      await _addLog();
 
-                                          logId.setItem('logId', startQuizId);
+                                      logId.setItem('logId', startQuizId);
 
-                                          if (getTripleName != null) {
-                                            _showDialog();
-                                          } else {
-                                            await Future.delayed(const Duration(
-                                                milliseconds: 500));
+                                      if (getTripleName != null) {
+                                        alertStartQuiz(context, deviceid,
+                                            questionsListTest, oldData);
+                                      } else {
+                                        await Future.delayed(
+                                            const Duration(milliseconds: 500));
 
-                                            Navigator.push<bool>(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
+                                        Navigator.push<bool>(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
                                                         QuizPage(
                                                             deviceid,
                                                             cookieName,
                                                             oldData,
                                                             questionsListTest,
                                                             answersList)));
-                                          }
-                                        }),
-                                  ),
-                          ],
-                        )),
-                    Container(
-                      width: width * 0.65,
-                      height: height / 2,
-                    )
-                  ],
-                ))),
+                                      }
+                                    }),
+                              ),
+                      ],
+                    )),
+
+                // Container(
+                //   width: width * 0.65,
+                //   height: height / 2,
+                // )
+              ],
+            )),
       ),
-    );
-  }
-
-  void _showDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('لقد قمت بإجراء الاختبار من قبل ',
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                color: Colors.lightBlue,
-              )),
-          content: Text(' هل ترغب بعرض النتيجة أو الإعادة من جديد ؟ ',
-              strutStyle: StrutStyle(
-                fontSize: 14.0,
-                height: 1,
-              ),
-              locale: Locale('ar'),
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                color: Colors.lightBlue,
-              )),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-
-            new FlatButton(
-              color: Colors.white,
-              child: new Text(
-                "عرض النتيجة",
-                style: TextStyle(color: Colors.lightBlue),
-              ),
-              onPressed: () async {
-                await tripleName.ready;
-
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => SubmitPage(
-                          deviceId: deviceid,
-                          cookieName: deviceid,
-                          questionsList: questionsListTest,
-                          progress: 33.3,
-                          oldData: oldData,
-                          dataListWithCookieName: oldData,
-                        )));
-              },
-            ),
-            new FlatButton(
-              color: Colors.lightBlue,
-              child: new Text(
-                "الإعادة من جديد",
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () async {
-                await storage.ready;
-                await progressStorage.ready;
-                await tripleName.clear();
-
-                storage.clear();
-                progressStorage.clear();
-                cookie.remove('id');
-                tripleName.clear();
-
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => IntroPage()));
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

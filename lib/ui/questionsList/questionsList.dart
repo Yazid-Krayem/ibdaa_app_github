@@ -3,15 +3,10 @@ import 'package:flutter/material.dart';
 import '../style.dart';
 
 class QuestionsList extends StatelessWidget {
-  final double progress;
   final int currentIndex;
   final question;
 
-  const QuestionsList(
-      {Key key,
-      @required this.progress,
-      @required this.currentIndex,
-      this.question})
+  const QuestionsList({Key key, @required this.currentIndex, this.question})
       : super(key: key);
 
   @override

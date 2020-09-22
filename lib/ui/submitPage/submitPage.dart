@@ -10,12 +10,11 @@ import 'package:localstorage/localstorage.dart';
 import 'package:cooky/cooky.dart' as cookie;
 
 class SubmitPage extends StatefulWidget {
-  final List oldData;
   final deviceId;
   final List questionsList;
+  final List oldData;
   final List dataListWithCookieName;
   final String cookieName;
-  final double progress;
 
   SubmitPage({
     Key key,
@@ -24,7 +23,6 @@ class SubmitPage extends StatefulWidget {
     @required this.dataListWithCookieName,
     @required this.cookieName,
     @required this.oldData,
-    @required this.progress,
   }) : super(key: key);
 
   @override
@@ -34,13 +32,11 @@ class SubmitPage extends StatefulWidget {
         this.dataListWithCookieName,
         cookieName,
         oldData,
-        progress,
       );
 }
 
 class _SubmitPageState extends State<SubmitPage> {
   final List oldData;
-  final double progress;
   final cookieName;
   final deviceId;
   final List questionsList;
@@ -51,7 +47,6 @@ class _SubmitPageState extends State<SubmitPage> {
     this.dataListWithCookieName,
     this.cookieName,
     this.oldData,
-    this.progress,
   );
   ScrollController controller = ScrollController();
   bool closeTopContainer = false;
@@ -393,9 +388,6 @@ class _SubmitPageState extends State<SubmitPage> {
               textColor: Colors.lightBlue,
               color: Colors.white,
               onPressed: () async {
-                setState(() {
-                  newProgress = progress - 0.33;
-                });
                 newCurrentIndex = 1;
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => EditPage(

@@ -53,21 +53,6 @@ class _WebViewState extends State<WebView> {
     super.dispose();
   }
 
-  void _showDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(' تقييمك ارسل بنجاح',
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                color: Colors.lightBlue,
-              )),
-        );
-      },
-    );
-  }
-
   _restState() {
     setState(() {
       name = '';
@@ -94,8 +79,6 @@ class _WebViewState extends State<WebView> {
 
       if (result['success']) {
         _restState();
-
-        // _showDialog();
 
         // print('ok');
       } else {

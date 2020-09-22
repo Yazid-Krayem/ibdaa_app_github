@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:ibdaa_app/common/imageClass.dart';
 import 'package:ibdaa_app/models/answersList.dart';
 
 import 'package:ibdaa_app/models/api.dart';
 import 'package:ibdaa_app/models/getAnswers.dart';
 import 'package:ibdaa_app/ui/answersButtons/answersButtons.dart';
-import 'package:ibdaa_app/ui/introPage/introPage.dart';
+import 'package:ibdaa_app/ui/editPage/alertEditPage.dart';
 import 'package:ibdaa_app/ui/linearProgressIndicator/linearProgressIndicator.dart';
 import 'package:ibdaa_app/ui/questionsList/questionsList.dart';
 import 'package:ibdaa_app/ui/responsiveWIdget.dart';
@@ -17,7 +18,6 @@ import 'package:ibdaa_app/ui/resultPage/resultPage.dart';
 import 'package:ibdaa_app/ui/submitPage/submitPage.dart';
 import 'package:localstorage/localstorage.dart';
 import '../style.dart';
-import 'package:cooky/cooky.dart' as cookie;
 
 class EditPage extends StatefulWidget {
   final deviceId;
@@ -44,8 +44,6 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
       : super();
 
 //LinearProgressIndicator methods
-
-  double _progress = 0.33;
 
   _changeCurrentIndex() async {
     setState(() {
@@ -102,73 +100,9 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
                   result: resultString,
                 )));
       } else {
-        _showDialog();
+        alertEditPage(context);
       }
     });
-  }
-
-  void _showDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('لقد قمت بإجراء الاختبار من قبل ',
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                color: Colors.lightBlue,
-              )),
-          content: Text(' هل ترغب بعرض النتيجة أو الإعادة من جديد ؟ ',
-              strutStyle: StrutStyle(
-                fontSize: 14.0,
-                height: 1,
-              ),
-              locale: Locale('ar'),
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                color: Colors.lightBlue,
-              )),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-
-            new FlatButton(
-              color: Colors.white,
-              child: new Text(
-                "عرض النتيجة",
-                style: TextStyle(color: Colors.lightBlue),
-              ),
-              onPressed: () async {
-                await tripleName.ready;
-
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ResultPage(
-                          result: tripleName.getItem('tripleName'),
-                        )));
-              },
-            ),
-            new FlatButton(
-              color: Colors.lightBlue,
-              child: new Text(
-                "الإعادة من جديد",
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () async {
-                await storage.ready;
-                await progressStorage.ready;
-                await tripleName.clear();
-
-                storage.clear();
-                progressStorage.clear();
-                cookie.remove('id');
-                tripleName.clear();
-
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => IntroPage()));
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -324,7 +258,6 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
     if (currentIndex != 0) {
       setState(() {
         currentIndex--;
-        _progress = _progress - 0.33;
       });
       if (_imagesIndex == 5) {
         setState(() {
@@ -339,18 +272,37 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
           currentIndex == 120) {
         _imagesIndex++;
       }
-      progressStorage.setItem("progress", _progress);
     }
   }
 
-  List _quizPageImages = [
-    '/images/1.png',
-    '/images/2.jpg',
-    '/images/3.jpg',
-    '/images/4.jpg',
-    '/images/5.jpg',
-    '/images/6.jpg',
+  //image
+  final List theImage = [
+    AssetImage(
+      '/images/1.png',
+    ),
+    AssetImage(
+      '/images/2.jpg',
+    ),
+    AssetImage(
+      '/images/3.jpg',
+    ),
+    AssetImage(
+      '/images/4.jpg',
+    ),
+    AssetImage(
+      '/images/5.jpg',
+    ),
+    AssetImage(
+      '/images/6.jpg',
+    )
   ];
+
+  /// Did Change Dependencies
+  @override
+  void didChangeDependencies() {
+    precacheImage(theImage[_imagesIndex], context);
+    super.didChangeDependencies();
+  }
 
   int _imagesIndex = 0;
 
@@ -363,12 +315,6 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
       });
     }
     _incrementCurrentIndex();
-
-    setState(() {
-      _progress = (_progress + 0.333);
-    });
-
-    progressStorage.setItem("progress", _progress);
   }
 
   /////////
@@ -384,7 +330,6 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
               dataListWithCookieName: dataListWithCookieName,
               cookieName: deviceId,
               oldData: oldData,
-              progress: _progress,
             ),
           ));
     }
@@ -397,12 +342,6 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
     _incrementCurrentIndex();
 
     // if (getData.length == questionsList.length) {
-
-    setState(() {
-      _progress = (_progress + 0.333);
-    });
-
-    progressStorage.setItem("progress", _progress);
   }
 
   /// new design for stack
@@ -436,9 +375,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
           children: questionsList.map((question) {
             if (questionsList.indexOf(question) <= questionsList.length) {
               return QuestionsList(
-                  currentIndex: currentIndex,
-                  progress: _progress,
-                  question: question);
+                  currentIndex: currentIndex, question: question);
             } else {
               return Container();
             }
@@ -468,15 +405,13 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
                       bottomRight: Radius.circular(20.0),
                     ),
                     child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  '${_quizPageImages[_imagesIndex]}'),
-                              fit: BoxFit.cover),
-                        ),
-                        width: MediaQuery.of(context).size.width / 2,
-                        height: MediaQuery.of(context).size.height,
-                        child: null),
+                      width: width / 2,
+                      height: height,
+                      child: ImageWidgetPlaceholder(
+                        image: theImage[_imagesIndex],
+                        height: height,
+                      ),
+                    ),
                   )
                 : Container()
           ],
