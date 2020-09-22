@@ -158,8 +158,8 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
 
   // Get questions From the server
 
-  final url = 'https://ibdaa.herokuapp.com';
-  // final url = 'http://localhost:8000';
+  // final url = 'https://ibdaa.herokuapp.com';
+  final url = 'http://ibdaa.sy/';
 //
 //Get answers From the serve
   var listAnswers = new List<GetAnswers>();
@@ -408,7 +408,8 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
                       width: width / 2,
                       height: height,
                       child: ImageWidgetPlaceholder(
-                        image: theImage[_imagesIndex],
+                        image: ResizeImage(theImage[_imagesIndex],
+                            height: 120, width: 30),
                         height: height,
                       ),
                     ),
@@ -443,6 +444,14 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
                 onPressed: () async {
                   setState(() {
                     currentIndex++;
+                    if (currentIndex == 20 ||
+                        currentIndex == 40 ||
+                        currentIndex == 60 ||
+                        currentIndex == 80 ||
+                        currentIndex == 100 ||
+                        currentIndex == 120) {
+                      _imagesIndex++;
+                    }
                   });
                 },
                 label: Text('السؤال التالي'),

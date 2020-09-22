@@ -4,8 +4,8 @@ import 'package:ibdaa_app/models/getQuestions.dart';
 import 'package:ibdaa_app/models/triple.dart';
 import 'package:ibdaa_app/ui/resultPage/alertResultPage.dart';
 
-final url = 'https://ibdaa.herokuapp.com';
-// final url = 'http://localhost:8000';
+// final url = 'https://ibdaa.herokuapp.com';
+final url = 'http://ibdaa.sy/';
 
 Future<GetTriple> fetchAlbum(result, context) async {
   final response = await http.get('$url/triple/get/$result');

@@ -168,9 +168,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
 
   List questionsList = [];
 
-  final url = 'https://ibdaa.herokuapp.com';
+  // final url = 'https://ibdaa.herokuapp.com';
 
-  // final url = 'http://localhost:8000';
+  final url = 'http://ibdaa.sy/';
 
 //Get answers From the serve
   var listAnswers = new List<GetAnswers>();
@@ -462,7 +462,8 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                         width: width / 2,
                         height: height,
                         child: ImageWidgetPlaceholder(
-                          image: theImage[_imagesIndex],
+                          image: ResizeImage(theImage[_imagesIndex],
+                              height: 120, width: 30),
                           height: height,
                         ),
                       ),
