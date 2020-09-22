@@ -37,12 +37,10 @@ class _ResultPageState extends State<ResultPage> {
     await API.updateLog(getlogId).then((response) {
       var result = jsonDecode(response.body);
 
-      print(result);
-
       if (result['success']) {
-        print('ok');
+        // print('ok');
       } else {
-        print('error');
+        // print('error');
       }
     });
   }

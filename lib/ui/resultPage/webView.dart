@@ -29,7 +29,6 @@ class _WebViewState extends State<WebView> {
   String mobile = '';
   String name = '';
   String message = '';
-  bool authState = false;
 
   final TextEditingController _mobileController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -54,6 +53,36 @@ class _WebViewState extends State<WebView> {
     super.dispose();
   }
 
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(' تقييمك ارسل بنجاح',
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: Colors.lightBlue,
+              )),
+        );
+      },
+    );
+  }
+
+  _restState() {
+    setState(() {
+      name = '';
+      mobile = '';
+      message = '';
+      _nameController.text = '';
+      _mobileController.text = '';
+      _messageController.text = '';
+    });
+
+    _nameController.clear();
+    _mobileController.clear();
+    _messageController.clear();
+  }
+
   _updateMobile() => setState(() => mobile = _mobileController.text);
   _updateName() => setState(() => name = _nameController.text);
   _message() => setState(() => message = _messageController.text);
@@ -64,12 +93,19 @@ class _WebViewState extends State<WebView> {
       var result = jsonDecode(response.body);
 
       if (result['success']) {
-        print('ok');
+        _restState();
+
+        // _showDialog();
+
+        // print('ok');
       } else {
-        print('error');
+        // print('error');
       }
     });
   }
+
+  Color labelStyle = Colors.lightBlue[200];
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -84,69 +120,39 @@ class _WebViewState extends State<WebView> {
             SizedBox(
               height: 10,
             ),
-            // triple url
+            // triple university container
             Container(
-              padding: EdgeInsets.all(20),
-              height: MediaQuery.of(context).size.height * 0.7,
-              width: MediaQuery.of(context).size.width / 3.5,
-              decoration: BoxDecoration(
-                  color: Colors.lightBlue,
-                  borderRadius: new BorderRadius.circular(25.0),
-                  border: Border.all(color: Colors.lightBlue, width: 8)),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: ListView(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.topCenter,
+                height: MediaQuery.of(context).size.height * 0.7,
+                width: MediaQuery.of(context).size.width / 3.5,
+                decoration: BoxDecoration(
+                    color: Colors.lightBlue,
+                    borderRadius: new BorderRadius.circular(25.0),
+                    border: Border.all(color: Colors.lightBlue, width: 8)),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ListView(shrinkWrap: true, children: [
+                    Container(
+                      alignment: Alignment.topRight,
                       child: Text(
-                        'مقالات تعريفية',
-                        textAlign: TextAlign.center,
+                        'المجالات الدراسية /المهن الملائمة',
                         style: TextStyle(
-                            color: Colors.white,
                             fontSize: 22,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ),
                     SizedBox(
                       height: 40,
                     ),
-                    for (var items in widget.tripleUrl)
-                      if (items.contains('لا'))
-                        RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(children: <TextSpan>[
-                              TextSpan(
-                                text: "$items\n\n\n",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                ),
-                              )
-                            ]))
-                      else
-                        Link(
-                          child: RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(children: <TextSpan>[
-                                TextSpan(
-                                  text: "$items\n\n\n",
-                                  style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                  ),
-                                )
-                              ])),
-
-                          url: items,
-                          // onError: _showErrorSnackBar,
-                        ),
-                  ],
-                ),
-              ),
-            ),
+                    for (var item in widget.unviersitiesName)
+                      ListTile(
+                          title: Text(
+                        '$item\n',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 22, color: Colors.white),
+                      ))
+                  ]),
+                )),
 
             Center(
               child: Icon(
@@ -216,192 +222,250 @@ class _WebViewState extends State<WebView> {
                 color: Colors.lightBlue,
               ),
             ),
-            // triple university container
+
+            // triple url
             Container(
-                height: MediaQuery.of(context).size.height * 0.7,
-                width: MediaQuery.of(context).size.width / 3.5,
-                decoration: BoxDecoration(
-                    color: Colors.lightBlue,
-                    borderRadius: new BorderRadius.circular(25.0),
-                    border: Border.all(color: Colors.lightBlue, width: 8)),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: ListView(shrinkWrap: true, children: [
-                    Container(
-                      alignment: Alignment.topRight,
+              padding: EdgeInsets.all(20),
+              height: MediaQuery.of(context).size.height * 0.7,
+              width: MediaQuery.of(context).size.width / 3.5,
+              decoration: BoxDecoration(
+                  color: Colors.lightBlue,
+                  borderRadius: new BorderRadius.circular(25.0),
+                  border: Border.all(color: Colors.lightBlue, width: 8)),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: ListView(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.topCenter,
                       child: Text(
-                        'المجالات الدراسية /المهن الملائمة',
+                        'مقالات تعريفية',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
+                            color: Colors.white,
                             fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     SizedBox(
                       height: 40,
                     ),
-                    for (var item in widget.unviersitiesName)
-                      ListTile(
-                          title: Text(
-                        '$item\n',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 22, color: Colors.white),
-                      ))
-                  ]),
-                )),
+                    for (var items in widget.tripleUrl)
+                      if (items.contains('لا'))
+                        RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(children: <TextSpan>[
+                              TextSpan(
+                                text: "$items\n\n\n",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                ),
+                              )
+                            ]))
+                      else
+                        Link(
+                          child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(children: <TextSpan>[
+                                TextSpan(
+                                  text: "$items\n\n\n",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                  ),
+                                )
+                              ])),
+
+                          url: items,
+                          // onError: _showErrorSnackBar,
+                        ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
-        Directionality(
-          textDirection: TextDirection.rtl,
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.7,
-            width: MediaQuery.of(context).size.width / 3.5,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 40,
+        Container(
+          height: MediaQuery.of(context).size.height * 0.7,
+          width: MediaQuery.of(context).size.width / 3.5,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 40,
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Text(
+                  'اقتراحاتك قد تفيدنا في تحسين النتيجة',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.lightBlue,
+                      fontWeight: FontWeight.bold),
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Text(
-                    'ملاحظاتك حول الموقع',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                        fontSize: 22,
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: 50,
+                        child: TextFormField(
+                          textAlign: TextAlign.right,
+                          textDirection: TextDirection.rtl,
+                          autofocus: true,
+                          // textDirection: TextDirection.rtl,
+                          keyboardType: TextInputType.number,
+                          enabled: true,
+                          decoration: InputDecoration(
+                            alignLabelWithHint: true,
+                            prefixIcon: Icon(
+                              Icons.topic,
+                              color: Colors.lightBlue,
+                            ),
+                            labelText: 'الاسم',
+                            hintText: 'اكتب اسمك',
+                            hintStyle: TextStyle(color: Colors.grey[350]),
+                            labelStyle: TextStyle(color: labelStyle),
+                            enabled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.lightBlue, width: 2.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.lightBlue, width: 1.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                          ),
+                          controller: _nameController,
+                          onChanged: (String name) {
+                            setState(() {
+                              name = name;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: 50,
+                        child: TextFormField(
+                          textAlign: TextAlign.right,
+                          textDirection: TextDirection.rtl,
+                          enabled: true,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.mobile_friendly,
+                                color: Colors.lightBlue),
+                            labelText: ' رقم الهاتف او الايميل',
+                            hintText: 'اكتب رقم هاتفك او الايميل',
+                            hintStyle: TextStyle(color: Colors.grey[350]),
+                            // helperText: 'helper',
+                            labelStyle: TextStyle(color: labelStyle),
+                            enabled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.lightBlue, width: 2.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.lightBlue, width: 1.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                          ),
+                          controller: _mobileController,
+                          onChanged: (String mobile) {
+                            setState(() {
+                              mobile = mobile;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: TextFormField(
+                          textAlign: TextAlign.right,
+                          textDirection: TextDirection.rtl,
+                          cursorColor: Colors.lightBlue,
+                          maxLines: 4,
+                          enabled: true,
+                          decoration: InputDecoration(
+                            prefixIcon:
+                                Icon(Icons.message, color: Colors.lightBlue),
+                            labelText: 'رسالة',
+                            hintText: 'اكتب رسالتك',
+                            hintStyle: TextStyle(color: Colors.grey[350]),
+                            // helperText: 'helper',
+                            labelStyle: TextStyle(color: labelStyle),
+                            enabled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.lightBlue, width: 2.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.lightBlue, width: 1.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                          ),
+                          controller: _messageController,
+                          onChanged: (String message) {
+                            setState(() {
+                              message = message;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      RaisedButton.icon(
+                        shape: buttonStyle,
+                        textColor: Colors.white,
                         color: Colors.lightBlue,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 3,
-                  height: 50,
-                  child: TextFormField(
-                    textDirection: TextDirection.rtl,
-                    keyboardType: TextInputType.number,
-                    enabled: true,
-                    decoration: InputDecoration(
-                      alignLabelWithHint: true,
-                      prefixIcon: Icon(
-                        Icons.topic,
-                        color: Colors.lightBlue,
+                        onPressed: () async {
+                          if (name == '' && mobile == '' && message == '') {
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                              content: Text('يجب تعبئة الحقول '),
+                              backgroundColor: Colors.red,
+                            ));
+                          } else {
+                            await _addFeedback();
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                              content: Text(' تقييمك ارسل بنجاح'),
+                              backgroundColor: Colors.lightBlue,
+                            ));
+                          }
+                        },
+                        label: Text('تقييم'),
+                        icon: Icon(Icons.feedback),
                       ),
-                      labelText: 'الاسم',
-                      hintText: 'اكتب اسمك',
-                      hintStyle: TextStyle(color: Colors.grey[350]),
-                      labelStyle: TextStyle(color: Colors.lightBlue[50]),
-                      enabled: true,
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.lightBlue, width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.lightBlue, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                    ),
-                    controller: _nameController,
-                    onChanged: (String name) {
-                      setState(() {
-                        name = name;
-                      });
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 3,
-                  height: 50,
-                  child: TextFormField(
-                    textDirection: TextDirection.rtl,
-                    enabled: true,
-                    decoration: InputDecoration(
-                      prefixIcon:
-                          Icon(Icons.mobile_friendly, color: Colors.lightBlue),
-                      labelText: 'رقم الهاتف',
-                      hintText: 'اكتب رقم هاتفك',
-                      hintStyle: TextStyle(color: Colors.grey[350]),
-                      // helperText: 'helper',
-                      labelStyle: TextStyle(color: Colors.lightBlue[50]),
-                      enabled: true,
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.lightBlue, width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.lightBlue, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                    ),
-                    controller: _mobileController,
-                    onChanged: (String mobile) {
-                      setState(() {
-                        mobile = mobile;
-                      });
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 3,
-                  child: TextFormField(
-                    maxLines: 4,
-                    textDirection: TextDirection.rtl,
-                    enabled: true,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.message, color: Colors.lightBlue),
-                      labelText: 'رسالة',
-                      hintText: 'اكتب رسالتك',
-                      hintStyle: TextStyle(color: Colors.grey[350]),
-                      // helperText: 'helper',
-                      labelStyle: TextStyle(color: Colors.lightBlue[50]),
-                      enabled: true,
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.lightBlue, width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.lightBlue, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                    ),
-                    controller: _messageController,
-                    onChanged: (String message) {
-                      setState(() {
-                        message = message;
-                      });
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                RaisedButton.icon(
-                  shape: buttonStyle,
-                  textColor: Colors.lightBlue,
-                  color: Colors.white,
-                  onPressed: () async {
-                    await _addFeedback();
-                  },
-                  label: Text('تقييم'),
-                  icon: Icon(Icons.feedback),
-                ),
-              ],
-            ),
+                    ],
+                  ))
+            ],
           ),
         )
       ]),

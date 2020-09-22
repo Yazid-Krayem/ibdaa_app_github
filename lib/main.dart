@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibdaa_app/ui/introPage/introPage.dart';
-import 'package:ibdaa_app/ui/resultPage/resultPage.dart';
 import 'package:ibdaa_app/ui/style.dart';
 
 void main() {
@@ -14,21 +14,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        routes: {
-          '/second': (context) => ResultPage(
-                result: 'RIC',
-              ),
-        },
-        // localizationsDelegates: [
-        //   // ... app-specific localization delegate[s] here
-        //   GlobalMaterialLocalizations.delegate,
-        //   GlobalWidgetsLocalizations.delegate,
-        //   GlobalCupertinoLocalizations.delegate,
-        // ],
-        // supportedLocales: [
-        //   const Locale('ar', ''), // English, no country code
-        //   // ... other locales the app supports
-        // ],
+        localizationsDelegates: [
+          // ... app-specific localization delegate[s] here
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('ar', ''), // English, no country code
+          // ... other locales the app supports
+        ],
         debugShowCheckedModeBanner: false,
         title: 'Ibdaa',
         theme: ThemeData(

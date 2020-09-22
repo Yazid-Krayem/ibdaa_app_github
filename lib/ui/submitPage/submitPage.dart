@@ -144,25 +144,6 @@ class _SubmitPageState extends State<SubmitPage> {
             // usually buttons at the bottom of the dialog
 
             new FlatButton(
-              color: Colors.white,
-              child: new Text(
-                "عرض النتيجة",
-                strutStyle: StrutStyle(
-                  fontSize: 14.0,
-                  height: 1,
-                ),
-                style: TextStyle(color: Colors.lightBlue),
-              ),
-              onPressed: () async {
-                await tripleName.ready;
-
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ResultPage(
-                          result: tripleName.getItem('tripleName'),
-                        )));
-              },
-            ),
-            new FlatButton(
               color: Colors.lightBlue,
               child: new Text(
                 "الإعادة من جديد",
@@ -184,6 +165,25 @@ class _SubmitPageState extends State<SubmitPage> {
 
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => IntroPage()));
+              },
+            ),
+            new FlatButton(
+              color: Colors.white,
+              child: new Text(
+                "عرض النتيجة",
+                strutStyle: StrutStyle(
+                  fontSize: 14.0,
+                  height: 1,
+                ),
+                style: TextStyle(color: Colors.lightBlue),
+              ),
+              onPressed: () async {
+                await tripleName.ready;
+
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ResultPage(
+                          result: tripleName.getItem('tripleName'),
+                        )));
               },
             ),
           ],
@@ -249,15 +249,15 @@ class _SubmitPageState extends State<SubmitPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Icon(
+                              Icons.assignment_turned_in,
+                              color: Colors.lightBlue,
+                            ),
                             Text(
                               "  ${post["answers_text"]}",
                               style: answerStyleWeb,
                               textAlign: TextAlign.center,
                               textDirection: TextDirection.rtl,
-                            ),
-                            Icon(
-                              Icons.assignment_turned_in,
-                              color: Colors.lightBlue,
                             ),
                           ],
                         )
@@ -373,6 +373,22 @@ class _SubmitPageState extends State<SubmitPage> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: RaisedButton.icon(
+              textColor: Colors.white,
+              color: Colors.lightBlue,
+              shape: buttonStyle,
+              onPressed: () async {
+                final device_id = "$deviceId";
+                final user_answers = '$questionWithAnswer';
+
+                await _addResult(device_id, result, user_answers);
+              },
+              label: Text('إرسال'),
+              icon: Icon(Icons.send),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: RaisedButton.icon(
               shape: buttonStyle,
               textColor: Colors.lightBlue,
               color: Colors.white,
@@ -389,24 +405,8 @@ class _SubmitPageState extends State<SubmitPage> {
                           newCurrentIndex,
                         )));
               },
-              label: Text('مراجعة الاجابات'),
               icon: Icon(Icons.keyboard_return),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: RaisedButton.icon(
-              textColor: Colors.white,
-              color: Colors.lightBlue,
-              shape: buttonStyle,
-              onPressed: () async {
-                final device_id = "$deviceId";
-                final user_answers = '$questionWithAnswer';
-
-                await _addResult(device_id, result, user_answers);
-              },
-              label: Text('إرسال'),
-              icon: Icon(Icons.send),
+              label: Text('مراجعة الاجابات'),
             ),
           ),
         ],

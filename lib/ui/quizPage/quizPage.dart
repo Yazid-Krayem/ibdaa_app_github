@@ -471,6 +471,10 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Container(
+                  width:
+                      orientation == Orientation.landscape ? width / 2 : width,
+                  child: _mobileScreen()),
               orientation == Orientation.landscape && height > 500
                   ? ClipRRect(
                       borderRadius: BorderRadius.only(
@@ -486,11 +490,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                         height: MediaQuery.of(context).size.height,
                         child: null,
                       ))
-                  : Container(),
-              Container(
-                  width:
-                      orientation == Orientation.landscape ? width / 2 : width,
-                  child: _mobileScreen())
+                  : Container()
             ],
           ),
         );

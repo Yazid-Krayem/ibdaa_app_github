@@ -165,8 +165,6 @@ class _StartQuizPageState extends State<StartQuizPage> {
   _addLog() async {
     await API.createLog(deviceid).then((response) {
       var result = jsonDecode(response.body);
-      print(result);
-      print(deviceid);
 
       if (result['success']) {
         setState(() {
@@ -198,10 +196,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
                 child: Row(
                   children: [
                     Container(
-                      width: width * 0.65,
-                      height: height / 2,
-                    ),
-                    Container(
+                        alignment: Alignment.centerRight,
                         width: width * 0.35,
                         height: height / 2,
                         child: Column(
@@ -265,7 +260,11 @@ class _StartQuizPageState extends State<StartQuizPage> {
                                         }),
                                   ),
                           ],
-                        ))
+                        )),
+                    Container(
+                      width: width * 0.65,
+                      height: height / 2,
+                    )
                   ],
                 ))),
       ),

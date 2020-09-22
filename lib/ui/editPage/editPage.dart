@@ -458,6 +458,9 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+                width: orientation == Orientation.landscape ? width / 2 : width,
+                child: _mobileScreen()),
             orientation == Orientation.landscape && height > 500
                 ? ClipRRect(
                     borderRadius: BorderRadius.only(
@@ -475,10 +478,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
                         height: MediaQuery.of(context).size.height,
                         child: null),
                   )
-                : Container(),
-            Container(
-                width: orientation == Orientation.landscape ? width / 2 : width,
-                child: _mobileScreen())
+                : Container()
           ],
         ),
       );
@@ -498,6 +498,22 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // return button
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(8.0),
+              child: RaisedButton.icon(
+                shape: buttonStyle,
+                textColor: Colors.lightBlue,
+                color: Colors.white,
+                onPressed: () async {
+                  setState(() {
+                    currentIndex++;
+                  });
+                },
+                label: Text('السؤال التالي'),
+                icon: Icon(Icons.navigate_next),
+              ),
+            ),
             currentIndex == 0
                 ? SizedBox()
                 : Container(
@@ -520,22 +536,6 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
                       },
                     ),
                   ),
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(8.0),
-              child: RaisedButton.icon(
-                shape: buttonStyle,
-                textColor: Colors.lightBlue,
-                color: Colors.white,
-                onPressed: () async {
-                  setState(() {
-                    currentIndex++;
-                  });
-                },
-                label: Text('السؤال التالي'),
-                icon: Icon(Icons.navigate_next),
-              ),
-            ),
           ],
         ),
 
