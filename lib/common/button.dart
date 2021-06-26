@@ -12,6 +12,7 @@ class Button extends StatelessWidget {
     return ButtonTheme(
       minWidth: 120,
       height: width < 500 ? 40 : 50,
+      // ignore: deprecated_member_use
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),

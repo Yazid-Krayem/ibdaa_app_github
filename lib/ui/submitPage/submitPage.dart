@@ -138,6 +138,7 @@ class _SubmitPageState extends State<SubmitPage> {
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
 
+            // ignore: deprecated_member_use
             new FlatButton(
               color: Colors.lightBlue,
               child: new Text(
@@ -162,6 +163,7 @@ class _SubmitPageState extends State<SubmitPage> {
                     .push(MaterialPageRoute(builder: (context) => IntroPage()));
               },
             ),
+            // ignore: deprecated_member_use
             new FlatButton(
               color: Colors.white,
               child: new Text(
@@ -367,6 +369,7 @@ class _SubmitPageState extends State<SubmitPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
+            // ignore: deprecated_member_use
             child: RaisedButton.icon(
               textColor: Colors.white,
               color: Colors.lightBlue,
@@ -383,6 +386,7 @@ class _SubmitPageState extends State<SubmitPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
+            // ignore: deprecated_member_use
             child: RaisedButton.icon(
               shape: buttonStyle,
               textColor: Colors.lightBlue,

@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           // brightness: Brightness.dark,
           primaryColor: Colors.white,
+          // ignore: deprecated_member_use
           accentColor: AppColors.dodgerBlue,
           scaffoldBackgroundColor: Colors.white,
           // fontFamily: ArabicFonts.Cairo,

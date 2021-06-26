@@ -82,6 +82,7 @@ class AnswersButtonsState extends State<AnswersButtons> {
                 });
               }
             },
+            // ignore: deprecated_member_use
             child: RaisedButton(
                 hoverColor: Colors.lightBlue,
                 shape: buttonStyle,

@@ -58,7 +58,7 @@ class _ResultPageState extends State<ResultPage> {
 
     return SafeArea(child: ResponsiveWIdget(builder: (context, constraints) {
       return Scaffold(
-          resizeToAvoidBottomPadding: false,
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
           appBar: AppBar(
             automaticallyImplyLeading: false,

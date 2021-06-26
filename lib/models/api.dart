@@ -84,7 +84,7 @@ class API {
     );
   }
 
-  static Future feedBackAdd(deviceId, name, phoneNumber, message) {
+  static Future feedBackAdd(deviceId, name, phoneNumber, message, double rating) {
     var url = baseUrl + "/feedback/add/";
 
     var query = {
@@ -92,6 +92,18 @@ class API {
       "name": '$name',
       "phone_number": phoneNumber,
       "message": message
+    };
+    return http.post(url, body: query);
+  }
+  static Future raiting(deviceId, phoneNumber, message,rating) {
+    var url = baseUrl + "/feedback/add/";
+
+    var query = {
+      "deviceId": '$deviceId',
+      "name": 'Yazid',
+      "phone_number": phoneNumber,
+      "message": message,
+      "stars":rating
     };
     return http.post(url, body: query);
   }

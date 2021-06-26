@@ -173,6 +173,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   final url = 'http://ibdaa.sy/';
 
 //Get answers From the serve
+  // ignore: deprecated_member_use
   var listAnswers = new List<GetAnswers>();
 
   _getAnswers() async {
@@ -485,6 +486,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         Container(
           alignment: Alignment.bottomLeft,
           padding: const EdgeInsets.all(20.0),
+          // ignore: deprecated_member_use
           child: RaisedButton.icon(
             label: Text("السؤال السابق", style: TextStyle(fontSize: 16)),
             icon: Icon(Icons.keyboard_return),

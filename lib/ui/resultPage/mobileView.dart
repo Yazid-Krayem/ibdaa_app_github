@@ -28,6 +28,7 @@ class _MobileViewState extends State<MobileView> {
   String mobile = '';
   String name = '';
   String message = '';
+  double rating =2.0;
   bool authState = false;
 
   final TextEditingController _mobileController = TextEditingController();
@@ -74,7 +75,7 @@ class _MobileViewState extends State<MobileView> {
 
   _addFeedback() async {
     var deviceId = cookie.get('id');
-    await API.feedBackAdd(deviceId, name, mobile, message).then((response) {
+    await API.feedBackAdd(deviceId, name, mobile, message,rating).then((response) {
       var result = jsonDecode(response.body);
 
       if (result['success']) {
@@ -282,8 +283,40 @@ class _MobileViewState extends State<MobileView> {
                   // width: MediaQuery.of(context).size.width * 0.8,
                   child: Column(
                     // mainAxisAlignment: MainAxisAlignment.start,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'تقييم النتيجة',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.lightBlue,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                           Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Align(
+                            alignment: Alignment.center,
+                            child: Center(
+      child: new StarRating(
+        rating: rating,
+        onRatingChanged: (rating) => setState(() => this.rating = rating),
+      ),
+    ),
+                          ),
+                        ],
+                      ),
+                        ],
+                      ),
                       SizedBox(
                         height: 40,
                       ),
@@ -296,6 +329,9 @@ class _MobileViewState extends State<MobileView> {
                               color: Colors.lightBlue,
                               fontWeight: FontWeight.bold),
                         ),
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                       SizedBox(
                         height: 10,
@@ -430,6 +466,7 @@ class _MobileViewState extends State<MobileView> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
+                                // ignore: deprecated_member_use
                                 child: RaisedButton.icon(
                                   shape: buttonStyle,
                                   textColor: Colors.white,
@@ -439,6 +476,7 @@ class _MobileViewState extends State<MobileView> {
                                         mobile == '' &&
                                         message == '') {
                                       Scaffold.of(context)
+                                          // ignore: deprecated_member_use
                                           .showSnackBar(SnackBar(
                                         content: Text('يجب تعبئة الحقول '),
                                         backgroundColor: Colors.red,
@@ -446,6 +484,7 @@ class _MobileViewState extends State<MobileView> {
                                     } else {
                                       await _addFeedback();
                                       Scaffold.of(context)
+                                          // ignore: deprecated_member_use
                                           .showSnackBar(SnackBar(
                                         content: Text(' تقييمك ارسل بنجاح'),
                                         backgroundColor: Colors.lightBlue,
@@ -469,3 +508,42 @@ class _MobileViewState extends State<MobileView> {
     );
   }
 }
+
+typedef void RatingChangeCallback(double rating);
+
+class StarRating extends StatelessWidget {
+  final int starCount;
+  final double rating;
+  final RatingChangeCallback onRatingChanged;
+  final Color color;
+
+  StarRating(
+      {this.starCount = 5, this.rating = .0, this.onRatingChanged, this.color});
+
+  Widget buildStar(BuildContext context, int index) {
+    Icon icon;
+    if (index >= rating) {
+      icon = new Icon(
+        Icons.star_border,
+        // ignore: deprecated_member_use
+        color: Theme.of(context).buttonColor,
+      );
+    } else {
+      icon = new Icon(Icons.star, color: color ?? Colors.lightBlue);
+    }
+    return new InkResponse(
+      onTap:
+          onRatingChanged == null ? null : () => onRatingChanged(index + 1.0),
+      child: icon,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Row(
+        children:
+            new List.generate(starCount, (index) => buildStar(context, index)));
+  }
+}
+
+

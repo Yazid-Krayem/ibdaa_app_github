@@ -29,6 +29,7 @@ class _WebViewState extends State<WebView> {
   String mobile = '';
   String name = '';
   String message = '';
+  double rating = 2.0;
 
   final TextEditingController _mobileController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -74,7 +75,7 @@ class _WebViewState extends State<WebView> {
 
   _addFeedback() async {
     var deviceId = cookie.get('id');
-    await API.feedBackAdd(deviceId, name, mobile, message).then((response) {
+    await API.feedBackAdd(deviceId, name, mobile, message,rating).then((response) {
       var result = jsonDecode(response.body);
 
       if (result['success']) {
@@ -282,6 +283,37 @@ class _WebViewState extends State<WebView> {
                 height: 40,
               ),
               Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'تقييم النتيجة',
+                  style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.lightBlue,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Center(
+                      child: new StarRating(
+                        rating: rating,
+                        onRatingChanged: (rating) =>
+                            setState(() => this.rating = rating),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Align(
                 alignment: Alignment.topRight,
                 child: Text(
                   'اقتراحاتك قد تفيدنا في تحسين النتيجة',
@@ -425,18 +457,21 @@ class _WebViewState extends State<WebView> {
                       SizedBox(
                         height: 10,
                       ),
+                      // ignore: deprecated_member_use
                       RaisedButton.icon(
                         shape: buttonStyle,
                         textColor: Colors.white,
                         color: Colors.lightBlue,
                         onPressed: () async {
                           if (name == '' && mobile == '' && message == '') {
+                            // ignore: deprecated_member_use
                             Scaffold.of(context).showSnackBar(SnackBar(
                               content: Text('يجب تعبئة الحقول '),
                               backgroundColor: Colors.red,
                             ));
                           } else {
                             await _addFeedback();
+                            // ignore: deprecated_member_use
                             Scaffold.of(context).showSnackBar(SnackBar(
                               content: Text(' تقييمك ارسل بنجاح'),
                               backgroundColor: Colors.lightBlue,
@@ -453,5 +488,43 @@ class _WebViewState extends State<WebView> {
         )
       ]),
     );
+  }
+}
+
+typedef void RatingChangeCallback(double rating);
+
+class StarRating extends StatelessWidget {
+  final int starCount;
+  final double rating;
+  final RatingChangeCallback onRatingChanged;
+  final Color color;
+
+  StarRating(
+      {this.starCount = 5, this.rating = .0, this.onRatingChanged, this.color});
+
+  Widget buildStar(BuildContext context, int index) {
+    Icon icon;
+    if (index >= rating) {
+      icon = new Icon(
+        Icons.star_border,
+        // ignore: deprecated_member_use
+        color: Theme.of(context).buttonColor,
+        size: 20,
+      );
+    } else {
+      icon = new Icon(Icons.star, color: color ?? Colors.lightBlue);
+    }
+    return new InkResponse(
+      onTap:
+          onRatingChanged == null ? null : () => onRatingChanged(index + 1.0),
+      child: icon,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Row(
+        children:
+            new List.generate(starCount, (index) => buildStar(context, index)));
   }
 }

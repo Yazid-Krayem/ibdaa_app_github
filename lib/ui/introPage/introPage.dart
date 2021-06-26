@@ -61,6 +61,7 @@ class _IntroScreenState extends State<IntroPage> {
           ),
           Align(
             alignment: Alignment.bottomCenter,
+            // ignore: deprecated_member_use
             child: FlatButton(
               onPressed: () async {
                 _timer.cancel();

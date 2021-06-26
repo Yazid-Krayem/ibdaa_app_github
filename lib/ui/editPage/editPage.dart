@@ -162,6 +162,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
   final url = 'http://ibdaa.sy/';
 //
 //Get answers From the serve
+  // ignore: deprecated_member_use
   var listAnswers = new List<GetAnswers>();
   List answersList = [];
 
@@ -437,6 +438,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(8.0),
+              // ignore: deprecated_member_use
               child: RaisedButton.icon(
                 shape: buttonStyle,
                 textColor: Colors.lightBlue,
@@ -463,6 +465,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
                 : Container(
                     // alignment: Alignment.topRight,
                     padding: const EdgeInsets.all(8.0),
+                    // ignore: deprecated_member_use
                     child: RaisedButton.icon(
                       label:
                           Text("السؤال السابق", style: TextStyle(fontSize: 16)),
@@ -515,6 +518,7 @@ class _QuizPageState extends State<EditPage> with TickerProviderStateMixin {
         Container(
           alignment: Alignment.bottomCenter,
           padding: const EdgeInsets.all(8.0),
+          // ignore: deprecated_member_use
           child: RaisedButton.icon(
             shape: buttonStyle,
             textColor: Colors.white,

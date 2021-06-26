@@ -30,6 +30,7 @@ void alertEditPage(context) {
         actions: <Widget>[
           // usually buttons at the bottom of the dialog
 
+          // ignore: deprecated_member_use
           new FlatButton(
             color: Colors.white,
             child: new Text(
@@ -45,6 +46,7 @@ void alertEditPage(context) {
                       )));
             },
           ),
+          // ignore: deprecated_member_use
           new FlatButton(
             color: Colors.lightBlue,
             child: new Text(

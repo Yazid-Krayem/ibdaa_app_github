@@ -33,6 +33,7 @@ void showDialogResultPage(BuildContext context) {
         actions: <Widget>[
           // usually buttons at the bottom of the dialog
           Center(
+            // ignore: deprecated_member_use
             child: new FlatButton(
               child: new Text(
                 "اعادة الاختبار ",
